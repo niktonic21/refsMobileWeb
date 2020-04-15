@@ -1,0 +1,11 @@
+{
+    "printWidth": 100,
+    "useTabs": false,
+    "bracketSpacing": true,
+    "arrowParens": "avoid",
+    "tabWidth": 4,
+    "eslintIntegration": true,
+    "singleQuote": true,
+    "trailingComma":"none",
+    "parser": "typescript"
+}

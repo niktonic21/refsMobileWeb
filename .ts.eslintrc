@@ -1,0 +1,51 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "./tsconfig.json",
+      "ecmaVersion": 2018,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react/recommended",
+      "airbnb-typescript/base",
+      "plugin:prettier/recommended"
+    ],
+    "overrides": [
+    ],
+    "rules": {
+      "@typescript-eslint/ban-ts-ignore": 0,
+      "@typescript-eslint/indent": 0,
+      "@typescript-eslint/interface-name-prefix": 0,
+      "import/order": 0,
+      "import/no-unresolved": [2, { "ignore": [ "^@.*"]  }],
+      "import/first": 0,
+      "import/named": 0,
+      "import/prefer-default-export": 0,
+      "no-underscore-dangle": 0,
+      "react/display-name": 0,
+      "react/jsx-boolean-value": 0,
+      "react/prop-types": 1,
+      "sort-keys": 0,
+      "prettier/prettier": "error",
+      "no-console": 2
+    },
+    "globals": {
+    },
+    "settings": {
+      "import/resolver": {
+        "reactnative": {
+          "extensions": [".js", ".jsx", ".ts", ".tsx", ".ios.js", ".android.js", ".ios.ts", ".android.js", ".ios.tsx", ".android.tsx"]
+        }
+      },
+      "react": {
+        "version": "detect"
+      }
+    }
+}

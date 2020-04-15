@@ -1,18 +1,18 @@
-import * as React from "react";
-import { Platform, StatusBar, StyleSheet, View } from "react-native";
-import { SplashScreen } from "expo";
-import * as Font from "expo-font";
-import { Ionicons } from "@expo/vector-icons";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import store from "./src/redux/store";
-import TabNavigator from "./src/navigation/TabNavigator";
-import useLinking from "./src/navigation/useLinking";
+import * as React from 'react';
+import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { SplashScreen } from 'expo';
+import * as Font from 'expo-font';
+import { Ionicons } from '@expo/vector-icons';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import store from './src/redux/store';
+import TabNavigator from './src/navigation/TabNavigator';
+import useLinking from './src/navigation/useLinking';
 
 const Stack = createStackNavigator();
-const headerMode = Platform.OS === "web" ? "none" : "screen";
+const headerMode = Platform.OS === 'web' ? 'none' : 'screen';
 
 interface IApp {
     skipLoadingScreen: any;
@@ -36,7 +36,7 @@ export default function App(props: IApp) {
                 // Load fonts
                 await Font.loadAsync({
                     ...Ionicons.font,
-                    "space-mono": require("./assets/fonts/SpaceMono-Regular.ttf"),
+                    'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf')
                 });
             } catch (e) {
                 // We might want to provide this error information to an error reporting service
@@ -57,7 +57,7 @@ export default function App(props: IApp) {
             <Provider store={store.reduxStore}>
                 <PersistGate loading={null} persistor={store.persistor}>
                     <View style={styles.container}>
-                        {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+                        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
                         <NavigationContainer
                             ref={containerRef}
                             initialState={initialNavigationState}
@@ -76,6 +76,6 @@ export default function App(props: IApp) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#fff",
-    },
+        backgroundColor: '#fff'
+    }
 });
