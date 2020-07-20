@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, SectionList } from 'react-native';
+import { StyleSheet, Text, View, SectionList, SectionListData } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 import get from 'lodash/get';
 import { createGameSections } from '../utils/gameUtils';
+import { ISection, IRef, IItemButton } from '../utils/types';
 
 const styles = StyleSheet.create({
     container: {
@@ -54,21 +55,6 @@ const styles = StyleSheet.create({
     }
 });
 
-interface IRef {
-    id: number;
-    name: string;
-}
-
-interface IItemButton {
-    item: {
-        home: string;
-        away: string;
-        external_id: string;
-        game_date: string;
-        referees: Array<IRef>;
-    };
-}
-
 const _renderItem = ({ item }: IItemButton) => {
     const { home, away, external_id, game_date, referees } = item;
     const datTime = game_date.split(' ');
@@ -95,7 +81,7 @@ const _renderItem = ({ item }: IItemButton) => {
     );
 };
 
-const _renderSectionHeader = ({ section }: { section: { title: string } }) => (
+const _renderSectionHeader = ({ section }) => (
     <View style={styles.sectionHeader}>
         <Text style={styles.sectionText}>{section.title}</Text>
     </View>
@@ -105,7 +91,7 @@ const _renderSeparator = () => <View style={styles.separator} />;
 
 export default function MatchesScreen() {
     const games = useSelector(state => get(state, 'games.games', []));
-    const gameSections = createGameSections(games);
+    const gameSections: Array<SectionListData<ISection>> = createGameSections(games);
 
     return (
         <SectionList

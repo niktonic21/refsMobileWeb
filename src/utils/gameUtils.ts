@@ -1,3 +1,6 @@
+import { SectionListData } from 'react-native';
+import { ISection, IListItem, ISec, IItemButton } from './types';
+
 export const numberToLigue = (num: number): string => {
     if (num > 0 && num < 500) return 'Extraliga seniorov';
     if (num > 500 && num < 1000) return '1. Liga seniorov';
@@ -14,25 +17,10 @@ export const numberToLigue = (num: number): string => {
     return 'Ostatné';
 };
 
-interface IListItem {
-    external_id: number;
-}
-interface ISec {
-    id: string;
-    sectionName: string;
-    data: object[];
-}
-
-interface ISection {
-    id: string;
-    title: string;
-    data: object[];
-}
-
-export const createGameSections = (games: object[]): object[] => {
+export const createGameSections = (games: object[]): Array<SectionListData<IItemButton>> => {
     const categoryMap: any = {};
     const sections: any = [];
-    games.forEach((listItem: any): void => {
+    games.forEach((listItem: IListItem): void => {
         const category: string = numberToLigue(listItem.external_id);
         if (!categoryMap[category]) {
             sections.push({ sectionName: category, id: listItem.external_id });
@@ -41,7 +29,7 @@ export const createGameSections = (games: object[]): object[] => {
         }
         categoryMap[category].push(listItem);
     });
-    const result = sections.map((sec: { id: string; sectionName: string; data: object[] }) => {
+    const result = sections.map((sec: ISec) => {
         const section: ISection = { id: '', title: '', data: [] };
         section.id = sec.id;
         section.title = sec.sectionName;
