@@ -5,6 +5,7 @@ import * as React from 'react';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
+import MatchesScreen from '../screens/MatchesScreen';
 import { Platform } from 'react-native';
 // import device from "../../constants/Layout";
 
@@ -70,10 +71,10 @@ export default function TabNavigator({ navigation, route }: { navigation: any; r
                 }}
             />
             <Tab.Screen
-                name="Settings"
-                component={LinksScreen}
+                name="Matches"
+                component={MatchesScreen}
                 options={{
-                    title: 'Settings',
+                    title: 'Matches',
                     tabBarIcon: ({ focused }: { focused: () => {} }) => (
                         <TabBarIcon focused={focused} name="md-settings" />
                     )
@@ -87,6 +88,8 @@ const getHeaderTitle = (route: any): string => {
     const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 
     switch (routeName) {
+        case 'Matches':
+            return 'Games';
         case 'Home':
             return 'How to get started';
         case 'Links':
