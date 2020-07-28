@@ -4882,6 +4882,10 @@ mkdirp@^0.5.1:
   dependencies:
     minimist "^1.2.5"
 
+modal-enhanced-react-native-web@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/modal-enhanced-react-native-web/-/modal-enhanced-react-native-web-0.2.0.tgz#767d6e8d78da4a6d34e80d9da49bc192016aaca1"
+
 morgan@^1.9.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/morgan/-/morgan-1.10.0.tgz#091778abc1fc47cd3509824653dae1faab6b17d7"

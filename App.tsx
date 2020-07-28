@@ -4,15 +4,11 @@ import { SplashScreen } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import store from './src/redux/store';
 import TabNavigator from './src/navigation/TabNavigator';
 import useLinking from './src/navigation/useLinking';
-
-const Stack = createStackNavigator();
-const headerMode = Platform.OS === 'web' ? 'none' : 'screen';
 
 interface IApp {
     skipLoadingScreen: any;
@@ -62,9 +58,7 @@ export default function App(props: IApp) {
                             ref={containerRef}
                             initialState={initialNavigationState}
                         >
-                            <Stack.Navigator headerMode={headerMode}>
-                                <Stack.Screen name="Root" component={TabNavigator} />
-                            </Stack.Navigator>
+                            <TabNavigator {...props} />
                         </NavigationContainer>
                     </View>
                 </PersistGate>
