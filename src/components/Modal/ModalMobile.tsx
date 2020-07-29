@@ -1,43 +1,44 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Modal, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import { layout } from '@layout';
+import { IModal } from './index';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Modal from 'react-native-modal';
 
 const styles = StyleSheet.create({
-    centeredView: {
-        flex: 1,
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        backgroundColor: 'rgba(52, 52, 52, 0.5)'
-    },
-    modalView: {
+    modalView: { justifyContent: 'flex-end', margin: 0 },
+    centerdView: {
         backgroundColor: 'white',
         borderRadius: 20,
-        alignItems: 'center',
-        width: layout.window.width,
-        height: layout.window.height * 0.85,
-        elevation: 5
+        paddingTop: 0,
+        height: layout.window.height * 0.85
     },
-    textStyle: {
-        color: 'white',
-        fontWeight: 'bold',
-        textAlign: 'center'
+    separator: {
+        height: 1,
+        backgroundColor: 'grey'
     },
     modalText: {
-        flex: 1,
-        marginBottom: 15,
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginVertical: 15,
         textAlign: 'center'
     }
 });
 
-const ModalMobile = ({ onClose, isVisible = false, label = 'HEADER', children }) => {
+const ModalMobile: React.FC<IModal> = ({ onClose, label = 'Modal', children }) => {
+    const _onClose = () => {
+        onClose(label);
+    };
+
     return (
-        <Modal visible={isVisible} transparent={true} animationType="slide">
-            <TouchableOpacity style={styles.centeredView} onPress={onClose}>
-                <View style={styles.modalView}>
-                    <Text style={styles.modalText}>{label}</Text>
-                    {children}
-                </View>
-            </TouchableOpacity>
+        <Modal isVisible={true} onBackdropPress={_onClose} style={styles.modalView}>
+            <SafeAreaView style={styles.centerdView}>
+                <Text style={styles.modalText}>{label}</Text>
+                <View style={styles.separator} />
+                {children}
+                <View style={styles.separator} />
+                <Button title="Save" onPress={() => {}} />
+            </SafeAreaView>
         </Modal>
     );
 };

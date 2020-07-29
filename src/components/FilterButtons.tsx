@@ -33,11 +33,12 @@ const styles = StyleSheet.create({
 
 interface IProps {
     label: string;
+    onPress: (label: string) => void;
 }
 
-const FilterButton = ({ label }: IProps) => {
+const FilterButton = ({ label, onPress }: IProps) => {
     const _onPress = () => {
-        console.log('log_fitler', label);
+        onPress(label);
     };
     return (
         <RectButton style={styles.buttonContainer} onPress={_onPress}>
@@ -46,13 +47,13 @@ const FilterButton = ({ label }: IProps) => {
     );
 };
 
-const data = [{ label: 'Liga' }, { label: 'Rozhodcovia' }, { label: 'Mesiac' }];
+const data = [{ label: 'Liga' }, { label: 'Rozhodca' }, { label: 'Mesiac' }];
 
-export default function FilterButtons() {
+export default function FilterButtons({ onPress }) {
     return (
         <View style={styles.container}>
             {data.map(({ label }) => (
-                <FilterButton key={label} label={label} />
+                <FilterButton key={label} label={label} onPress={onPress} />
             ))}
         </View>
     );

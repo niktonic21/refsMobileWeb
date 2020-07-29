@@ -1,52 +1,46 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import Modal from 'modal-enhanced-react-native-web';
-import { layout } from '@layout';
-
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { IModal } from './index';
 
 const styles = StyleSheet.create({
     centeredView: {
-        flex: 1,
-        justifyContent: 'flex-end',
-        alignItems: 'center'
+        flex: 1
     },
     modalView: {
+        flex: 1,
+        alignSelf: 'center',
+        width: 400,
         backgroundColor: 'white',
-        borderRadius: 20,
-        alignItems: 'center',
-        maxWidth: 800,
-        width: layout.window.width,
-        height: layout.window.height * 0.85,
-        elevation: 5
-    },
-    openButton: {
-        backgroundColor: '#F194FF',
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2
-    },
-    textStyle: {
-        color: 'white',
-        fontWeight: 'bold',
-        textAlign: 'center'
+        borderRadius: 20
     },
     modalText: {
-        marginBottom: 15,
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginVertical: 15,
         textAlign: 'center'
+    },
+    saveButton: {
+        padding: 15
+    },
+    separator: {
+        height: 1,
+        backgroundColor: 'grey'
     }
 });
 
-const ModalWeb = ({ isVisible = true, onClose, label = 'lable', children }) => {
+const ModalWeb: React.FC<IModal> = ({ onClose, isVisible = true, label = 'Modal', children }) => {
     return (
-        <Modal isVisible={isVisible}>
-            <TouchableOpacity onPress={onClose} style={styles.centeredView}>
-                <View style={styles.modalView}>
-                    <Text style={styles.modalText}>{label}</Text>
-                    {children}
+        <Modal isVisible={isVisible} onBackdropPress={() => onClose(label)}>
+            <View style={styles.modalView}>
+                <Text style={styles.modalText}>{label}</Text>
+                <View style={styles.separator} />
+                {children}
+                <View style={styles.separator} />
+                <View style={styles.saveButton}>
+                    <Button title="Uloz" onPress={() => {}} />
                 </View>
-                <Button title="Hide modal" onPress={() => {}} />
-            </TouchableOpacity>
+            </View>
         </Modal>
     );
 };

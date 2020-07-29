@@ -6,7 +6,7 @@ import get from 'lodash/get';
 import { createGameSections } from '../utils/gameUtils';
 import { IItemButton } from '../utils/types';
 import FilterButtons from '../components/FilterButtons';
-import { Modal } from '@Modal';
+import { FilterModal } from '../components/FilterModal';
 
 const styles = StyleSheet.create({
     container: {
@@ -131,14 +131,23 @@ const _renderSectionHeader = ({ section }: any) => (
 const _renderSeparator = () => <View style={styles.separator} />;
 
 export default function MatchesScreen() {
-    //const [modalVisible, setModalVisible] = React.useState(true);
+    const [modalKey, setModalKey] = React.useState('');
     const games = useSelector(state => get(state, 'games.games', []));
     const gameSections: Array<SectionListData<any>> = createGameSections(games);
 
+    const _onFilterButtonPresed = (label: string) => {
+        console.log('lable', label);
+        if (modalKey === label) {
+            setModalKey('');
+        } else {
+            setModalKey(label);
+        }
+    };
+
     return (
         <View style={styles.container}>
-            <Modal />
-            <FilterButtons />
+            {modalKey ? <FilterModal onClose={_onFilterButtonPresed} label={modalKey} /> : null}
+            <FilterButtons onPress={_onFilterButtonPresed} />
             <SectionList
                 style={styles.container}
                 contentContainerStyle={styles.contentContainer}
