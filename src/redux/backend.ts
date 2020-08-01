@@ -2,8 +2,14 @@ const BACKEND_URL = 'https://delegacky.herokuapp.com';
 import json from './reducers/dataLocalGames21.json';
 import json2 from './reducers/dataLocalGames11.json';
 import jsonAll from './reducers/dataLocalGamesAll.json';
+import refsAll from './reducers/dataLocalReferees.json';
 
-const request = async (args: any) => {
+export const requestR = async () => {
+    console.log('filter_', refsAll);
+    return refsAll;
+};
+
+export const request = async (args: any) => {
     const { method = 'GET', route, headers, payload } = args;
     // const res = await fetch(`${BACKEND_URL}${route}`, {
     //     method,
@@ -53,8 +59,4 @@ const request = async (args: any) => {
     // // }
     console.log('filter_', jsonAll);
     return jsonAll;
-};
-
-export default {
-    request
 };

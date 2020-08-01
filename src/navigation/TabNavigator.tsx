@@ -6,7 +6,6 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import MatchesScreen from '../screens/MatchesScreen';
-import FilterScreen from '../screens/FilterScreen';
 import RightButton from '../components/RightButton';
 
 import { isWeb } from '../../constants/Layout';
@@ -35,7 +34,6 @@ function MatchesStackScreen({ navigation }: any) {
                 }}
                 component={MatchesScreen}
             />
-            <MatchesStack.Screen name="Filter" component={FilterScreen} />
         </MatchesStack.Navigator>
     );
 }

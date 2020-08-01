@@ -20,6 +20,7 @@
                 "assets/*",
             ],
             "@Modal": ["src/components/Modal"],
+            "@gameUtils": ["src/utils/gameUtils"],
             "@colors": ["constants/Colors"],
             "@layout": ["constants/Layout"]
         }

@@ -2,7 +2,7 @@ import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
 import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { fetchGames } from '../redux/actions';
+import { fetchGames, fetchRefs } from '../redux/actions';
 
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -40,6 +40,9 @@ const HomeScreen = () => {
     const handleHelpPress = () => {
         dispatch(fetchGames(21));
     };
+    const handleRefPress = () => {
+        dispatch(fetchRefs());
+    };
 
     return (
         <View style={styles.container}>
@@ -68,6 +71,11 @@ const HomeScreen = () => {
                 <View style={styles.helpContainer}>
                     <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
                         <Text style={styles.helpLinkText}>Download games</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.helpContainer}>
+                    <TouchableOpacity onPress={handleRefPress} style={styles.helpLink}>
+                        <Text style={styles.helpLinkText}>Download refs</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>

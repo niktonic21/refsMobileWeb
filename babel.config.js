@@ -9,6 +9,7 @@ module.exports = function (api) {
                 {
                     alias: {
                         '@Modal': './src/components/Modal',
+                        '@gameUtils': './src/utils/gameUtils.ts',
                         '@colors': './constants/Colors.ts',
                         '@layout': './constants/Layout.ts'
                     }

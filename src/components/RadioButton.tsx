@@ -28,23 +28,13 @@ const styles = StyleSheet.create({
 
 interface IRadioButton {
     label: string;
-    value: string;
     checked: boolean;
-    sortKey: string;
-    onCheck: (sortKey: string, value: string | object) => void;
+    onPress: () => void;
 }
 
-export const RadioButton: React.FC<IRadioButton> = ({
-    label,
-    value,
-    sortKey,
-    checked,
-    onCheck
-}) => {
-    const _onPress = () => onCheck(sortKey, value);
-
+export const RadioButton: React.FC<IRadioButton> = ({ label, checked, onPress }) => {
     return (
-        <RectButton style={styles.option} onPress={_onPress}>
+        <RectButton style={styles.option} onPress={onPress}>
             <View style={styles.container}>
                 <Text style={styles.optionText}>{label}</Text>
                 <View style={styles.optionIconContainer}>

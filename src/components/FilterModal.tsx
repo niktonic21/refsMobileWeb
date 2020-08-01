@@ -1,8 +1,34 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Modal } from '@Modal';
+import get from 'lodash/get';
+import { getRefList, getLigueList } from '../utils/gameUtils';
 import { FlatList } from 'react-native-gesture-handler';
 import { RadioButton } from './RadioButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { filterChanged } from '../redux/actions';
+import { ISection } from 'src/utils/types';
+
+const dataMesiac = [
+    { label: 'Vsetky', key: 'mesiac', value: 0 },
+    { label: 'Januar', key: 'mesiac', value: 1 },
+    { label: 'Februar', key: 'mesiac', value: 2 },
+    { label: 'Marec', key: 'mesiac', value: 3 }
+];
+
+const dataRozhodca = [
+    { label: 'Vsetci', key: 'rozhodca', value: 0 },
+    { label: 'Jobbagy', key: 'rozhodca', value: 1 },
+    { label: 'Bogdan', key: 'rozhodca', value: 2 },
+    { label: 'Korba', key: 'rozhodca', value: 3 }
+];
+
+const dataLiga = [
+    { label: 'Vsetky', key: 'liga', value: 0 },
+    { label: 'Extraliga', key: 'liga', value: 1 },
+    { label: '1.liga', key: 'liga', value: 2 },
+    { label: '2.liga', key: 'liga', value: 3 }
+];
 
 const styles = StyleSheet.create({
     separator: {
@@ -13,60 +39,43 @@ const styles = StyleSheet.create({
     }
 });
 
-const dataMesiac = [
-    { label: 'Vsetky', key: 'Mesiac', value: 0 },
-    { label: 'Januar', key: 'Mesiac', value: 1 },
-    { label: 'Februar', key: 'Mesiac', value: 2 },
-    { label: 'Marec', key: 'Mesiac', value: 3 }
-];
-
-const dataRozhodca = [
-    { label: 'Vsetci', key: 'Rozhodca', value: 0 },
-    { label: 'Jobbagy', key: 'Rozhodca', value: 1 },
-    { label: 'Bogdan', key: 'Rozhodca', value: 2 },
-    { label: 'Korba', key: 'Rozhodca', value: 3 }
-];
-
-const dataLiga = [
-    { label: 'Vsetky', key: 'Liga', value: 0 },
-    { label: 'Extraliga', key: 'Liga', value: 1 },
-    { label: '1.liga', key: 'Liga', value: 2 },
-    { label: '2.liga', key: 'Liga', value: 3 }
-];
-
-const getFilterList = (label: string): Array<object> => {
+const getFilterList = (label: string, games: ISection): Array<object> => {
     if (label === 'Rozhodca') {
-        return dataRozhodca;
+        return getRefList();
     }
     if (label === 'Mesiac') {
-        return dataMesiac;
+        return dataMesiac; //getMonthList();
     }
-    return dataLiga;
+    return getLigueList(games);
 };
 
-const FilterModal: React.FC<{ label: string; onClose: (label: string) => void }> = ({
-    label,
-    onClose
-}) => {
+const _renderSeparator = () => <View style={styles.separator} />;
+const _keyExtractor = (item: any) => item.label;
+
+interface IProps {
+    filterKey: string;
+    gameSections: ISection;
+    onClose: (label: string) => void;
+    isVisible: boolean;
+}
+
+const FilterModal: React.FC<IProps> = ({ isVisible, filterKey, onClose, gameSections }) => {
+    const dispatch = useDispatch();
+    const filterData = useSelector(state => get(state, 'filter', []));
+    const data = getFilterList(filterKey, gameSections);
+
     const _renderItem = ({ item }: any): JSX.Element => {
-        const checked = item.value === 2;
-        return (
-            <RadioButton
-                checked={checked}
-                label={item.label}
-                value={item.value}
-                sortKey={item.key}
-                onCheck={() => console.log('radioButton_tapped')}
-            />
-        );
+        const _onCheck = () => {
+            dispatch(filterChanged(item.key, item.value));
+        };
+
+        const checked = item.value === filterData[filterKey.toLocaleLowerCase()];
+
+        return <RadioButton checked={checked} label={item.label} onPress={_onCheck} />;
     };
 
-    const _renderSeparator = () => <View style={styles.separator} />;
-    const _keyExtractor = (item: any) => item.label;
-    const data = getFilterList(label);
-
     return (
-        <Modal isVisible={true} label={label} onClose={onClose}>
+        <Modal isVisible={isVisible} label={filterKey} onClose={onClose}>
             <FlatList
                 data={data}
                 initialNumToRender={10}
