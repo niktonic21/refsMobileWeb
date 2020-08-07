@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#f2f2f2'
     },
     contentContainer: {
+        paddingTop: 0,
         paddingBottom: 15
     },
     option: {
@@ -43,7 +44,6 @@ const styles = StyleSheet.create({
     sectionHeader: {
         height: 35,
         flex: 1,
-        marginBottom: 10,
         paddingHorizontal: 17,
         justifyContent: 'center',
         backgroundColor: '#ccc'
@@ -52,44 +52,16 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '700'
     },
+    noMatches: {
+        alignSelf: 'center',
+        margin: 15,
+        marginTop: 100,
+        fontSize: 18,
+        fontWeight: '700'
+    },
     matchInfo: { flex: 3, flexDirection: 'column', justifyContent: 'space-between' },
     refsContainer: { flex: 2, paddingLeft: 4, flexDirection: 'column' }
 });
-
-const _renderItem = ({ item }: IItemButton) => {
-    const { home, away, external_id, game_date, referees } = item;
-    const datTime = game_date ? game_date.split(' ') : [];
-
-    const _onPress = () => {
-        console.log('tap', external_id);
-    };
-
-    return (
-        <RectButton key={game_date} style={styles.option} onPress={_onPress}>
-            <View style={styles.matchInfo}>
-                <Text style={styles.optionText}>{home}</Text>
-                <Text style={styles.optionText}>{away}</Text>
-                <Text style={styles.optionText}>{datTime[0]}</Text>
-                <Text style={styles.optionText}>{datTime[1]}</Text>
-            </View>
-            <View style={styles.separatorItem} />
-            <View style={styles.refsContainer}>
-                {referees
-                    ? referees.map((ref, idx) => (
-                          <Text
-                              key={idx}
-                              numberOfLines={1}
-                              ellipsizeMode="tail"
-                              style={styles.refText}
-                          >
-                              {ref.name.split(',', 2)}
-                          </Text>
-                      ))
-                    : null}
-            </View>
-        </RectButton>
-    );
-};
 
 const _renderSectionHeader = ({ section }: any) => (
     <View style={styles.sectionHeader}>
@@ -103,7 +75,7 @@ const _renderSeparator = () => <View style={styles.separator} />;
 
 const _keyExtractor = (item: { external_id: number }) => String(item.external_id);
 
-export default function MatchesScreen() {
+export default function MatchesScreen({ navigation }) {
     const [modalKey, setModalKey] = React.useState('');
     const games = useSelector(state => get(state, 'games.games', []));
     const filterData = useSelector(state => get(state, 'filter', []));
@@ -113,12 +85,48 @@ export default function MatchesScreen() {
         filterData
     );
 
-    const _onFilterButtonPresed = (label: string) => {
-        if (modalKey === label) {
+    const _onFilterButtonPresed = (filterKey: string) => {
+        if (modalKey === filterKey) {
             setModalKey('');
         } else {
-            setModalKey(label);
+            setModalKey(filterKey);
         }
+    };
+
+    const _renderItem = ({ item }: IItemButton) => {
+        const { home, away, external_id, game_date, referees } = item;
+        const datTime = game_date ? game_date.split(' ') : [];
+
+        const _onPress = () => {
+            navigation.navigate('GameScreen', { gameId: external_id });
+            console.log('tap', external_id);
+        };
+
+        return (
+            <RectButton key={game_date} style={styles.option} onPress={_onPress}>
+                <View style={styles.matchInfo}>
+                    <Text style={styles.optionText}>{home}</Text>
+                    <Text style={styles.optionText}>{away}</Text>
+                    <Text style={styles.optionText}>{datTime[0]}</Text>
+                    <Text style={styles.optionText}>{datTime[1]}</Text>
+                </View>
+                <View style={styles.separatorItem} />
+                <View style={styles.refsContainer}>
+                    {referees
+                        ? referees.map((ref, idx) => (
+                              <Text
+                                  key={idx}
+                                  numberOfLines={1}
+                                  ellipsizeMode="tail"
+                                  style={styles.refText}
+                              >
+                                  {ref.name.split(',', 2)}
+                              </Text>
+                          ))
+                        : null}
+                </View>
+            </RectButton>
+        );
     };
 
     return (
@@ -130,17 +138,22 @@ export default function MatchesScreen() {
                 filterKey={modalKey}
             />
             <FilterButtons onPress={_onFilterButtonPresed} />
-            <SectionList
-                style={styles.container}
-                contentContainerStyle={styles.contentContainer}
-                sections={filteredGameSections}
-                keyExtractor={_keyExtractor}
-                ListEmptyComponent={() => null}
-                stickySectionHeadersEnabled={true}
-                renderItem={_renderItem}
-                renderSectionHeader={_renderSectionHeader}
-                ItemSeparatorComponent={_renderSeparator}
-            />
+            {filteredGameSections.length ? (
+                <SectionList
+                    style={styles.container}
+                    contentContainerStyle={styles.contentContainer}
+                    sections={filteredGameSections}
+                    keyExtractor={_keyExtractor}
+                    ListEmptyComponent={() => null}
+                    stickySectionHeadersEnabled={true}
+                    renderItem={_renderItem}
+                    renderSectionHeader={_renderSectionHeader}
+                    ItemSeparatorComponent={_renderSeparator}
+                    SectionSeparatorComponent={_renderSeparator}
+                />
+            ) : (
+                <Text style={styles.noMatches}>Ziadne zapasy</Text>
+            )}
         </View>
     );
 }

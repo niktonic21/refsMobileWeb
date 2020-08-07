@@ -1,5 +1,6 @@
 export interface IListItem {
     external_id: number;
+    game_date: string;
 }
 export interface ISec {
     id: string;

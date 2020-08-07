@@ -6,6 +6,7 @@ export const GAMES_ERROR = 'games_error';
 export const REFS_REQUEST = 'refs_request';
 export const REFS_RECEIVE = 'refs_receive';
 export const REFS_ERROR = 'refs_error';
+export const GAMES_MONTHS = 'games_months';
 
 export const requestGames = () => ({
     type: GAMES_REQUEST
@@ -49,7 +50,7 @@ export const fetchRefsRejected = (refs: any) => ({
     type: REFS_ERROR,
     refs
 });
-0;
+
 export const fetchRefs = () => {
     return async (dispatch: any) => {
         try {
@@ -62,3 +63,8 @@ export const fetchRefs = () => {
         }
     };
 };
+
+export const filterMonths = (months: Array<object>) => ({
+    type: GAMES_MONTHS,
+    months
+});

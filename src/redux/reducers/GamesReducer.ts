@@ -4,10 +4,11 @@ import {
     GAMES_ERROR,
     REFS_REQUEST,
     REFS_RECEIVE,
-    REFS_ERROR
+    REFS_ERROR,
+    GAMES_MONTHS
 } from '../actions';
 
-const INITIAL_STATE = { games: [], refs: [], loading: false, error: '' };
+const INITIAL_STATE = { games: [], refs: [], months: [], loading: false, error: '' };
 
 export default (state = INITIAL_STATE, action: any) => {
     switch (action.type) {
@@ -23,6 +24,9 @@ export default (state = INITIAL_STATE, action: any) => {
             return { ...state, refs: action.refs, loading: false };
         case REFS_ERROR:
             return { ...state, error: action.error, loading: false };
+        case GAMES_MONTHS: {
+            return { ...state, months: action.months };
+        }
         default:
             return state;
     }

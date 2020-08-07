@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
+import { getFilterButtonLabel } from '../utils/gameUtils';
 
 import Colors from '../../constants/Colors';
 
@@ -27,33 +28,38 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontSize: 15,
+        paddingHorizontal: 5,
         textAlign: 'center'
     }
 });
 
 interface IProps {
-    label: string;
+    filterKey: string;
     onPress: (label: string) => void;
 }
 
-const FilterButton = ({ label, onPress }: IProps) => {
+const data = [{ filterKey: 'Liga' }, { filterKey: 'Rozhodca' }, { filterKey: 'Mesiac' }];
+
+const FilterButton = ({ filterKey, onPress }: IProps) => {
     const _onPress = () => {
-        onPress(label);
+        onPress(filterKey);
     };
+    const label = getFilterButtonLabel(filterKey);
+
     return (
         <RectButton style={styles.buttonContainer} onPress={_onPress}>
-            <Text style={styles.buttonText}>{label}</Text>
+            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.buttonText}>
+                {label}
+            </Text>
         </RectButton>
     );
 };
 
-const data = [{ label: 'Liga' }, { label: 'Rozhodca' }, { label: 'Mesiac' }];
-
 export default function FilterButtons({ onPress }) {
     return (
         <View style={styles.container}>
-            {data.map(({ label }) => (
-                <FilterButton key={label} label={label} onPress={onPress} />
+            {data.map(({ filterKey }) => (
+                <FilterButton key={filterKey} filterKey={filterKey} onPress={onPress} />
             ))}
         </View>
     );

@@ -1,9 +1,10 @@
 import { SectionListData } from 'react-native';
-import { ISection, IListItem, ISec, IItemButton, IFilter } from './types';
+import { ISection, IListItem, ISec, IItemButton, IFilter, IRef } from './types';
 import sortBy from 'lodash/sortBy';
 import get from 'lodash/get';
 import filter from 'lodash/filter';
 import store from '../redux/store';
+import { filterMonths } from '../redux/actions';
 
 const numberToLigue = (num: number): string => {
     if (num > 0 && num < 500) return 'Extraliga seniorov';
@@ -37,10 +38,158 @@ const numberToLigueId = (num: number): number => {
     return 13;
 };
 
+export const ligueToLig = str => {
+    if (str === 'Liga') return 'Liga';
+    if (str === 'Extraliga seniorov') return 'EXS';
+    if (str === '1. Liga seniorov') return '1.LS';
+    if (str === 'Extraliga juniorov') return 'EXJ';
+    if (str === 'Extraliga dorastu') return 'EXD';
+    if (str === '1. Liga juniorov') return '1.LJ';
+    if (str === '1. Liga dorastu') return '1.LD';
+    if (str === 'Kadeti') return 'Kadeti';
+    if (str === '2. Liga seniorov') return '2.LS';
+    if (str === 'Extraliga žien') return 'EXZ';
+    if (str === 'Prípravné SVK') return 'Príp. SVK';
+    if (str === 'Prípravné IIHF') return 'Príp. IIHF';
+    if (str === 'Turnaje repre') return 'Turnaje';
+    return 'Ostatné';
+};
+const ligueIdToLigue = (num: number): string => {
+    if (num === 1) return 'EXS';
+    if (num === 2) return '1.LS';
+    if (num === 3) return 'EXJ';
+    if (num === 4) return 'EXD';
+    if (num === 5) return '1.LJ';
+    if (num === 6) return '1.LD';
+    if (num === 7) return 'Kadeti';
+    if (num === 8) return '2.LS';
+    if (num === 9) return 'EXZ';
+    if (num === 10) return 'Príp. SVK';
+    if (num === 11) return 'Príp. IIHF';
+    if (num === 12) return 'Turnaje';
+    return 'Ostatné';
+};
+
+const defaultListMonth = [
+    'Neznáme',
+    'Júl',
+    'August',
+    'September',
+    'Október',
+    'November',
+    'December',
+    'Január',
+    'Február',
+    'Marec',
+    'Apríl',
+    'Máj',
+    'Jún',
+    'Mesiac'
+];
+
+export const numberToMonth2 = (num: number): string => {
+    switch (num) {
+        case 1:
+            return 'Január';
+        case 2:
+            return 'Február';
+        case 3:
+            return 'Marec';
+        case 4:
+            return 'Apríl';
+        case 5:
+            return 'Máj';
+        case 6:
+            return 'Jún';
+        case 7:
+            return 'Júl';
+        case 8:
+            return 'August';
+        case 9:
+            return 'September';
+        case 10:
+            return 'Október';
+        case 11:
+            return 'November';
+        case 12:
+            return 'December';
+        default:
+            return 'Neznáme';
+    }
+};
+
+export const monthToNumber = (str: string): number => {
+    switch (str) {
+        case 'Január':
+            return 1;
+        case 'Február':
+            return 2;
+        case 'Marec':
+            return 3;
+        case 'Apríl':
+            return 4;
+        case 'Máj':
+            return 5;
+        case 'Jún':
+            return 6;
+        case 'Júl':
+            return 7;
+        case 'August':
+            return 8;
+        case 'September':
+            return 9;
+        case 'Október':
+            return 10;
+        case 'November':
+            return 11;
+        case 'December':
+            return 12;
+        default:
+            return 0;
+    }
+};
+
+export const numberToMonth = (num: number): string => {
+    switch (num) {
+        case 1:
+            return 'jan.';
+        case 2:
+            return 'feb.';
+        case 3:
+            return 'mar.';
+        case 4:
+            return 'apr.';
+        case 5:
+            return 'máj';
+        case 6:
+            return 'jún';
+        case 7:
+            return 'júl';
+        case 8:
+            return 'aug.';
+        case 9:
+            return 'sep.';
+        case 10:
+            return 'okt.';
+        case 11:
+            return 'nov.';
+        case 12:
+            return 'dec.';
+        default:
+            return '';
+    }
+};
+
 export const createGameSections = (games: object[]): Array<SectionListData<IItemButton>> => {
     const categoryMap: any = {};
     const sections: any = [];
+    const months: any = [];
     games.forEach((listItem: IListItem): void => {
+        const month = numberToMonth2(new Date(listItem.game_date).getMonth() + 1);
+        if (!months.includes(month)) {
+            months.push(month);
+        }
+
         const category: string = numberToLigue(listItem.external_id);
         if (!categoryMap[category]) {
             sections.push({ sectionName: category, id: numberToLigueId(listItem.external_id) });
@@ -56,6 +205,15 @@ export const createGameSections = (games: object[]): Array<SectionListData<IItem
         section.data = categoryMap[sec.sectionName];
         return section;
     });
+
+    if (months.length) {
+        const monthsResult = months.map((month: string) => ({
+            month: month,
+            value: monthToNumber(month)
+        }));
+        store.reduxStore.dispatch(filterMonths(monthsResult));
+    }
+
     return result;
 };
 
@@ -74,6 +232,21 @@ const filterGamesByRozhodca = (games: any, rozhodcaId: number) => {
     return filteredGames;
 };
 
+const filterGamesByMesiac = (games: any, mesiacId: number) => {
+    const filteredGames = games
+        .map((section: ISection) => {
+            const filterMonths = filter(section.data, ({ game_date }): boolean => {
+                return new Date(game_date).getMonth() + 1 === mesiacId;
+            });
+            if (filterMonths.length) {
+                return { ...section, data: filterMonths };
+            }
+        })
+        .filter((i: any) => i !== undefined);
+
+    return filteredGames;
+};
+
 const filterGamesByLiga = (games: any, ligaId: number) => {
     const filteredGames = filter(games, ({ id }): boolean => id === ligaId);
     return filteredGames;
@@ -81,16 +254,14 @@ const filterGamesByLiga = (games: any, ligaId: number) => {
 
 export const filterGameSections = (games: any, filter: IFilter) => {
     let result = games;
-    console.log('filterGameSections', filter);
 
     if (filter.liga !== 0) {
         result = filterGamesByLiga(result, filter.liga);
     }
 
-    // if (filter.mesiac !== 0) {
-    //     result = filterGamesByMesiac(result, filter.mesiac);
-    // }
-    //console.log('result', result);
+    if (filter.mesiac !== 0) {
+        result = filterGamesByMesiac(result, filter.mesiac);
+    }
 
     if (filter.rozhodca !== 0) {
         result = filterGamesByRozhodca(result, filter.rozhodca);
@@ -112,10 +283,31 @@ export const getLigueList = (gameSections: ISection) => {
         key: 'Liga',
         value: id
     }));
-    const result = [{ label: 'Vsetky', key: 'liga', value: 0 }].concat(ligueList);
+    const result = [{ label: 'Vsetky', key: 'Liga', value: 0 }].concat(ligueList);
     return result;
 };
 
 export const getMonthList = () => {
-    return [];
+    const months = get(store.reduxStore.getState(), 'games.months', []);
+    const monthList = months.map(({ month, value }: { month: string; value: number }) => ({
+        label: month,
+        key: 'Mesiac',
+        value: value
+    }));
+    const result = [{ label: 'Vsetky', key: 'Mesiac', value: 0 }].concat(monthList);
+
+    return result;
+};
+
+export const getFilterButtonLabel = (filterKey: string): string => {
+    const { liga, mesiac, rozhodca } = get(store.reduxStore.getState(), 'filter', {});
+    if (filterKey === 'Mesiac') {
+        return mesiac === 0 ? filterKey : numberToMonth2(mesiac);
+    }
+    if (filterKey === 'Liga') {
+        return liga === 0 ? filterKey : ligueIdToLigue(liga);
+    }
+    const refs = get(store.reduxStore.getState(), 'games.refs', []);
+    const ref = refs.find((ref: IRef) => ref.id === rozhodca);
+    return rozhodca === 0 || !ref ? filterKey : ref.name;
 };

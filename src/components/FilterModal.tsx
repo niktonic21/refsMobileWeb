@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Modal } from '@Modal';
 import get from 'lodash/get';
-import { getRefList, getLigueList } from '../utils/gameUtils';
+import { getRefList, getLigueList, getMonthList } from '../utils/gameUtils';
 import { FlatList } from 'react-native-gesture-handler';
 import { RadioButton } from './RadioButton';
 import { useDispatch, useSelector } from 'react-redux';
@@ -44,7 +44,7 @@ const getFilterList = (label: string, games: ISection): Array<object> => {
         return getRefList();
     }
     if (label === 'Mesiac') {
-        return dataMesiac; //getMonthList();
+        return getMonthList();
     }
     return getLigueList(games);
 };
