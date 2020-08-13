@@ -4,7 +4,7 @@ import { RectButton } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 import get from 'lodash/get';
 import { createGameSections, filterGameSections } from '../utils/gameUtils';
-import { IItemButton, ISec, ISection, IGame } from '../utils/types';
+import { IItemButton, IGame } from '../utils/types';
 import FilterButtons from '../components/FilterButtons';
 import { FilterModal } from '../components/FilterModal';
 
@@ -98,7 +98,7 @@ export default function MatchesScreen({ navigation }) {
         const datTime = game_date ? game_date.split(' ') : [];
 
         const _onPress = () => {
-            navigation.navigate('GameScreen', { gameId: external_id });
+            navigation.navigate('GameScreen', { gameId: external_id, item: item });
             console.log('tap', external_id);
         };
 

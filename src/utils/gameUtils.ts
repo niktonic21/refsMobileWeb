@@ -3,6 +3,7 @@ import { ISection, IListItem, ISec, IItemButton, IFilter, IRef } from './types';
 import sortBy from 'lodash/sortBy';
 import get from 'lodash/get';
 import filter from 'lodash/filter';
+import find from 'lodash/find';
 import store from '../redux/store';
 import { filterMonths } from '../redux/actions';
 
@@ -54,7 +55,7 @@ export const ligueToLig = str => {
     if (str === 'Turnaje repre') return 'Turnaje';
     return 'Ostatné';
 };
-const ligueIdToLigue = (num: number): string => {
+export const ligueIdToLigue = (num: number): string => {
     if (num === 1) return 'EXS';
     if (num === 2) return '1.LS';
     if (num === 3) return 'EXJ';
@@ -310,4 +311,10 @@ export const getFilterButtonLabel = (filterKey: string): string => {
     const refs = get(store.reduxStore.getState(), 'games.refs', []);
     const ref = refs.find((ref: IRef) => ref.id === rozhodca);
     return rozhodca === 0 || !ref ? filterKey : ref.name;
+};
+
+export const getGameData = (gameId: number): object => {
+    const games = get(store.reduxStore.getState(), 'games.games', []);
+    const game = find(games, (g: { external_id: number }) => g.external_id === gameId);
+    return game;
 };

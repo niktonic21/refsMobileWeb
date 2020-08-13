@@ -1,7 +1,11 @@
 import * as React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import get from 'lodash/get';
+import ZapasDetail from '../components/GameDetail/ZapasDetail';
+import CestovneDetail from '../components/GameDetail/CestovneDetail';
+import OstatneDetail from '../components/GameDetail/OstatneDetail';
+import PeniazeDetail from '../components/GameDetail/PeniazeDetail';
 
 const styles = StyleSheet.create({
     container: {
@@ -9,22 +13,24 @@ const styles = StyleSheet.create({
         backgroundColor: '#fafafa'
     },
     contentContainer: {
-        paddingTop: 15
-    },
-    optionText: {
-        fontSize: 15,
-        alignSelf: 'flex-start',
-        marginTop: 1
+        maxWidth: 800,
+        width: '100%',
+        alignSelf: 'center',
+        justifyContent: 'center',
+        paddingVertical: 15
     }
 });
 
-export default function GameScreen({ navigation, route }) {
-    const gameId = get(route, 'params.gameId', null);
-    const gameData = get(route, 'params.gameId', null);
+export default function GameScreen({ navigation, route }: any) {
+    const gameData = get(route, 'params.item', null);
+    console.log('gameData', gameData);
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-            <Text style={styles.optionText}>game: {gameId}</Text>
+            <ZapasDetail gameData={gameData} />
+            <CestovneDetail gameData={gameData} />
+            <OstatneDetail />
+            <PeniazeDetail />
         </ScrollView>
     );
 }

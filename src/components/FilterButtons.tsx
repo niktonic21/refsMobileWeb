@@ -3,8 +3,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { getFilterButtonLabel } from '../utils/gameUtils';
 
-import Colors from '../../constants/Colors';
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
