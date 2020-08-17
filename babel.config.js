@@ -10,8 +10,11 @@ module.exports = function (api) {
                     alias: {
                         '@Modal': './src/components/Modal',
                         '@gameUtils': './src/utils/gameUtils.ts',
+                        '@profileUtils': './src/utils/profileUtils.ts',
+                        '@utils': './src/utils',
                         '@colors': './constants/Colors.ts',
-                        '@layout': './constants/Layout.ts'
+                        '@layout': './constants/Layout.ts',
+                        '@actions': './src/redux/actions'
                     }
                 }
             ]

@@ -4,7 +4,6 @@ import { Card } from '../Card';
 import { IGame } from '../../utils/types';
 import ItemDetailButton from './ItemDetailButton';
 import ItemDetailSwitch from './ItemDetailSwitch';
-import { ligueToLig } from '@gameUtils';
 import Separator from './Separator';
 
 const styles = StyleSheet.create({

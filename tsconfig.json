@@ -17,12 +17,15 @@
                 "*.android"
             ],
             "@assets/*": [
-                "assets/*",
+                "./assets/*",
             ],
             "@Modal": ["src/components/Modal"],
             "@gameUtils": ["src/utils/gameUtils"],
+            "@profileUtils": ["src/utils/profileUtils"],
+            "@utils": ["src/utils/"],
             "@colors": ["constants/Colors"],
-            "@layout": ["constants/Layout"]
+            "@layout": ["constants/Layout"],
+            "@actions": ["src/redux/actions/"]
         }
     }
 }

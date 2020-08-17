@@ -16,6 +16,12 @@ export default {
                         screens: {
                             HomeScreen: 'home'
                         }
+                    },
+                    User: {
+                        screens: {
+                            UserScreen: 'user',
+                            ForgotPasswordScreen: 'password'
+                        }
                     }
                 }
             },

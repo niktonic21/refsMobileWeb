@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
 
 export default function GameScreen({ navigation, route }: any) {
     const gameData = get(route, 'params.item', null);
-    console.log('gameData', gameData);
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>

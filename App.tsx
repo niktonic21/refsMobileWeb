@@ -4,12 +4,14 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
+import { initFirebase } from './src/redux/firebase';
 import store from './src/redux/store';
 import useCachedResources from './src/utils/hooks/useCachedResources';
 import useColorScheme from './src/utils/hooks/useColorScheme';
 import Navigation from './src/navigation';
 
 export default function App() {
+    initFirebase();
     const isLoadingComplete = useCachedResources();
     const colorScheme = useColorScheme();
 

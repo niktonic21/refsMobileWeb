@@ -5,7 +5,7 @@ import jsonAll from './reducers/dataLocalGamesAll.json';
 import refsAll from './reducers/dataLocalReferees.json';
 
 export const requestR = async () => {
-    console.log('filter_', refsAll);
+    //console.log('filter_', refsAll);
     return refsAll;
 };
 

@@ -3,9 +3,8 @@ import { StyleSheet, View } from 'react-native';
 
 const styles = StyleSheet.create({
     separator: {
-        height: 1,
-        flex: 1,
-        backgroundColor: '#aaa'
+        borderBottomWidth: 1,
+        borderBottomColor: '#aaa'
     }
 });
 

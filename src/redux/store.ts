@@ -6,6 +6,8 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
 import rootReducer from '../redux/reducers';
+import { initFirebase } from './firebase';
+initFirebase();
 
 let middleware = applyMiddleware(thunk);
 

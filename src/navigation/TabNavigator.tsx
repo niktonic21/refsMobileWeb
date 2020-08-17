@@ -8,7 +8,9 @@ import useColorScheme from '../utils/hooks/useColorScheme';
 import MatchesScreen from '../screens/MatchesScreen';
 import HomeScreen from '../screens/HomeScreen';
 import GameScreen from '../screens/GameScreen';
-import { BottomTabParamList, HomeParamList, MatchesParamList } from '../../types';
+import UserScreen from '../screens/UserScreen';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+import { BottomTabParamList, HomeParamList, MatchesParamList, UserParamList } from '../../types';
 import { isWeb } from '../../constants/Layout';
 
 const Tab = isWeb
@@ -18,7 +20,6 @@ const headerMode = isWeb ? 'none' : 'screen';
 
 export default function TabNavigator() {
     const colorScheme = useColorScheme();
-
     return (
         <Tab.Navigator
             initialRouteName="Matches"
@@ -28,7 +29,7 @@ export default function TabNavigator() {
                 name="Matches"
                 component={MatchesNavigator}
                 options={{
-                    tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />
+                    tabBarIcon: ({ color }) => <TabBarIcon name="ios-list" color={color} />
                 }}
             />
             <Tab.Screen
@@ -36,6 +37,13 @@ export default function TabNavigator() {
                 component={HomeNavigator}
                 options={{
                     tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />
+                }}
+            />
+            <Tab.Screen
+                name="Profile"
+                component={UserNavigator}
+                options={{
+                    tabBarIcon: ({ color }) => <TabBarIcon name="ios-contacts" color={color} />
                 }}
             />
         </Tab.Navigator>
@@ -77,8 +85,27 @@ function HomeNavigator() {
             <HomeStack.Screen
                 name="HomeScreen"
                 component={HomeScreen}
-                options={{ headerTitle: 'Home' }}
+                options={{ headerTitle: 'Domov' }}
             />
         </HomeStack.Navigator>
+    );
+}
+
+const UserStack = createStackNavigator<UserParamList>();
+
+function UserNavigator() {
+    return (
+        <UserStack.Navigator headerMode={headerMode}>
+            <UserStack.Screen
+                name="UserScreen"
+                component={UserScreen}
+                options={{ headerTitle: 'Profil' }}
+            />
+            <UserStack.Screen
+                name="ForgotPasswordScreen"
+                component={ForgotPasswordScreen}
+                options={{ headerTitle: '' }}
+            />
+        </UserStack.Navigator>
     );
 }
