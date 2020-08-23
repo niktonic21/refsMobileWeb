@@ -25,6 +25,7 @@
             "@utils": ["src/utils/"],
             "@colors": ["constants/Colors"],
             "@layout": ["constants/Layout"],
+            "@strings": ["constants/Strings"],
             "@actions": ["src/redux/actions/"]
         }
     }

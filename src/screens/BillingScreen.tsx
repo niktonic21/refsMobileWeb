@@ -85,13 +85,13 @@ const _renderSectionHeader = ({ section }: any) => (
 
 const _renderSeparator = () => <View style={styles.separator} />;
 
-const _keyExtractor = (item: { external_id: number }) => String(item.external_id);
+const _keyExtractor = (item: { gameId: string }) => item.gameId;
 
 const _renderEmptyListItem = () => <Text style={styles.noMatches}>Ziadne zapasy</Text>;
 
 export default function BillingScreen({ navigation }) {
     const isLoggedId = useSelector<{ auth: { loggedIn: boolean } }>(state => state.auth.loggedIn);
-    const userId = 'jobbagymartin';
+    const userId = 'jobbagymartinmgr';
     console.log('aaa_Logged_in', isLoggedId);
     const games = useSelector(state => get(state, 'games.games', []));
     const billingSections: Array<SectionListData<any>> = createBillingSections(games, userId);
@@ -101,20 +101,21 @@ export default function BillingScreen({ navigation }) {
     };
 
     const _renderItem = ({ item }: IItemButton) => {
-        const { home, away, gameId, date } = item;
+        const { home, away, gameId, ligue, day, time, date } = item;
 
         const _onPress = () => {
-            navigation.navigate('GameScreen', { gameId: gameId, item: item });
-            console.log('tap', gameId);
+            navigation.navigate('GameScreen', { gameId: gameId, item: item, isBilling: true });
         };
 
         return (
             <RectButton key={gameId} style={styles.option} onPress={_onPress}>
                 <View style={styles.matchInfo}>
+                    <Text style={styles.optionText}>{ligue}</Text>
                     <Text style={styles.optionText}>{home}</Text>
                     <Text style={styles.optionText}>{away}</Text>
-                    <Text style={styles.optionText}>{gameId}</Text>
-                    <Text style={styles.optionText}>{date}</Text>
+                    <Text style={styles.optionText}>
+                        {date} o {time}, {day}
+                    </Text>
                 </View>
             </RectButton>
         );

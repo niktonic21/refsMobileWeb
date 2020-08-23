@@ -14,6 +14,7 @@ module.exports = function (api) {
                         '@utils': './src/utils',
                         '@colors': './constants/Colors.ts',
                         '@layout': './constants/Layout.ts',
+                        '@strings': './constants/Strings.ts',
                         '@actions': './src/redux/actions'
                     }
                 }

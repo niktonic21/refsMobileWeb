@@ -6,6 +6,7 @@ import ItemDetailButton from './ItemDetailButton';
 import ItemDetailSwitch from './ItemDetailSwitch';
 import { ligueToLig } from '@gameUtils';
 import Separator from './Separator';
+import { ZAPAS } from '@strings';
 
 const styles = StyleSheet.create({
     container: {
@@ -20,33 +21,40 @@ const styles = StyleSheet.create({
     }
 });
 
-export default function ZapasDetail({ gameData }: { gameData: IGame }) {
-    const { home, away, external_id, game_date, referees } = gameData;
-    const ligue = ligueToLig(external_id);
-    const dateTime = game_date ? game_date.split(' ') : [];
+interface IProps {
+    gameData: IGame;
+    isBilling: boolean;
+}
+
+export default function ZapasDetail({ gameData, isBilling }: IProps) {
+    const { home, away, gameId, date, time, subligue, stadium, round, referees } = gameData;
+    const ligue = ligueToLig(gameId);
     const refs = referees.map(ref => ref.name.split(',', 2)).join('\n');
 
     return (
         <View style={styles.container}>
-            <Text style={styles.headerText}>Zapas</Text>
+            <Text style={styles.headerText}>{ZAPAS}</Text>
             <Card>
-                <ItemDetailButton
-                    placeholder={'Liga, Kolo, C. zapasu'}
-                    label={`${ligue}, ${''}, ${external_id}`}
-                />
+                <ItemDetailButton placeholder={'Časť'} label={`${subligue}`} />
                 <Separator />
                 <ItemDetailButton
-                    placeholder={'Datum a cas'}
-                    label={`${dateTime[0]}, ${dateTime[1]}`}
+                    placeholder={'Liga, Kolo, Č. zápasu'}
+                    label={`${ligue}, ${round}, ${gameId}`}
                 />
                 <Separator />
-                <ItemDetailButton placeholder={'Stadion'} label={home} />
+                <ItemDetailButton placeholder={'Dátum a čas'} label={`${date}, ${time}`} />
                 <Separator />
-                <ItemDetailButton placeholder={'Domaci - Hostia'} label={`${home} - ${away}`} />
+                <ItemDetailButton placeholder={'Štadión'} label={stadium} />
+                <Separator />
+                <ItemDetailButton placeholder={'Domáci - Hostia'} label={`${home} - ${away}`} />
                 <Separator />
                 <ItemDetailButton placeholder={'Rozhodcovia'} label={refs} />
-                <Separator />
-                <ItemDetailSwitch label={'Stretnutie sa hralo'} />
+                {isBilling ? (
+                    <>
+                        <Separator />
+                        <ItemDetailSwitch label={'Stretnutie sa hralo'} />
+                    </>
+                ) : null}
             </Card>
         </View>
     );

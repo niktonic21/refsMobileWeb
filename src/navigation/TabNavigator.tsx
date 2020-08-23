@@ -4,6 +4,9 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
+import get from 'lodash/get';
+import { isWeb } from '@layout';
+import store from '../redux/store';
 import Colors from '../../constants/Colors';
 import useColorScheme from '../utils/hooks/useColorScheme';
 import MatchesScreen from '../screens/MatchesScreen';
@@ -14,8 +17,7 @@ import GameScreen from '../screens/GameScreen';
 import UserScreen from '../screens/UserScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import { BottomTabParamList, HomeParamList, MatchesParamList, UserParamList } from '../../types';
-import { isWeb } from '../../constants/Layout';
-import { fetchRefsAction, fetchGames } from '@actions';
+import { checkNewData } from '../redux/actions';
 
 const Tab = isWeb
     ? createMaterialTopTabNavigator<BottomTabParamList>()
@@ -27,8 +29,8 @@ export default function TabNavigator() {
     const dispatch = useDispatch();
 
     React.useEffect(() => {
-        dispatch(fetchGames());
-        dispatch(fetchRefsAction());
+        const lastUpdated = get(store.reduxStore.getState(), 'games.lastUpdated', 0);
+        dispatch(checkNewData(lastUpdated));
     }, []);
 
     return (
@@ -96,7 +98,7 @@ function HomeNavigator() {
             <HomeStack.Screen
                 name="HomeScreen"
                 component={BillingScreen}
-                options={{ headerTitle: 'Domov' }}
+                options={{ headerTitle: 'Vyuctovanie' }}
             />
             <MatchesStack.Screen
                 name="GameScreen"

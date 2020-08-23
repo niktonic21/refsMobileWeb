@@ -23,13 +23,18 @@ const styles = StyleSheet.create({
 
 export default function GameScreen({ navigation, route }: any) {
     const gameData = get(route, 'params.item', null);
+    const isBilling = get(route, 'params.isBilling', null);
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-            <ZapasDetail gameData={gameData} />
-            <CestovneDetail gameData={gameData} />
-            <OstatneDetail />
-            <PeniazeDetail />
+            <ZapasDetail gameData={gameData} isBilling={isBilling} />
+            {isBilling ? (
+                <>
+                    <CestovneDetail gameData={gameData} />
+                    <OstatneDetail />
+                    <PeniazeDetail />
+                </>
+            ) : null}
         </ScrollView>
     );
 }
