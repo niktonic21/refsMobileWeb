@@ -21,15 +21,9 @@ const styles = StyleSheet.create({
 
 export default function UserScreen({ navigation }: any) {
     const isLoggedId = useSelector<{ auth: { loggedIn: boolean } }>(state => state.auth.loggedIn);
-    console.log('aaa_Logged_in', isLoggedId);
-
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-            {isLoggedId ? (
-                <ProfileScreen navigation={navigation} />
-            ) : (
-                <LoginScreen navigation={navigation} />
-            )}
+            {isLoggedId ? <ProfileScreen /> : <LoginScreen navigation={navigation} />}
         </ScrollView>
     );
 }

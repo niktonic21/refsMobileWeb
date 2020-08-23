@@ -3,7 +3,7 @@ import { FILTER_CHANGED } from '../actions';
 const INITIAL_STATE = {
     liga: 0,
     mesiac: 0,
-    rozhodca: 0
+    rozhodca: ''
 };
 export default (state = INITIAL_STATE, action: any) => {
     switch (action.type) {

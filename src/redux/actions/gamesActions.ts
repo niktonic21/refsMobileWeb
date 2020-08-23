@@ -1,4 +1,4 @@
-import { requestR, request } from '../backend';
+import { fetchRefs, request, fetchSeasonGames } from '../backend';
 
 export const GAMES_REQUEST = 'games_request';
 export const GAMES_RECEIVE = 'games_receive';
@@ -22,13 +22,11 @@ export const fetchGameRejected = (games: any) => ({
     games
 });
 
-export const fetchGames = (monthId: number) => {
+export const fetchGames = () => {
     return async (dispatch: any) => {
         try {
             dispatch(requestGames());
-            const result = await request({
-                route: `/games/${monthId}`
-            });
+            const result = await fetchSeasonGames();
             dispatch(receivedGames(result));
         } catch (error) {
             console.log('Getting Games Error---------', error);
@@ -51,11 +49,11 @@ export const fetchRefsRejected = (refs: any) => ({
     refs
 });
 
-export const fetchRefs = () => {
+export const fetchRefsAction = () => {
     return async (dispatch: any) => {
         try {
             dispatch(requestRefs());
-            const result = await requestR();
+            const result = await fetchRefs();
             dispatch(receivedRefs(result));
         } catch (error) {
             console.log('Getting Referees Error---------', error);

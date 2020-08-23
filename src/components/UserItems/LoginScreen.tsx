@@ -33,7 +33,7 @@ const LoginScreen = ({ navigation }: Props) => {
     const [email, setEmail] = useState({ value: '', error: '' });
     const [password, setPassword] = useState({ value: '', error: '' });
     const dispatch = useDispatch();
-    const { error: firebaseError, loading } = useSelector<any>(state => state.auth);
+    const { error: firebaseError, loading } = useSelector(state => state.auth);
 
     const _onLoginPressed = () => {
         const emailError = emailValidator(email.value);
@@ -60,7 +60,6 @@ const LoginScreen = ({ navigation }: Props) => {
                 label="Email"
                 returnKeyType="next"
                 onFocus={_onFocus}
-                editable={false}
                 value={email.value}
                 onChangeText={text => setEmail({ value: text, error: '' })}
                 error={!!email.error}

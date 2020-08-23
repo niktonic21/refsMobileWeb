@@ -1,5 +1,5 @@
 import { SectionListData } from 'react-native';
-import { ISection, IListItem, ISec, IItemButton, IFilter, IRef } from './types';
+import { ISection, IListItem, ISec, IItemButton, IFilter, IRef, IGame } from './types';
 import sortBy from 'lodash/sortBy';
 import get from 'lodash/get';
 import filter from 'lodash/filter';
@@ -181,24 +181,31 @@ export const numberToMonth = (num: number): string => {
     }
 };
 
+export const parseDate = (date: string) => {
+    const dataArray = date.split('.');
+    return { day: dataArray[0], month: dataArray[1], year: dataArray[2] };
+};
+
 export const createGameSections = (games: object[]): Array<SectionListData<IItemButton>> => {
     const categoryMap: any = {};
     const sections: any = [];
     const months: any = [];
-    games.forEach((listItem: IListItem): void => {
-        const month = numberToMonth2(new Date(listItem.game_date).getMonth() + 1);
+    games.forEach((game: IGame): void => {
+        const month = numberToMonth2(parseInt(parseDate(game.date).month, 10));
+
         if (!months.includes(month)) {
             months.push(month);
         }
-
-        const category: string = numberToLigue(listItem.external_id);
+        const gameID = parseInt(game.gameId, 10);
+        const category: string = numberToLigue(gameID);
         if (!categoryMap[category]) {
-            sections.push({ sectionName: category, id: numberToLigueId(listItem.external_id) });
+            sections.push({ sectionName: category, id: numberToLigueId(gameID) });
             // Create an entry in the map for the category if it hasn't yet been created
             categoryMap[category] = [];
         }
-        categoryMap[category].push(listItem);
+        categoryMap[category].push(game);
     });
+
     const result = sections.map((sec: ISec) => {
         const section: ISection = { id: '', title: '', data: [] };
         section.id = sec.id;
@@ -218,12 +225,12 @@ export const createGameSections = (games: object[]): Array<SectionListData<IItem
     return result;
 };
 
-const filterGamesByRozhodca = (games: any, rozhodcaId: number) => {
-    const filteredGames = games
+const filterGamesByRozhodca = (gamesSections: any, rozhodcaId: string) => {
+    const filteredGames = gamesSections
         .map((section: ISection) => {
             const filterRefs = filter(
                 section.data,
-                ({ referees }): boolean => !referees.every(({ id }) => id != rozhodcaId)
+                ({ referees }): boolean => !referees.every(({ id }) => id !== rozhodcaId)
             );
             if (filterRefs.length) {
                 return { ...section, data: filterRefs };
@@ -236,8 +243,8 @@ const filterGamesByRozhodca = (games: any, rozhodcaId: number) => {
 const filterGamesByMesiac = (games: any, mesiacId: number) => {
     const filteredGames = games
         .map((section: ISection) => {
-            const filterMonths = filter(section.data, ({ game_date }): boolean => {
-                return new Date(game_date).getMonth() + 1 === mesiacId;
+            const filterMonths = filter(section.data, ({ date }): boolean => {
+                return parseInt(parseDate(date).month, 10) === mesiacId;
             });
             if (filterMonths.length) {
                 return { ...section, data: filterMonths };
@@ -264,9 +271,10 @@ export const filterGameSections = (games: any, filter: IFilter) => {
         result = filterGamesByMesiac(result, filter.mesiac);
     }
 
-    if (filter.rozhodca !== 0) {
+    if (filter.rozhodca !== '') {
         result = filterGamesByRozhodca(result, filter.rozhodca);
     }
+
     return result;
 };
 
@@ -274,7 +282,7 @@ export const getRefList = () => {
     const refs = get(store.reduxStore.getState(), 'games.refs', []);
     const sortedRefs = sortBy(refs, ['name']);
     const refList = sortedRefs.map(({ name, id }) => ({ label: name, key: 'Rozhodca', value: id }));
-    const result = [{ label: 'Vsetci', key: 'Rozhodca', value: 0 }].concat(refList);
+    const result = [{ label: 'Vsetci', key: 'Rozhodca', value: '' }].concat(refList);
     return result;
 };
 
@@ -317,4 +325,43 @@ export const getGameData = (gameId: number): object => {
     const games = get(store.reduxStore.getState(), 'games.games', []);
     const game = find(games, (g: { external_id: number }) => g.external_id === gameId);
     return game;
+};
+
+const filterGamesListByRozhodca = (games: any, rozhodcaId: number) => {
+    const filteredGames = filter(
+        games,
+        ({ referees }): boolean => !referees.every(({ id }) => id != rozhodcaId)
+    ).filter((i: any) => i !== undefined);
+    return filteredGames;
+};
+
+export const createBillingSections = (
+    games: object[],
+    userId: number
+): Array<SectionListData<IItemButton>> => {
+    const categoryMap: any = {};
+    const sections: any = [];
+    const filteredGames = filterGamesListByRozhodca(games, userId);
+
+    filteredGames.forEach((listItem: IListItem): void => {
+        const category: string = numberToMonth2(new Date(listItem.game_date).getMonth() + 1);
+        if (!categoryMap[category]) {
+            sections.unshift({
+                sectionName: category,
+                id: new Date(listItem.game_date).getMonth() + 1
+            });
+            // Create an entry in the map for the category if it hasn't yet been created
+            categoryMap[category] = [];
+        }
+        categoryMap[category].unshift(listItem);
+    });
+    const result = sections.map((sec: ISec) => {
+        const section: ISection = { id: '', title: '', data: [] };
+        section.id = sec.id;
+        section.title = sec.sectionName;
+        section.data = categoryMap[sec.sectionName];
+        return section;
+    });
+
+    return result;
 };

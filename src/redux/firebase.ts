@@ -12,8 +12,6 @@ const firebaseConfig = {
 };
 
 export const initFirebase = () => {
-    console.log('as', firebase.apps.length);
-
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
         console.log('init_done');
@@ -30,5 +28,3 @@ export const resetPassword = (email: string) => {
             console.warn('Request error', error);
         });
 };
-
-//const dbh = firebase.firestore();

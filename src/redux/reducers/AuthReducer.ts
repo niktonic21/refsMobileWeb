@@ -19,7 +19,8 @@ const INITIAL_STATE = {
     loggedIn: null,
     profile: {
         mesto: '',
-        auto: ''
+        auto: '',
+        email: ''
     }
 };
 

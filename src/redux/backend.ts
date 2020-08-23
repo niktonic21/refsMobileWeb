@@ -1,25 +1,26 @@
-const BACKEND_URL = 'https://delegacky.herokuapp.com';
+//const BACKEND_URL = 'https://delegacky.herokuapp.com';
+const BACKEND_URL = 'https://jobb.sk'; // /seasons/20192020.json
+//https://jobb.sk/seasons/20202021.json
+//https://jobb.sk/seasons/20202021_updates.json
+//https://jobb.sk/seasons/20192020_referees.json
 import json from './reducers/dataLocalGames21.json';
 import json2 from './reducers/dataLocalGames11.json';
 import jsonAll from './reducers/dataLocalGamesAll.json';
 import refsAll from './reducers/dataLocalReferees.json';
 
-export const requestR = async () => {
-    //console.log('filter_', refsAll);
-    return refsAll;
+export const fetchSeasonGames = async (season: string = '20192020') => {
+    const res = await fetch(`${BACKEND_URL}/seasons/${season}.json`);
+    return res.json();
+};
+
+export const fetchRefs = async (season: string = '20192020') => {
+    const res = await fetch(`${BACKEND_URL}/seasons/${season}_referees.json`);
+    return res.json();
 };
 
 export const request = async (args: any) => {
     const { method = 'GET', route, headers, payload } = args;
-    // const res = await fetch(`${BACKEND_URL}${route}`, {
-    //     method,
-    //     headers: {
-    //         Accept: 'application/json',
-    //         ...(payload ? { 'Content-Type': 'application/json' } : {}),
-    //         ...(headers || {})
-    //     },
-    //     body: payload && JSON.stringify(payload)
-    // })
+    const res = await fetch(`${BACKEND_URL}${route}`);
 
     // console.log('filter_args', args);
     // const fetchPromise = fetch('https://delegacky.herokuapp.com/lists', { mode: 'no-cors' });

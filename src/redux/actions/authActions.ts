@@ -1,6 +1,4 @@
 import * as firebase from 'firebase';
-import store from '../store';
-import get from 'lodash/get';
 
 export const EMAIL_CHANGED = 'auth_email_changed';
 export const PASSWORD_CHANGED = 'auth_password_changed';
@@ -26,34 +24,53 @@ export const removeError = () => ({
     type: ERROR_REMOVED
 });
 
-const loginUserSuccess = (dispatch, user) => {
+const loginUserSuccess = (dispatch: any, user: any) => {
     dispatch({
         type: LOGIN_USER_SUCCESS,
         payload: user
     });
-    //Actions.pop();
+    //downloadProfileData(dispatch, user.user.uid);
 };
 
-const loginUserFail = (dispatch, error) => {
+export const downloadProfileData = (dispatch: any, userId: string) => {
+    if (!userId) return;
+    firebase
+        .firestore()
+        .collection('referees')
+        .doc(userId)
+        .onSnapshot(doc => {
+            if (doc.exists) {
+                dispatch({
+                    type: PROFILE_UPDATE,
+                    payload: doc.data()
+                });
+            } else {
+                console.warn('Profile: no data to be stored');
+            }
+        });
+    // .catch(error => {
+    //     console.warn('Profile error written!', error);
+    // });
+};
+
+const loginUserFail = (dispatch: any, error: string) => {
     dispatch({ type: LOGIN_USER_FAIL, payload: error });
 };
 
-export const loginUser = ({ email, password }) => dispatch => {
+export const loginUser = ({ email, password }: { email: string; password: string }) => (
+    dispatch: any
+) => {
     dispatch({ type: LOGIN_USER });
+
     firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(user => loginUserSuccess(dispatch, user))
         .catch(error => {
-            console.log(error);
+            console.warn('Login error: ', error);
             loginUserFail(dispatch, error);
         });
 };
-
-export const loggedInChange = (usr, lgdIn) => ({
-    type: LOGGED_IN_CHANGE,
-    payload: { usr, lgdIn }
-});
 
 export const logOut = () => {
     firebase.auth().signOut();
@@ -62,19 +79,36 @@ export const logOut = () => {
     };
 };
 
-export const saveProfileData = (profileData: { mesto: string; auto: string; email: string }) => {
-    const { currentUser } = firebase.auth();
-    if (!profileData || !currentUser) return;
+export const updateProfileData = (profileData: { mesto: string; auto: string; email: string }) => {
     return {
         type: PROFILE_UPDATE,
         payload: profileData
     };
-    // firebase
-    //     .database()
-    //     .ref(`/referees/${currentUser.uid}`)
-    //     .update({ rozhodca, liga, mesto, auto, kategoria, email })
-    //     .then(() => console.log('data_saved'));
 };
+
+export const saveProfileData = (profileData: { mesto: string; auto: string; email: string }) => {
+    const { currentUser } = firebase.auth();
+    if (!profileData || !currentUser) return;
+
+    firebase
+        .firestore()
+        .collection('referees')
+        .doc(currentUser.uid)
+        .set(profileData, { merge: true })
+        .catch(error => {
+            console.warn('Profile error written!', error);
+        });
+
+    return {
+        type: PROFILE_UPDATE,
+        payload: profileData
+    };
+};
+
+// export const loggedInChange = (usr, lgdIn) => ({
+//     type: LOGGED_IN_CHANGE,
+//     payload: { usr, lgdIn }
+// });
 
 // export const authChanges = firebase.auth().onAuthStateChanged(function (user) {
 //     if (user) {

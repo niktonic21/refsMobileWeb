@@ -15,18 +15,22 @@ export interface ISection {
 }
 
 export interface IRef {
-    id: number;
+    id: string;
     name: string;
-    date_add: string;
-    date_uuid: string;
 }
 
 export interface IGame {
+    gameId: string;
     home: string;
     away: string;
-    external_id: number;
-    game_date: string;
-    game_uuid: string;
+    date: string;
+    day: string;
+    time: string;
+    ligue: string;
+    subligue: string;
+    round: string;
+    stadium: string;
+    delegation: number;
     referees: Array<IRef>;
 }
 
@@ -35,7 +39,7 @@ export interface IItemButton {
 }
 
 export interface IFilter {
-    rozhodca: number;
+    rozhodca: string;
     mesiac: number;
     liga: number;
 }

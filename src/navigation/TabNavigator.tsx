@@ -3,15 +3,19 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
+import { useDispatch } from 'react-redux';
 import Colors from '../../constants/Colors';
 import useColorScheme from '../utils/hooks/useColorScheme';
 import MatchesScreen from '../screens/MatchesScreen';
-import HomeScreen from '../screens/HomeScreen';
+// import HomeScreen from '../screens/HomeScreen';
+// import LinksScreen from '../screens/LinksScreen';
+import BillingScreen from '../screens/BillingScreen';
 import GameScreen from '../screens/GameScreen';
 import UserScreen from '../screens/UserScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import { BottomTabParamList, HomeParamList, MatchesParamList, UserParamList } from '../../types';
 import { isWeb } from '../../constants/Layout';
+import { fetchRefsAction, fetchGames } from '@actions';
 
 const Tab = isWeb
     ? createMaterialTopTabNavigator<BottomTabParamList>()
@@ -20,27 +24,34 @@ const headerMode = isWeb ? 'none' : 'screen';
 
 export default function TabNavigator() {
     const colorScheme = useColorScheme();
+    const dispatch = useDispatch();
+
+    React.useEffect(() => {
+        dispatch(fetchGames());
+        dispatch(fetchRefsAction());
+    }, []);
+
     return (
         <Tab.Navigator
             initialRouteName="Matches"
             tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
         >
             <Tab.Screen
-                name="Matches"
+                name="Zapasy"
                 component={MatchesNavigator}
                 options={{
                     tabBarIcon: ({ color }) => <TabBarIcon name="ios-list" color={color} />
                 }}
             />
             <Tab.Screen
-                name="Home"
+                name="Vyuctovanie"
                 component={HomeNavigator}
                 options={{
-                    tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />
+                    tabBarIcon: ({ color }) => <TabBarIcon name="ios-wallet" color={color} />
                 }}
             />
             <Tab.Screen
-                name="Profile"
+                name="Profil"
                 component={UserNavigator}
                 options={{
                     tabBarIcon: ({ color }) => <TabBarIcon name="ios-contacts" color={color} />
@@ -84,8 +95,13 @@ function HomeNavigator() {
         <HomeStack.Navigator headerMode={headerMode}>
             <HomeStack.Screen
                 name="HomeScreen"
-                component={HomeScreen}
+                component={BillingScreen}
                 options={{ headerTitle: 'Domov' }}
+            />
+            <MatchesStack.Screen
+                name="GameScreen"
+                component={GameScreen}
+                options={{ headerTitle: 'Datial zapasu' }}
             />
         </HomeStack.Navigator>
     );

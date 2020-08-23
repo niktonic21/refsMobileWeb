@@ -6,18 +6,19 @@ export default {
         screens: {
             Root: {
                 screens: {
-                    Matches: {
+                    Zapasy: {
                         screens: {
                             MatchesScreen: 'matches',
                             Game: 'game'
                         }
                     },
-                    Home: {
+                    Vyuctovanie: {
                         screens: {
-                            HomeScreen: 'home'
+                            HomeScreen: 'home',
+                            Game: 'game'
                         }
                     },
-                    User: {
+                    Profil: {
                         screens: {
                             UserScreen: 'user',
                             ForgotPasswordScreen: 'password'
