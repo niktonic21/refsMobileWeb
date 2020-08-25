@@ -20,7 +20,5 @@ export const fetchRefs = async (season: string = '20192020') => {
 
 export const fetchUpdateTime = async (season: string = '20192020') => {
     const res = await fetch(`${BACKEND_URL}${season}_updates.json`);
-    console.log('aaaaaaaa', res);
-
     return res.json();
 };

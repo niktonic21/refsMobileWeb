@@ -20,7 +20,8 @@ const INITIAL_STATE = {
     profile: {
         mesto: '',
         auto: '',
-        email: ''
+        email: '',
+        refID: ''
     }
 };
 

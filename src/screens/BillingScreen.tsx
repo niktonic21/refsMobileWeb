@@ -91,10 +91,12 @@ const _renderEmptyListItem = () => <Text style={styles.noMatches}>Ziadne zapasy<
 
 export default function BillingScreen({ navigation }) {
     const isLoggedId = useSelector<{ auth: { loggedIn: boolean } }>(state => state.auth.loggedIn);
-    const userId = 'jobbagymartinmgr';
-    console.log('aaa_Logged_in', isLoggedId);
+    const refId = useSelector<{ auth: { profile: { refID: string } } }>(
+        state => state.auth.profile.refID
+    );
     const games = useSelector(state => get(state, 'games.games', []));
-    const billingSections: Array<SectionListData<any>> = createBillingSections(games, userId);
+
+    const billingSections: Array<SectionListData<any>> = createBillingSections(games, refId);
 
     const _goToLogin = () => {
         navigation.navigate('Profil');
