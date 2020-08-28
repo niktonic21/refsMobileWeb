@@ -203,6 +203,7 @@ export const createGameSections = (games: object[]): Array<SectionListData<IItem
             months.push(month);
         }
         const gameID = game.gameId ? parseInt(game.gameId, 10) : 0;
+
         const category: string = numberToLigue(gameID);
         if (!categoryMap[category]) {
             sections.push({ sectionName: category, id: numberToLigueId(gameID) });
@@ -369,4 +370,10 @@ export const createBillingSections = (
     });
 
     return result;
+};
+
+export const stringToNumber = (text: string): number => {
+    const parsedNum = text ? parseFloat(text) : 0;
+    const isNum = !isNaN(parsedNum);
+    return isNum ? parsedNum : 0;
 };

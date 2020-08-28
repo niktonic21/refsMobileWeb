@@ -128,7 +128,7 @@ export default function BillingScreen({ navigation }) {
             {!isLoggedId ? (
                 <View style={styles.loginContainer}>
                     <Text onPress={_goToLogin} style={styles.loginText}>
-                        Na vytvaranie vyuctovani musis byt prihlaseny
+                        Na vytváranie vyučtovaní musíš byť prihláseny.
                     </Text>
                 </View>
             ) : (

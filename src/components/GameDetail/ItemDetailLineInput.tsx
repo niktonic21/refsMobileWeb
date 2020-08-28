@@ -10,7 +10,15 @@ const styles = StyleSheet.create({
         paddingVertical: 8
     },
     moneyContainer: {
+        flex: 1,
+        justifyContent: 'flex-end',
         flexDirection: 'row'
+    },
+    inputText: {
+        flex: 1,
+        textAlign: 'right',
+        paddingRight: 5,
+        fontSize: 18
     },
     labelText: {
         fontSize: 18
@@ -21,18 +29,20 @@ interface IProps {
     itemKey?: string;
     value: string;
     label: string;
-    onChangeText?: (itemKey: string, text: string) => void;
+    editable?: boolean;
+    changeNumber?: (itemKey: string, number: string) => void;
 }
 
 export default function ItemDetailLineInput({
     itemKey,
     label,
-    value = '22',
-    onChangeText
+    value = '0',
+    editable = true,
+    changeNumber
 }: IProps) {
     const _onChangeText = (text: string): void => {
-        if (!onChangeText || !itemKey) return;
-        onChangeText(itemKey, text);
+        if (!changeNumber || !itemKey) return;
+        changeNumber(itemKey, text);
     };
 
     return (
@@ -41,8 +51,16 @@ export default function ItemDetailLineInput({
                 {label}
             </Text>
             <View style={styles.moneyContainer}>
-                <TextInput style={styles.labelText} onChangeText={_onChangeText} value={value} />
-                <Text style={styles.labelText}> EUR</Text>
+                <TextInput
+                    style={styles.inputText}
+                    placeholder={'0.0'}
+                    keyboardType="numeric"
+                    returnKeyType={'next'}
+                    editable={editable}
+                    onChangeText={_onChangeText}
+                    value={value}
+                />
+                <Text style={styles.labelText}>€</Text>
             </View>
         </View>
     );

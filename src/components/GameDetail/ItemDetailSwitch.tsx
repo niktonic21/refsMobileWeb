@@ -24,7 +24,7 @@ interface IProps {
 export default function ItemDetailSwitch({
     itemKey,
     label,
-    isEnabled = true,
+    isEnabled = false,
     toggleSwitch
 }: IProps) {
     const _toggleSwitch = () => {

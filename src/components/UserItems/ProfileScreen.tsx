@@ -78,7 +78,7 @@ const ProfileScreen = () => {
                 error={!!email.error}
                 errorText={email.error}
                 autoCapitalize="none"
-                autoCompleteType="email"
+                //autoCompleteType="email"
                 textContentType="emailAddress"
                 keyboardType="email-address"
             />
