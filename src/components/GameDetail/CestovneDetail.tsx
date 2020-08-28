@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Card } from '../Card';
 import { EGameDetail, IGame } from '@utils';
+import { TRAVEL, CAR_ID, RATE_CITY, PASSENGERS, FROM_TO, WAS_DRIVER } from '@strings';
 import ItemDetailInput from './ItemDetailInput';
 import ItemDetailSwitch from './ItemDetailSwitch';
 import Separator from './Separator';
@@ -67,11 +68,11 @@ export default function CestovneDetail({ gameData, updateDetails }: IProps) {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.headerText}>Cestovne</Text>
+            <Text style={styles.headerText}>{TRAVEL}</Text>
             <Card>
                 <ItemDetailSwitch
                     itemKey={EGameDetail.IS_DRIVER}
-                    label={'Bol som vodic'}
+                    label={WAS_DRIVER}
                     toggleSwitch={_toggleSwitch}
                     isEnabled={isDriver}
                 />
@@ -82,26 +83,26 @@ export default function CestovneDetail({ gameData, updateDetails }: IProps) {
                             itemKey={EGameDetail.COUNT_CITY}
                             isEnabled={countCity}
                             toggleSwitch={_toggleSwitch}
-                            label={'Sadzba mesto'}
+                            label={RATE_CITY}
                         />
                         <Separator />
                         <ItemDetailInput
                             itemKey={EGameDetail.CAR}
-                            placeholder={'Spz auto'}
+                            placeholder={CAR_ID}
                             onChangeText={_changeText}
                             value={car}
                         />
                         <Separator />
                         <ItemDetailInput
                             itemKey={EGameDetail.REFS_IN_CAR}
-                            placeholder={'Spolucestujuci'}
+                            placeholder={PASSENGERS}
                             onChangeText={_changeText}
                             value={refsInCar}
                         />
                         <Separator />
                         <ItemDetailInput
                             itemKey={EGameDetail.ROAD}
-                            placeholder={'Odkial a kam'}
+                            placeholder={FROM_TO}
                             onChangeText={_changeText}
                             value={road}
                         />

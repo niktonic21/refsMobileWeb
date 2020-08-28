@@ -8,6 +8,7 @@ import TextInput from './profileUI/TextInput';
 import { useSelector, useDispatch } from 'react-redux';
 import { logOut, saveProfileData, updateProfileData } from '@actions';
 import { emailValidator } from '@utils';
+import { SAVE_CHANGES, LOG_OUT, CITY, CAR_ID } from '@strings';
 
 const styles = StyleSheet.create({
     container: {
@@ -82,14 +83,14 @@ const ProfileScreen = () => {
                 textContentType="emailAddress"
                 keyboardType="email-address"
             />
-            <TextInput label="Mesto" onChangeText={text => setMesto(text)} value={mesto} />
-            <TextInput label="ŠPZ vozidla" onChangeText={text => setAuto(text)} value={auto} />
+            <TextInput label={CITY} onChangeText={text => setMesto(text)} value={mesto} />
+            <TextInput label={CAR_ID} onChangeText={text => setAuto(text)} value={auto} />
 
             <Button mode="contained" onPress={_saveChanges}>
-                Ulozit zmeny
+                {SAVE_CHANGES}
             </Button>
             <Button mode="outlined" onPress={_logOut}>
-                Odhlasit sa
+                {LOG_OUT}
             </Button>
         </View>
     );
