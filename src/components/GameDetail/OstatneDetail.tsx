@@ -69,6 +69,7 @@ export default function OstatneDetail({ gameData, updateDetails }: IProps) {
                     isEnabled={isRepeatedGame}
                     toggleSwitch={_toggleSwitch}
                 />
+                <Separator />
                 <ItemDetailSwitch
                     label={ANOTHER_GAME}
                     itemKey={EGameDetail.IS_SECOND_GAME}

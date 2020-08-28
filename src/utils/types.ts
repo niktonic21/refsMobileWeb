@@ -64,6 +64,7 @@ export enum EGameDetail {
     POST = 'postMoney',
     OTHER = 'otherMoney',
     TOGETHER = 'together',
+    MEAL_ENABLED = 'mealEnabled',
     FROM_CITY = 'fromCity',
     TO_CITY = 'toCity',
     FROM_DAY = 'fromdDay',

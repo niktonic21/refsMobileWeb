@@ -2,8 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Card } from '../Card';
 import { EGameDetail, IGame } from '@utils';
-import { MEAL, FROM_CITY, TO_CITY, FROM_DAY, TO_DAY, FROM_TIME, TO_TIME } from '@strings';
+import {
+    MEAL,
+    COUNT_MEAL,
+    FROM_CITY,
+    TO_CITY,
+    FROM_DAY,
+    TO_DAY,
+    FROM_TIME,
+    TO_TIME
+} from '@strings';
 import ItemDetailInput from './ItemDetailInput';
+import ItemDetailSwitch from './ItemDetailSwitch';
 import Separator from './Separator';
 
 const styles = StyleSheet.create({
@@ -25,12 +35,19 @@ interface IProps {
 }
 
 export default function StravneDetail({ gameData, updateDetails }: IProps) {
+    const [isMealEnabled, setIsMealEnabled] = useState(false);
     const [fromCity, setfromCity] = useState('');
     const [toCity, setToCity] = useState('');
     const [fromDay, setFromDay] = useState('');
     const [toDay, setToDay] = useState('');
     const [fromTime, setFromTime] = useState('');
     const [toTime, setToTime] = useState('');
+
+    const _toggleSwitch = (itemKey: string) => {
+        if (EGameDetail.MEAL_ENABLED === itemKey) {
+            setIsMealEnabled(!isMealEnabled);
+        }
+    };
 
     const _changeText = (itemKey: string, text: string) => {
         if (EGameDetail.FROM_CITY === itemKey) {
@@ -58,45 +75,58 @@ export default function StravneDetail({ gameData, updateDetails }: IProps) {
         <View style={styles.container}>
             <Text style={styles.headerText}>{MEAL}</Text>
             <Card>
-                <ItemDetailInput
-                    itemKey={EGameDetail.FROM_CITY}
-                    placeholder={FROM_CITY}
-                    onChangeText={_changeText}
-                    value={fromCity}
+                <ItemDetailSwitch
+                    label={COUNT_MEAL}
+                    itemKey={EGameDetail.MEAL_ENABLED}
+                    isEnabled={isMealEnabled}
+                    toggleSwitch={_toggleSwitch}
                 />
-                <Separator />
-                <ItemDetailInput
-                    itemKey={EGameDetail.TO_CITY}
-                    placeholder={TO_CITY}
-                    onChangeText={_changeText}
-                    value={toCity}
-                />
-                <ItemDetailInput
-                    itemKey={EGameDetail.FROM_DAY}
-                    placeholder={FROM_DAY}
-                    onChangeText={_changeText}
-                    value={fromDay}
-                />
-                <Separator />
-                <ItemDetailInput
-                    itemKey={EGameDetail.TO_DAY}
-                    placeholder={TO_DAY}
-                    onChangeText={_changeText}
-                    value={toDay}
-                />
-                <ItemDetailInput
-                    itemKey={EGameDetail.FROM_TIME}
-                    placeholder={FROM_TIME}
-                    onChangeText={_changeText}
-                    value={fromTime}
-                />
-                <Separator />
-                <ItemDetailInput
-                    itemKey={EGameDetail.TO_TIME}
-                    placeholder={TO_TIME}
-                    onChangeText={_changeText}
-                    value={toTime}
-                />
+                {isMealEnabled ? (
+                    <>
+                        <Separator />
+                        <ItemDetailInput
+                            itemKey={EGameDetail.FROM_CITY}
+                            placeholder={FROM_CITY}
+                            onChangeText={_changeText}
+                            value={fromCity}
+                        />
+                        <Separator />
+                        <ItemDetailInput
+                            itemKey={EGameDetail.TO_CITY}
+                            placeholder={TO_CITY}
+                            onChangeText={_changeText}
+                            value={toCity}
+                        />
+                        <Separator />
+                        <ItemDetailInput
+                            itemKey={EGameDetail.FROM_DAY}
+                            placeholder={FROM_DAY}
+                            onChangeText={_changeText}
+                            value={fromDay}
+                        />
+                        <Separator />
+                        <ItemDetailInput
+                            itemKey={EGameDetail.TO_DAY}
+                            placeholder={TO_DAY}
+                            onChangeText={_changeText}
+                            value={toDay}
+                        />
+                        <Separator />
+                        <ItemDetailInput
+                            itemKey={EGameDetail.FROM_TIME}
+                            placeholder={FROM_TIME}
+                            onChangeText={_changeText}
+                            value={fromTime}
+                        />
+                        <Separator />
+                        <ItemDetailInput
+                            itemKey={EGameDetail.TO_TIME}
+                            placeholder={TO_TIME}
+                            onChangeText={_changeText}
+                            value={toTime}
+                        />
+                    </>
+                ) : null}
             </Card>
         </View>
     );

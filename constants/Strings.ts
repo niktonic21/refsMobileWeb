@@ -18,6 +18,7 @@ export const RATE = 'Paušál';
 export const TRAVEL = 'Cestovné';
 export const RATE_CITY = 'Sadzba mesto';
 export const MEAL = 'Stravné';
+export const COUNT_MEAL = 'Započítať stravné';
 export const NIGHT = 'Noclažné';
 export const POST = 'Poštovné';
 export const TOGETHER = 'Spolu';
