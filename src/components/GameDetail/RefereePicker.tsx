@@ -2,31 +2,32 @@ import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { REFS } from '@strings';
+import { EGameDetail } from '@utils';
 
 const refsPickerData = [
     {
         label: 'H1',
-        value: 'H1'
+        value: EGameDetail.H1
     },
     {
         label: 'H2',
-        value: 'H2'
+        value: EGameDetail.H2
     },
     {
-        label: 'R1',
-        value: 'R1'
+        label: 'Č1',
+        value: EGameDetail.C1
     },
     {
-        label: 'R2',
-        value: 'R2'
+        label: 'Č2',
+        value: EGameDetail.C2
     },
     {
         label: 'I',
-        value: 'I'
+        value: EGameDetail.H1
     },
     {
         label: 'V',
-        value: 'V'
+        value: EGameDetail.H1
     }
 ];
 
@@ -62,7 +63,7 @@ interface IRefsTypes {
 const createRefsWithType = (referees: any) => {
     return referees.map((ref: { name: string }, index: number) => {
         const name = ref.name.split(',', 2).join();
-        return { refType: refsPickerData[index].label, name };
+        return { refType: refsPickerData[index].value, name };
     });
 };
 
@@ -108,7 +109,7 @@ export default function RefereePicker({ referees, saveRefsType, refsWithType }: 
                                 dropDownMaxHeight={95}
                                 containerStyle={styles.containerSize}
                                 itemStyle={styles.itemStyle}
-                                onChangeItem={(item: IPicker) => _onPress(index, item.label)}
+                                onChangeItem={(item: IPicker) => _onPress(index, item.value)}
                             />
                             <Text style={styles.labelText}>{ref.name}</Text>
                         </View>

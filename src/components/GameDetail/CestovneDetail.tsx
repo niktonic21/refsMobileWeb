@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Card } from '../Card';
 import { EGameDetail, IGame } from '@utils';
-import { TRAVEL, CAR_ID, RATE_CITY, PASSENGERS, FROM_TO, WAS_DRIVER } from '@strings';
+import { TRAVEL, CAR_ID, RATE_CITY, PASSENGERS, FROM_TO, WAS_DRIVER, DISTANCE_KM } from '@strings';
 import ItemDetailInput from './ItemDetailInput';
 import ItemDetailSwitch from './ItemDetailSwitch';
 import Separator from './Separator';
@@ -31,6 +31,7 @@ export default function CestovneDetail({ gameData, updateDetails }: IProps) {
     const [car, setCar] = useState('KS-1000BS');
     const [refsInCar, setRefsInCar] = useState('');
     const [road, setRoad] = useState('');
+    const [distance, setDistance] = useState('');
 
     useEffect(() => {
         updateDetails({ isDriver, countCity });
@@ -51,19 +52,17 @@ export default function CestovneDetail({ gameData, updateDetails }: IProps) {
     const _changeText = (itemKey: string, text: string) => {
         if (EGameDetail.CAR === itemKey) {
             setCar(text);
-            updateDetails({ car: text });
-            return;
         }
         if (EGameDetail.REFS_IN_CAR === itemKey) {
             setRefsInCar(text);
-            updateDetails({ refsInCar: text });
-            return;
         }
         if (EGameDetail.ROAD === itemKey) {
             setRoad(text);
-            updateDetails({ road: text });
-            return;
         }
+        if (EGameDetail.DISTANCE === itemKey) {
+            setDistance(text);
+        }
+        updateDetails({ [itemKey]: text });
     };
 
     return (
@@ -105,6 +104,13 @@ export default function CestovneDetail({ gameData, updateDetails }: IProps) {
                             placeholder={FROM_TO}
                             onChangeText={_changeText}
                             value={road}
+                        />
+                        <Separator />
+                        <ItemDetailInput
+                            itemKey={EGameDetail.DISTANCE}
+                            placeholder={DISTANCE_KM}
+                            onChangeText={_changeText}
+                            value={distance}
                         />
                     </>
                 ) : null}

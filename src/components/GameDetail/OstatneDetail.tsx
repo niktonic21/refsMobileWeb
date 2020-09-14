@@ -50,13 +50,11 @@ export default function OstatneDetail({ gameData, updateDetails }: IProps) {
     const _changeText = (itemKey: string, text: string) => {
         if (EGameDetail.SECOND_GAME === itemKey) {
             setSecondGameId(text);
-            updateDetails({ secondGameId: text });
-            return;
         }
         if (EGameDetail.NOTES === itemKey) {
             setNotes(text);
-            updateDetails({ notes: text });
         }
+        updateDetails({ [itemKey]: text });
     };
 
     return (
