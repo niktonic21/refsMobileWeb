@@ -7,6 +7,26 @@
         "noEmit": true,
         "skipLibCheck": true,
         "resolveJsonModule": true,
-        "strict": true
+        "strict": true,
+        "noImplicitAny": false,
+        "baseUrl": "./",
+        "paths": {
+            "*": [
+                "*",
+                "*.ios",
+                "*.android"
+            ],
+            "@assets/*": [
+                "./assets/*",
+            ],
+            "@Modal": ["src/components/Modal"],
+            "@gameUtils": ["src/utils/gameUtils"],
+            "@profileUtils": ["src/utils/profileUtils"],
+            "@utils": ["src/utils/"],
+            "@colors": ["constants/Colors"],
+            "@layout": ["constants/Layout"],
+            "@strings": ["constants/Strings"],
+            "@actions": ["src/redux/actions/"]
+        }
     }
 }

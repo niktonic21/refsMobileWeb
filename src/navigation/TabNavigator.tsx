@@ -1,96 +1,129 @@
+import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
-import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
-import { Platform } from 'react-native';
-// import device from "../../constants/Layout";
+import { useDispatch } from 'react-redux';
+import get from 'lodash/get';
+import { isWeb } from '@layout';
+import store from '../redux/store';
+import Colors from '../../constants/Colors';
+import useColorScheme from '../utils/hooks/useColorScheme';
+import MatchesScreen from '../screens/MatchesScreen';
+// import HomeScreen from '../screens/HomeScreen';
+// import LinksScreen from '../screens/LinksScreen';
+import BillingScreen from '../screens/BillingScreen';
+import GameScreen from '../screens/GameScreen';
+import UserScreen from '../screens/UserScreen';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+import { BottomTabParamList, HomeParamList, MatchesParamList, UserParamList } from '../../types';
+import { checkNewData } from '../redux/actions';
 
-// const { window, isBigDevice } = device;
-const Tab = Platform.OS === 'web' ? createMaterialTopTabNavigator() : createBottomTabNavigator();
-const Screen = Platform.OS === 'web' ? createMaterialTopTabNavigator() : createBottomTabNavigator();
+const Tab = isWeb
+    ? createMaterialTopTabNavigator<BottomTabParamList>()
+    : createBottomTabNavigator<BottomTabParamList>();
+const headerMode = isWeb ? 'none' : 'screen';
 
-const INITIAL_ROUTE_NAME = 'Home';
+export default function TabNavigator() {
+    const colorScheme = useColorScheme();
+    const dispatch = useDispatch();
 
-const tabBarOptions = {
-    showIcon: true
-};
-
-const HomeStack = createStackNavigator();
-
-function HomeStackScreen() {
-    return (
-        <HomeStack.Navigator
-            // screenOptions={{
-            //     cardStyle: {
-            //         width: isBigDevice ? 1000 : window.width,
-            //         alignSelf: "center"
-            //     }
-            // }}
-            headerMode={'none'}
-        >
-            <HomeStack.Screen name="Home" component={HomeScreen} />
-            <HomeStack.Screen name="HomeLinks" component={LinksScreen} />
-        </HomeStack.Navigator>
-    );
-}
-
-export default function TabNavigator({ navigation, route }: { navigation: any; route: any }) {
-    // Set the header title on the parent stack navigator depending on the
-    // currently active tab. Learn more in the documentation:
-    // https://reactnavigation.org/docs/en/screen-options-resolution.html
-    navigation.setOptions({ headerTitle: getHeaderTitle(route) });
+    React.useEffect(() => {
+        const lastUpdated = get(store.reduxStore.getState(), 'games.lastUpdated', 0);
+        dispatch(checkNewData(lastUpdated));
+    }, []);
 
     return (
         <Tab.Navigator
-            style={{ paddingHorizontal: 0 }}
-            tabBarOptions={tabBarOptions}
-            initialRouteName={INITIAL_ROUTE_NAME}
+            initialRouteName="Matches"
+            tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
         >
             <Tab.Screen
-                name="Home"
-                component={HomeStackScreen}
+                name="Zapasy"
+                component={MatchesNavigator}
                 options={{
-                    title: 'Get Started',
-                    tabBarIcon: ({ focused }: { focused: () => {} }) => (
-                        <TabBarIcon focused={focused} name="md-code-working" />
-                    )
+                    tabBarIcon: ({ color }) => <TabBarIcon name="ios-list" color={color} />
                 }}
             />
             <Tab.Screen
-                name="Links"
-                component={LinksScreen}
+                name="Vyuctovanie"
+                component={HomeNavigator}
                 options={{
-                    title: 'Resources',
-                    tabBarIcon: ({ focused }: { focused: () => {} }) => (
-                        <TabBarIcon focused={focused} name="md-book" />
-                    )
+                    tabBarIcon: ({ color }) => <TabBarIcon name="ios-wallet" color={color} />
                 }}
             />
             <Tab.Screen
-                name="Settings"
-                component={LinksScreen}
+                name="Profil"
+                component={UserNavigator}
                 options={{
-                    title: 'Settings',
-                    tabBarIcon: ({ focused }: { focused: () => {} }) => (
-                        <TabBarIcon focused={focused} name="md-settings" />
-                    )
+                    tabBarIcon: ({ color }) => <TabBarIcon name="ios-contacts" color={color} />
                 }}
             />
         </Tab.Navigator>
     );
 }
 
-const getHeaderTitle = (route: any): string => {
-    const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
+// You can explore the built-in icon families and icons on the web at:
+// https://icons.expo.fyi/
+function TabBarIcon(props: { name: string; color: string }) {
+    return <Ionicons size={30} style={{ marginBottom: -3 }} {...props} />;
+}
 
-    switch (routeName) {
-        case 'Home':
-            return 'How to get started';
-        case 'Links':
-            return 'Links to learn more';
-    }
-    return '';
-};
+// Each tab has its own navigation stack, you can read more about this pattern here:
+// https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
+const MatchesStack = createStackNavigator<MatchesParamList>();
+
+function MatchesNavigator() {
+    return (
+        <MatchesStack.Navigator headerMode={headerMode}>
+            <MatchesStack.Screen
+                name="MatchesScreen"
+                component={MatchesScreen}
+                options={{ headerTitle: 'Delegacka' }}
+            />
+            <MatchesStack.Screen
+                name="GameScreen"
+                component={GameScreen}
+                options={{ headerTitle: 'Datial zapasu' }}
+            />
+        </MatchesStack.Navigator>
+    );
+}
+
+const HomeStack = createStackNavigator<HomeParamList>();
+
+function HomeNavigator() {
+    return (
+        <HomeStack.Navigator headerMode={headerMode}>
+            <HomeStack.Screen
+                name="HomeScreen"
+                component={BillingScreen}
+                options={{ headerTitle: 'Vyuctovanie' }}
+            />
+            <MatchesStack.Screen
+                name="GameScreen"
+                component={GameScreen}
+                options={{ headerTitle: 'Datial zapasu' }}
+            />
+        </HomeStack.Navigator>
+    );
+}
+
+const UserStack = createStackNavigator<UserParamList>();
+
+function UserNavigator() {
+    return (
+        <UserStack.Navigator headerMode={headerMode}>
+            <UserStack.Screen
+                name="UserScreen"
+                component={UserScreen}
+                options={{ headerTitle: 'Profil' }}
+            />
+            <UserStack.Screen
+                name="ForgotPasswordScreen"
+                component={ForgotPasswordScreen}
+                options={{ headerTitle: '' }}
+            />
+        </UserStack.Navigator>
+    );
+}
