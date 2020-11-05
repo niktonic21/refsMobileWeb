@@ -14,8 +14,10 @@ export type MatchesParamList = {
     GameScreen: undefined;
 };
 
-export type HomeParamList = {
-    HomeScreen: undefined;
+export type BillingParamList = {
+    BillingScreen: undefined;
+    GameScreen: undefined;
+    CitiesScreen: undefined;
 };
 
 export type UserParamList = {

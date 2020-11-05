@@ -15,8 +15,9 @@ import MatchesScreen from '../screens/MatchesScreen';
 import BillingScreen from '../screens/BillingScreen';
 import GameScreen from '../screens/GameScreen';
 import UserScreen from '../screens/UserScreen';
+import CitiesScreen from '../screens/CitiesScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
-import { BottomTabParamList, HomeParamList, MatchesParamList, UserParamList } from '../../types';
+import { BottomTabParamList, BillingParamList, MatchesParamList, UserParamList } from '../../types';
 import { checkNewData } from '../redux/actions';
 
 const Tab = isWeb
@@ -90,22 +91,27 @@ function MatchesNavigator() {
     );
 }
 
-const HomeStack = createStackNavigator<HomeParamList>();
+const BillingStack = createStackNavigator<BillingParamList>();
 
 function HomeNavigator() {
     return (
-        <HomeStack.Navigator headerMode={headerMode}>
-            <HomeStack.Screen
-                name="HomeScreen"
+        <BillingStack.Navigator headerMode={headerMode}>
+            <BillingStack.Screen
+                name="BillingScreen"
                 component={BillingScreen}
                 options={{ headerTitle: 'Vyuctovanie' }}
             />
-            <MatchesStack.Screen
+            <BillingStack.Screen
                 name="GameScreen"
                 component={GameScreen}
                 options={{ headerTitle: 'Datial zapasu' }}
             />
-        </HomeStack.Navigator>
+            <BillingStack.Screen
+                name="CitiesScreen"
+                component={CitiesScreen}
+                options={{ headerTitle: 'Mesta' }}
+            />
+        </BillingStack.Navigator>
     );
 }
 

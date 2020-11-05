@@ -9,13 +9,14 @@ export default {
                     Zapasy: {
                         screens: {
                             MatchesScreen: 'matches',
-                            Game: 'game'
+                            GameScreen: 'game'
                         }
                     },
                     Vyuctovanie: {
                         screens: {
-                            HomeScreen: 'home',
-                            Game: 'game'
+                            BillingScreen: 'billing',
+                            GameScreen: 'game',
+                            CitiesScreen: 'cities'
                         }
                     },
                     Profil: {

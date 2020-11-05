@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 import get from 'lodash/get';
 import { createBillingSections } from '@utils';
 import { IItemButton, IGame } from '../utils/types';
+import ScreenContainer from '../components/ScreenContainer';
+import SectionHeader from '../components/SectionHeader';
 
 const styles = StyleSheet.create({
     container: {
@@ -53,17 +55,6 @@ const styles = StyleSheet.create({
     },
     separatorItem: { width: 1, alignSelf: 'stretch', backgroundColor: 'red' },
     separator: { height: 10, alignSelf: 'stretch' },
-    sectionHeader: {
-        height: 35,
-        flex: 1,
-        paddingHorizontal: 17,
-        justifyContent: 'center',
-        backgroundColor: '#ccc'
-    },
-    sectionText: {
-        fontSize: 18,
-        fontWeight: '700'
-    },
     noMatches: {
         alignSelf: 'center',
         margin: 15,
@@ -75,13 +66,7 @@ const styles = StyleSheet.create({
     refsContainer: { flex: 2, paddingLeft: 4, flexDirection: 'column' }
 });
 
-const _renderSectionHeader = ({ section }: any) => (
-    <View style={styles.sectionHeader}>
-        <Text style={styles.sectionText}>
-            {section.title} ({section.data.length})
-        </Text>
-    </View>
-);
+const _renderSectionHeader = ({ section }: any) => <SectionHeader section={section} />;
 
 const _renderSeparator = () => <View style={styles.separator} />;
 
@@ -110,16 +95,18 @@ export default function BillingScreen({ navigation }) {
         };
 
         return (
-            <RectButton key={gameId} style={styles.option} onPress={_onPress}>
-                <View style={styles.matchInfo}>
-                    <Text style={styles.optionText}>{ligue}</Text>
-                    <Text style={styles.optionText}>{home}</Text>
-                    <Text style={styles.optionText}>{away}</Text>
-                    <Text style={styles.optionText}>
-                        {date} o {time}, {day}
-                    </Text>
-                </View>
-            </RectButton>
+            <ScreenContainer>
+                <RectButton key={gameId} style={styles.option} onPress={_onPress}>
+                    <View style={styles.matchInfo}>
+                        <Text style={styles.optionText}>{ligue}</Text>
+                        <Text style={styles.optionText}>{home}</Text>
+                        <Text style={styles.optionText}>{away}</Text>
+                        <Text style={styles.optionText}>
+                            {date} o {time}, {day}
+                        </Text>
+                    </View>
+                </RectButton>
+            </ScreenContainer>
         );
     };
 

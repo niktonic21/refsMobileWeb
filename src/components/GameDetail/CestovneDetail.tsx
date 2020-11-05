@@ -6,6 +6,7 @@ import { TRAVEL, CAR_ID, RATE_CITY, PASSENGERS, FROM_TO, WAS_DRIVER, DISTANCE_KM
 import ItemDetailInput from './ItemDetailInput';
 import ItemDetailSwitch from './ItemDetailSwitch';
 import Separator from './Separator';
+import ItemDetailIcon from './ItemDetailIcon';
 
 const styles = StyleSheet.create({
     container: {
@@ -21,11 +22,12 @@ const styles = StyleSheet.create({
 });
 
 interface IProps {
+    navigation: any;
     gameData: IGame;
     updateDetails: (data: any) => void;
 }
 
-export default function CestovneDetail({ gameData, updateDetails }: IProps) {
+export default function CestovneDetail({ navigation, gameData, updateDetails }: IProps) {
     const [isDriver, setIsDriver] = useState(false);
     const [countCity, setCountCity] = useState(false);
     const [car, setCar] = useState('KS-1000BS');
@@ -63,6 +65,10 @@ export default function CestovneDetail({ gameData, updateDetails }: IProps) {
             setDistance(text);
         }
         updateDetails({ [itemKey]: text });
+    };
+
+    const _goToCities = () => {
+        navigation.navigate('CitiesScreen');
     };
 
     return (
@@ -103,6 +109,13 @@ export default function CestovneDetail({ gameData, updateDetails }: IProps) {
                             itemKey={EGameDetail.ROAD}
                             placeholder={FROM_TO}
                             onChangeText={_changeText}
+                            value={road}
+                        />
+                         <Separator />
+                        <ItemDetailIcon
+                            key={EGameDetail.ROAD}
+                            placeholder={FROM_TO}
+                            onPress={_goToCities}
                             value={road}
                         />
                         <Separator />

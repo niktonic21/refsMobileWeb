@@ -32,15 +32,13 @@ interface IRadioButton {
     onPress: () => void;
 }
 
-export const RadioButton: React.FC<IRadioButton> = ({ label, checked, onPress }) => {
-    return (
-        <RectButton style={styles.option} onPress={onPress}>
-            <View style={styles.container}>
-                <Text style={styles.optionText}>{label}</Text>
-                <View style={styles.optionIconContainer}>
-                    {checked && <Ionicons name={'ios-checkmark'} size={45} color="grey" />}
-                </View>
+export const RadioButton: React.FC<IRadioButton> = ({ label, checked, onPress }) => (
+    <RectButton style={styles.option} onPress={onPress}>
+        <View style={styles.container}>
+            <Text style={styles.optionText}>{label}</Text>
+            <View style={styles.optionIconContainer}>
+                {checked && <Ionicons name={'ios-checkmark'} size={45} color="grey" />}
             </View>
-        </RectButton>
-    );
-};
+        </View>
+    </RectButton>
+);

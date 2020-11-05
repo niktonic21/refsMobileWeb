@@ -10,6 +10,7 @@ import OstatneDetail from '../components/GameDetail/OstatneDetail';
 import PeniazeDetail from '../components/GameDetail/PeniazeDetail';
 import { Button } from 'react-native-paper';
 import { SAVE_CHANGES } from '@strings';
+import { getCitiesList, getCityObject, getDistance } from '@utils';
 
 const styles = StyleSheet.create({
     container: {
@@ -43,7 +44,11 @@ export default function GameScreen({ navigation, route }: any) {
     };
 
     const _saveChanges = () => {
-        console.log('saveBilling', gameData.gameId);
+        const lists = getCitiesList();
+        const cityObject = getCityObject('KOŠICE');
+        const distance = getDistance(cityObject, 'MISKOLC');
+        console.log('KM', lists, cityObject, distance);
+        //console.log('saveBilling', gameData.gameId);
         //dispatch(saveGameData(gameData.gameId));
     };
 
@@ -53,7 +58,11 @@ export default function GameScreen({ navigation, route }: any) {
             {isBilling ? (
                 <>
                     <StravneDetail gameData={gameData} updateDetails={_updateDetails} />
-                    <CestovneDetail gameData={gameData} updateDetails={_updateDetails} />
+                    <CestovneDetail
+                        navigation={navigation}
+                        gameData={gameData}
+                        updateDetails={_updateDetails}
+                    />
                     <OstatneDetail updateDetails={_updateDetails} />
                     <PeniazeDetail updateDetails={_updateDetails} />
                     <Button style={styles.button} mode="contained" onPress={_saveChanges}>

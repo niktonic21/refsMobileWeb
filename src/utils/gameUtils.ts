@@ -6,6 +6,7 @@ import filter from 'lodash/filter';
 import find from 'lodash/find';
 import store from '../redux/store';
 import { filterMonths } from '../redux/actions';
+import kilometrovnik from '../../assets/kilometrovnik.json';
 
 const numberToLigue = (num: number): string => {
     if (num > 0 && num < 500) return 'Extraliga seniorov';
@@ -377,3 +378,13 @@ export const stringToNumber = (text: string): number => {
     const isNum = !isNaN(parsedNum);
     return isNum ? parsedNum : 0;
 };
+
+export const getCitiesList = (): String[] => kilometrovnik.map(o => o.city);
+
+export const getCityObject = (cityName: string): object => {
+    const cityObj = kilometrovnik.find(o => o.city === cityName);
+    return cityObj ? cityObj : {};
+};
+
+export const getDistance = (cityObj: object, cityTo: string): number | null =>
+    get(cityObj, `${cityTo}`, null);
