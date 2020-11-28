@@ -7,15 +7,29 @@ export default {
             Root: {
                 screens: {
                     Zapasy: {
+                        path: 'matches',
                         screens: {
-                            MatchesScreen: 'matches',
-                            GameScreen: 'game'
+                            MatchesScreen: {
+                                name: 'MatchesScreen',
+                                path: '/'
+                            },
+                            GameScreen: {
+                                name: 'GameScreen',
+                                path: 'game/:gameId'
+                            }
                         }
                     },
                     Vyuctovanie: {
+                        path: 'billing',
                         screens: {
-                            BillingScreen: 'billing',
-                            GameScreen: 'game',
+                            BillingScreen: {
+                                name: 'BillingScreen',
+                                path: '/'
+                            },
+                            GameScreen: {
+                                name: 'GameScreen',
+                                path: 'game/:gameId/:isBilling?'
+                            },
                             CitiesScreen: 'cities'
                         }
                     },

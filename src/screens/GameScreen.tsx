@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import get from 'lodash/get';
-import { useDispatch } from 'react-redux';
 import ZapasDetail from '../components/GameDetail/ZapasDetail';
 import StravneDetail from '../components/GameDetail/StravneDetail';
 import CestovneDetail from '../components/GameDetail/CestovneDetail';
@@ -10,7 +9,7 @@ import OstatneDetail from '../components/GameDetail/OstatneDetail';
 import PeniazeDetail from '../components/GameDetail/PeniazeDetail';
 import { Button } from 'react-native-paper';
 import { SAVE_CHANGES } from '@strings';
-import { getCitiesList, getCityObject, getDistance } from '@utils';
+import { getCitiesList, getCityObject, getDistance, getGameData, getTravelInfo } from '@utils';
 
 const styles = StyleSheet.create({
     container: {
@@ -31,9 +30,8 @@ interface IGameDetail {}
 
 export default function GameScreen({ navigation, route }: any) {
     let gameDetailsData = {};
-    const dispatch = useDispatch();
-    // const [gameDetailsData, setGameDetailsData] = useState({});
-    const gameData = get(route, 'params.item', null);
+    const gameId = get(route, 'params.gameId', '');
+    const gameData = getGameData(gameId);
     const isBilling = get(route, 'params.isBilling', null);
 
     const _updateDetails = (data: IGameDetail) => {
@@ -44,10 +42,8 @@ export default function GameScreen({ navigation, route }: any) {
     };
 
     const _saveChanges = () => {
-        const lists = getCitiesList();
-        const cityObject = getCityObject('KOŠICE');
-        const distance = getDistance(cityObject, 'MISKOLC');
-        console.log('KM', lists, cityObject, distance);
+        const distance = getTravelInfo(['KOŠICE', 'ČAŇA', 'MISKOLC']);
+        console.log('KM', distance);
         //console.log('saveBilling', gameData.gameId);
         //dispatch(saveGameData(gameData.gameId));
     };
@@ -58,11 +54,7 @@ export default function GameScreen({ navigation, route }: any) {
             {isBilling ? (
                 <>
                     <StravneDetail gameData={gameData} updateDetails={_updateDetails} />
-                    <CestovneDetail
-                        navigation={navigation}
-                        gameData={gameData}
-                        updateDetails={_updateDetails}
-                    />
+                    <CestovneDetail gameData={gameData} updateDetails={_updateDetails} />
                     <OstatneDetail updateDetails={_updateDetails} />
                     <PeniazeDetail updateDetails={_updateDetails} />
                     <Button style={styles.button} mode="contained" onPress={_saveChanges}>

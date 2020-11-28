@@ -91,7 +91,7 @@ export default function BillingScreen({ navigation }) {
         const { home, away, gameId, ligue, day, time, date } = item;
 
         const _onPress = () => {
-            navigation.navigate('GameScreen', { gameId: gameId, item: item, isBilling: true });
+            navigation.navigate('GameScreen', { gameId: gameId, isBilling: true });
         };
 
         return (

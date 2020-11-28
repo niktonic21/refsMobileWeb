@@ -20,10 +20,11 @@ const styles = StyleSheet.create({
         fontSize: 18
     },
     textContainer: {
+        flex: 1,
         flexDirection: 'column'
     },
     tapContainer: {
-        width: 50
+        paddingRight: 5
     }
 });
 
@@ -43,7 +44,7 @@ export default function ItemDetailIcon({ value = '', placeholder, onPress }: IPr
                 <Text style={styles.labelText}>{value}</Text>
             </View>
             <RectButton style={styles.tapContainer} onPress={onPress}>
-                <Ionicons name="ios-arrow-round-forward" size={34} color="black" />
+                <Ionicons name="ios-arrow-round-forward" size={34} color="grey" />
             </RectButton>
         </View>
     );

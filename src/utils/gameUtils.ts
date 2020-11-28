@@ -329,7 +329,7 @@ export const getFilterButtonLabel = (filterKey: string): string => {
     return rozhodca === 0 || !ref ? filterKey : ref.name;
 };
 
-export const getGameData = (gameId: string): object => {
+export const getGameData = (gameId: string): IGame => {
     const games = get(store.reduxStore.getState(), 'games.games', []);
     const game = find(games, (g: { gameId: string }) => g.gameId === gameId);
     return game;
@@ -386,5 +386,41 @@ export const getCityObject = (cityName: string): object => {
     return cityObj ? cityObj : {};
 };
 
-export const getDistance = (cityObj: object, cityTo: string): number | null =>
-    get(cityObj, `${cityTo}`, null);
+export const getTravelInfo = (cities: string[]): number | null => {
+    let travelDistance = 0;
+    for (let i = 1; i < cities.length; i++) {
+        travelDistance += getDistance(cities[i - 1], cities[i]);
+    }
+    console.log(travelDistance);
+    return travelDistance;
+};
+
+export const getDistance = (cityFrom: string, cityTo: string): number => {
+    const sortedCities = [cityFrom, cityTo].sort((a, b) => slovakSort(a, b));
+    console.log(sortedCities);
+    const cityObject = getCityObject(sortedCities[0]);
+    return get(cityObject, `${sortedCities[1]}`, 0);
+};
+
+const charMapL = ' 0123456789aábcčdďeéěfghiíjklmnňoópqrřsštťuúůvwxyýzž';
+const charMapU = ' 0123456789AÁBCČDĎEÉĚFGHIÍJKLMNŇOÓPQRŘSŠTŤUÚŮVWXYÝZŽ';
+const charsOrder = {};
+for (var i in charMapL.split('')) {
+    charsOrder[charMapL[i]] = parseInt(i);
+    charsOrder[charMapU[i]] = parseInt(i);
+}
+
+const slovakSort = (s1: string, s2: string): number => {
+    let idx = 0;
+    while (idx < s1.length && idx < s2.length && charsOrder[s1[idx]] == charsOrder[s2[idx]]) {
+        idx++;
+    }
+    if (idx == s1.length && idx == s2.length) return 0;
+    if (idx == s1.length) return 1;
+    if (idx == s2.length) return -1;
+    return charsOrder[s1[idx]] > charsOrder[s2[idx]]
+        ? 1
+        : charsOrder[s1[idx]] < charsOrder[s2[idx]]
+        ? -1
+        : 0;
+};

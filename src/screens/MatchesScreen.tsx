@@ -93,8 +93,7 @@ export default function MatchesScreen({ navigation }) {
         const { home, away, gameId, date, day, time, stadium, referees } = item;
 
         const _onPress = () => {
-            navigation.navigate('GameScreen', { gameId: gameId, item: item });
-            console.log('tap', gameId);
+            navigation.navigate('GameScreen', { gameId: gameId });
         };
 
         return (

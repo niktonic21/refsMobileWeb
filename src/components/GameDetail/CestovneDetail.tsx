@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Card } from '../Card';
+import { useNavigation } from '@react-navigation/native';
 import { EGameDetail, IGame } from '@utils';
 import { TRAVEL, CAR_ID, RATE_CITY, PASSENGERS, FROM_TO, WAS_DRIVER, DISTANCE_KM } from '@strings';
 import ItemDetailInput from './ItemDetailInput';
 import ItemDetailSwitch from './ItemDetailSwitch';
 import Separator from './Separator';
 import ItemDetailIcon from './ItemDetailIcon';
+import { Card } from '../Card';
 
 const styles = StyleSheet.create({
     container: {
@@ -22,17 +23,17 @@ const styles = StyleSheet.create({
 });
 
 interface IProps {
-    navigation: any;
     gameData: IGame;
     updateDetails: (data: any) => void;
 }
 
-export default function CestovneDetail({ navigation, gameData, updateDetails }: IProps) {
+export default function CestovneDetail({ gameData, updateDetails }: IProps) {
+    const navigation = useNavigation();
     const [isDriver, setIsDriver] = useState(false);
     const [countCity, setCountCity] = useState(false);
     const [car, setCar] = useState('KS-1000BS');
     const [refsInCar, setRefsInCar] = useState('');
-    const [road, setRoad] = useState('');
+    const [road, setRoad] = useState<String[]>([]);
     const [distance, setDistance] = useState('');
 
     useEffect(() => {
@@ -58,17 +59,21 @@ export default function CestovneDetail({ navigation, gameData, updateDetails }: 
         if (EGameDetail.REFS_IN_CAR === itemKey) {
             setRefsInCar(text);
         }
-        if (EGameDetail.ROAD === itemKey) {
-            setRoad(text);
-        }
         if (EGameDetail.DISTANCE === itemKey) {
             setDistance(text);
         }
         updateDetails({ [itemKey]: text });
     };
 
+    const _onSelectedCities = (cities: String[]) => {
+        setRoad(cities);
+    };
     const _goToCities = () => {
-        navigation.navigate('CitiesScreen');
+        // TODO: stop sending function here use setparaps insted
+        navigation.navigate('CitiesScreen', {
+            selectedCities: road,
+            onSelectedCities: _onSelectedCities
+        });
     };
 
     return (
@@ -105,18 +110,11 @@ export default function CestovneDetail({ navigation, gameData, updateDetails }: 
                             value={refsInCar}
                         />
                         <Separator />
-                        <ItemDetailInput
-                            itemKey={EGameDetail.ROAD}
-                            placeholder={FROM_TO}
-                            onChangeText={_changeText}
-                            value={road}
-                        />
-                         <Separator />
                         <ItemDetailIcon
                             key={EGameDetail.ROAD}
                             placeholder={FROM_TO}
                             onPress={_goToCities}
-                            value={road}
+                            value={road.toString()}
                         />
                         <Separator />
                         <ItemDetailInput

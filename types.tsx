@@ -11,12 +11,16 @@ export type BottomTabParamList = {
 
 export type MatchesParamList = {
     MatchesScreen: undefined;
-    GameScreen: undefined;
+    GameScreen: {
+        gameId: string;
+    };
 };
 
 export type BillingParamList = {
     BillingScreen: undefined;
-    GameScreen: undefined;
+    GameScreen: {
+        gameId: string;
+    };
     CitiesScreen: undefined;
 };
 

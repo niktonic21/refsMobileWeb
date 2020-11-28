@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, FlatList, Text } from 'react-native';
 import includes from 'lodash/includes';
 import remove from 'lodash/remove';
+import get from 'lodash/get';
 import { getCitiesList } from '@utils';
 
 import { RadioButton } from '../components/RadioButton';
@@ -36,9 +37,10 @@ const styles = StyleSheet.create({
 const _renderSeparator = () => <View style={styles.separator} />;
 const _keyExtractor = (item: any) => item;
 
-let choosenC = ['BOJNICE', 'BARDEJOV', 'BRESTOV', 'BRATISLAVA'];
-export default function CitiesScreen({ navigation }: any) {
-    const [choosenCities, useChoosenCities] = useState(choosenC);
+export default function CitiesScreen({ route }: any) {
+    const onSelectedCities = get(route, 'params.onSelectedCities', () => {});
+    const selectedCities = get(route, 'params.selectedCities', []);
+    const [choosenCities, useChoosenCities] = useState(selectedCities);
     const data = getCitiesList();
 
     const _renderItem = ({ item }: any): JSX.Element => {
@@ -49,8 +51,8 @@ export default function CitiesScreen({ navigation }: any) {
             } else {
                 newChoosenCities = choosenCities.concat(item);
             }
+            onSelectedCities(newChoosenCities);
             useChoosenCities(newChoosenCities);
-            //dispatch(filterChanged(item.key, item.value));
         };
 
         const checked = includes(choosenCities, item);
