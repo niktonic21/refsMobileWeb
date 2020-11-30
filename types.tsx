@@ -21,7 +21,14 @@ export type BillingParamList = {
     GameScreen: {
         gameId: string;
     };
-    CitiesScreen: undefined;
+    CitiesScreen: {
+        selectedCities: string[];
+        onSelectedCities: () => {};
+    };
+    GameRefListScreen: {
+        selectedRefsInCar: string[];
+        onSelectedRefsInCar: () => {};
+    };
 };
 
 export type UserParamList = {

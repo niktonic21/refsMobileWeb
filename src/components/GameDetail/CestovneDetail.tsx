@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { EGameDetail, IGame } from '@utils';
+import uniq from 'lodash/uniq';
+import { EGameDetail, getTravelInfo, IGame } from '@utils';
 import { TRAVEL, CAR_ID, RATE_CITY, PASSENGERS, FROM_TO, WAS_DRIVER, DISTANCE_KM } from '@strings';
 import ItemDetailInput from './ItemDetailInput';
 import ItemDetailSwitch from './ItemDetailSwitch';
@@ -29,10 +30,10 @@ interface IProps {
 
 export default function CestovneDetail({ gameData, updateDetails }: IProps) {
     const navigation = useNavigation();
-    const [isDriver, setIsDriver] = useState(false);
+    const [isDriver, setIsDriver] = useState(true);
     const [countCity, setCountCity] = useState(false);
     const [car, setCar] = useState('KS-1000BS');
-    const [refsInCar, setRefsInCar] = useState('');
+    const [refsInCar, setRefsInCar] = useState<String[]>([]);
     const [road, setRoad] = useState<String[]>([]);
     const [distance, setDistance] = useState('');
 
@@ -56,16 +57,14 @@ export default function CestovneDetail({ gameData, updateDetails }: IProps) {
         if (EGameDetail.CAR === itemKey) {
             setCar(text);
         }
-        if (EGameDetail.REFS_IN_CAR === itemKey) {
-            setRefsInCar(text);
-        }
         if (EGameDetail.DISTANCE === itemKey) {
             setDistance(text);
         }
         updateDetails({ [itemKey]: text });
     };
 
-    const _onSelectedCities = (cities: String[]) => {
+    const _onSelectedCities = (cities: string[]) => {
+        setDistance(getTravelInfo(cities).toString());
         setRoad(cities);
     };
     const _goToCities = () => {
@@ -73,6 +72,22 @@ export default function CestovneDetail({ gameData, updateDetails }: IProps) {
         navigation.navigate('CitiesScreen', {
             selectedCities: road,
             onSelectedCities: _onSelectedCities
+        });
+    };
+
+    const _onSelectedRefsInCar = (refs: string[]) => {
+        setRefsInCar(refs);
+    };
+    const _goToGameRefList = () => {
+        const refList = uniq(
+            gameData.referees.map(ref => ref.name.split(',', 2).join('')),
+            false
+        );
+        // TODO: stop sending function here use setparams insted
+        navigation.navigate('GameRefListScreen', {
+            selectedRefsInCar: refsInCar,
+            onSelectedRefsInCar: _onSelectedRefsInCar,
+            refList: refList
         });
     };
 
@@ -103,11 +118,11 @@ export default function CestovneDetail({ gameData, updateDetails }: IProps) {
                             value={car}
                         />
                         <Separator />
-                        <ItemDetailInput
-                            itemKey={EGameDetail.REFS_IN_CAR}
+                        <ItemDetailIcon
+                            key={EGameDetail.REFS_IN_CAR}
                             placeholder={PASSENGERS}
-                            onChangeText={_changeText}
-                            value={refsInCar}
+                            onPress={_goToGameRefList}
+                            value={refsInCar.toString()}
                         />
                         <Separator />
                         <ItemDetailIcon

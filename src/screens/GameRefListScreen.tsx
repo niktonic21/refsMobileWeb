@@ -3,7 +3,6 @@ import { StyleSheet, View, FlatList, Text } from 'react-native';
 import includes from 'lodash/includes';
 import remove from 'lodash/remove';
 import get from 'lodash/get';
-import { getCitiesList } from '@utils';
 
 import { RadioButton } from '../components/RadioButton';
 
@@ -35,39 +34,39 @@ const styles = StyleSheet.create({
 });
 
 const _renderSeparator = () => <View style={styles.separator} />;
-const _keyExtractor = (item: any) => item;
+const _keyExtractor = (item: string) => item;
 
-export default function CitiesScreen({ route }: any) {
-    const onSelectedCities = get(route, 'params.onSelectedCities', () => {});
-    const selectedCities = get(route, 'params.selectedCities', []);
-    const [choosenCities, useChoosenCities] = useState(selectedCities);
-    const data = getCitiesList();
+export default function GameRefListScreen({ route }: any) {
+    const refList = get(route, 'params.refList', []);
+    const onSelectedRefsInCar = get(route, 'params.onSelectedRefsInCar', () => {});
+    const selectedRefsInCar = get(route, 'params.selectedRefsInCar', []);
+    const [choosenRefs, useChoosenRefs] = useState(selectedRefsInCar);
 
-    const _renderItem = ({ item }: any): JSX.Element => {
+    const _renderItem = ({ item }: { item: string }): JSX.Element => {
         const _onCheck = () => {
-            let newChoosenCities = [];
+            let newChoosenRefs = [];
             if (checked) {
-                newChoosenCities = remove(choosenCities, (city: string) => city !== item);
+                newChoosenRefs = remove(choosenRefs, (ref: string) => ref !== item);
             } else {
-                newChoosenCities = choosenCities.concat(item);
+                newChoosenRefs = choosenRefs.concat(item);
             }
-            onSelectedCities(newChoosenCities);
-            useChoosenCities(newChoosenCities);
+            onSelectedRefsInCar(newChoosenRefs);
+            useChoosenRefs(newChoosenRefs);
         };
 
-        const checked = includes(choosenCities, item);
+        const checked = includes(choosenRefs, item);
 
         return <RadioButton checked={checked} label={item} onPress={_onCheck} />;
     };
 
     return (
         <>
-            <Text style={styles.headerText}>Mestá: {choosenCities.toString()}</Text>
+            <Text style={styles.headerText}>Rozhodcovia: {choosenRefs.toString()}</Text>
             <FlatList
                 style={styles.container}
                 contentContainerStyle={styles.contentContainer}
-                data={data}
-                extraData={choosenCities}
+                data={refList}
+                extraData={choosenRefs}
                 initialNumToRender={10}
                 windowSize={20}
                 ItemSeparatorComponent={_renderSeparator}

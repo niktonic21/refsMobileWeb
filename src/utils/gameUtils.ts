@@ -386,12 +386,11 @@ export const getCityObject = (cityName: string): object => {
     return cityObj ? cityObj : {};
 };
 
-export const getTravelInfo = (cities: string[]): number | null => {
+export const getTravelInfo = (cities: string[]): number => {
     let travelDistance = 0;
     for (let i = 1; i < cities.length; i++) {
         travelDistance += getDistance(cities[i - 1], cities[i]);
     }
-    console.log(travelDistance);
     return travelDistance;
 };
 

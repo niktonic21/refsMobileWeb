@@ -16,6 +16,7 @@ import BillingScreen from '../screens/BillingScreen';
 import GameScreen from '../screens/GameScreen';
 import UserScreen from '../screens/UserScreen';
 import CitiesScreen from '../screens/CitiesScreen';
+import GameRefListScreen from '../screens/GameRefListScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import { BottomTabParamList, BillingParamList, MatchesParamList, UserParamList } from '../../types';
 import { checkNewData } from '../redux/actions';
@@ -110,6 +111,11 @@ function HomeNavigator() {
                 name="CitiesScreen"
                 component={CitiesScreen}
                 options={{ headerTitle: 'Mesta' }}
+            />
+            <BillingStack.Screen
+                name="GameRefListScreen"
+                component={GameRefListScreen}
+                options={{ headerTitle: 'Rozhodcovia' }}
             />
         </BillingStack.Navigator>
     );
