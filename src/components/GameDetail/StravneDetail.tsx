@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Card } from '../Card';
-import { EGameDetail, IGame } from '@utils';
+import { EGameDetail } from '@utils';
 import {
     MEAL,
     COUNT_MEAL,
@@ -15,6 +15,10 @@ import {
 import ItemDetailInput from './ItemDetailInput';
 import ItemDetailSwitch from './ItemDetailSwitch';
 import Separator from './Separator';
+import ItemDetailIcon from './ItemDetailIcon';
+import { useNavigation } from '@react-navigation/native';
+import DatePicker from '../DatePicker';
+import TimePicker from '../TimePicker';
 
 const styles = StyleSheet.create({
     container: {
@@ -30,16 +34,16 @@ const styles = StyleSheet.create({
 });
 
 interface IProps {
-    gameData: IGame;
+    fromCity?: string;
+    toCity?: string;
     updateDetails: (data: any) => void;
 }
 
-export default function StravneDetail({ gameData, updateDetails }: IProps) {
-    const [isMealEnabled, setIsMealEnabled] = useState(false);
-    const [fromCity, setfromCity] = useState('');
-    const [toCity, setToCity] = useState('');
-    const [fromDay, setFromDay] = useState('');
-    const [toDay, setToDay] = useState('');
+export default function StravneDetail({ fromCity = '', toCity = '', updateDetails }: IProps) {
+    const navigation = useNavigation();
+    const [isMealEnabled, setIsMealEnabled] = useState(true);
+    const [fromDay, setFromDay] = useState<Date>();
+    const [toDay, setToDay] = useState<Date>();
     const [fromTime, setFromTime] = useState('');
     const [toTime, setToTime] = useState('');
 
@@ -49,26 +53,50 @@ export default function StravneDetail({ gameData, updateDetails }: IProps) {
         }
     };
 
-    const _changeText = (itemKey: string, text: string) => {
-        if (EGameDetail.FROM_CITY === itemKey) {
-            setfromCity(fromCity);
+    const _onSelectedFromCities = (cities: string[]) => {
+        if (!toCity) {
+            updateDetails({ fromCity: cities[0], toCity: cities[0] });
+        } else {
+            updateDetails({ fromCity: cities[0] });
         }
-        if (EGameDetail.TO_CITY === itemKey) {
-            setToCity(toCity);
-        }
-        if (EGameDetail.FROM_DAY === itemKey) {
-            setFromDay(fromDay);
-        }
-        if (EGameDetail.TO_DAY === itemKey) {
-            setToDay(toDay);
-        }
-        if (EGameDetail.FROM_TIME === itemKey) {
-            setFromTime(fromTime);
-        }
-        if (EGameDetail.TO_TIME === itemKey) {
-            setToTime(toTime);
-        }
-        updateDetails({ [itemKey]: text });
+    };
+
+    const _goToCitiesFrom = () => {
+        // TODO: stop sending function here use setparaps instead
+        navigation.navigate('CitiesScreen', {
+            selectedCity: fromCity,
+            onSelectedCities: _onSelectedFromCities,
+            single: true
+        });
+    };
+
+    const _onSelectedToCities = (cities: string[]) => {
+        updateDetails({ toCity: cities[0] });
+    };
+
+    const _goToCitiesTo = () => {
+        // TODO: stop sending function here use setparaps instead
+        navigation.navigate('CitiesScreen', {
+            selectedCity: toCity,
+            onSelectedCities: _onSelectedToCities,
+            single: true
+        });
+    };
+
+    const _changeDateFrom = (date: Date) => {
+        setFromDay(date);
+    };
+    const _changeDateTo = (date: Date) => {
+        setToDay(date);
+    };
+
+    const _changeTimeFrom = (time: string) => {
+        setFromTime(time);
+        console.log(time);
+    };
+    const _changeTimeTo = (time: string) => {
+        setToTime(time);
+        console.log(time);
     };
 
     return (
@@ -84,46 +112,46 @@ export default function StravneDetail({ gameData, updateDetails }: IProps) {
                 {isMealEnabled ? (
                     <>
                         <Separator />
-                        <ItemDetailInput
-                            itemKey={EGameDetail.FROM_CITY}
+                        <ItemDetailIcon
+                            key={EGameDetail.FROM_CITY}
                             placeholder={FROM_CITY}
-                            onChangeText={_changeText}
+                            onPress={_goToCitiesFrom}
                             value={fromCity}
                         />
                         <Separator />
-                        <ItemDetailInput
-                            itemKey={EGameDetail.TO_CITY}
+                        <DatePicker
+                            onChange={_changeDateFrom}
+                            key={EGameDetail.FROM_DAY}
+                            placeholder={FROM_DAY}
+                            date={fromDay}
+                        />
+                        <Separator />
+                        <TimePicker
+                            onChange={_changeTimeFrom}
+                            key={EGameDetail.FROM_TIME}
+                            placeholder={FROM_TIME}
+                            time={fromTime}
+                        />
+                        <Separator />
+                        <ItemDetailIcon
+                            key={EGameDetail.TO_CITY}
                             placeholder={TO_CITY}
-                            onChangeText={_changeText}
+                            onPress={_goToCitiesTo}
                             value={toCity}
                         />
                         <Separator />
-                        <ItemDetailInput
-                            itemKey={EGameDetail.FROM_DAY}
-                            placeholder={FROM_DAY}
-                            onChangeText={_changeText}
-                            value={fromDay}
-                        />
-                        <Separator />
-                        <ItemDetailInput
-                            itemKey={EGameDetail.TO_DAY}
+                        <DatePicker
+                            onChange={_changeDateTo}
+                            key={EGameDetail.TO_DAY}
                             placeholder={TO_DAY}
-                            onChangeText={_changeText}
-                            value={toDay}
+                            date={toDay}
                         />
                         <Separator />
-                        <ItemDetailInput
-                            itemKey={EGameDetail.FROM_TIME}
-                            placeholder={FROM_TIME}
-                            onChangeText={_changeText}
-                            value={fromTime}
-                        />
-                        <Separator />
-                        <ItemDetailInput
-                            itemKey={EGameDetail.TO_TIME}
+                        <TimePicker
+                            onChange={_changeTimeTo}
+                            key={EGameDetail.TO_TIME}
                             placeholder={TO_TIME}
-                            onChangeText={_changeText}
-                            value={toTime}
+                            time={toTime}
                         />
                     </>
                 ) : null}

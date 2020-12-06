@@ -1,9 +1,10 @@
 import { SectionListData } from 'react-native';
-import { ISection, ISec, IItemButton, IFilter, IRef, IGame } from './types';
+import { ISection, ISec, IItemButton, IFilter, IRef, IGame, EGameDetail } from './types';
 import sortBy from 'lodash/sortBy';
 import get from 'lodash/get';
 import filter from 'lodash/filter';
 import find from 'lodash/find';
+import includes from 'lodash/includes';
 import store from '../redux/store';
 import { filterMonths } from '../redux/actions';
 import kilometrovnik from '../../assets/kilometrovnik.json';
@@ -70,6 +71,180 @@ export const ligueIdToLigue = (num: number): string => {
     if (num === 11) return 'Príp. IIHF';
     if (num === 12) return 'Turnaje';
     return 'Ostatné';
+};
+
+// DO 1.1.2021 HR CR
+// Extraliga seniorov (zákl. časť, nadstavba)180 € 110 €
+// Extraliga seniorov (štvrťfinále PO) 200 € 120 €
+// Extraliga seniorov (semifinále PO) 232 € 140 €
+// Extraliga seniorov (finále PO) 266 € 160 €
+// 1. Liga seniorov (zákl. časť, nadstavba) 85 € 50 €
+// 1. Liga seniorov (štvrťfinále PO) 80 € 40 €
+// 1. Liga seniorov (semifinále PO) 90 € 45 €
+// 1. Liga seniorov (finále PO) 100 € 50 €
+// 2. Liga seniorov 55 € 35 €
+// Extraliga juniorov 66 € 38 €
+// Extraliga dorastu 52 € 34 €
+// 1. Liga juniorov 44 € 30 €
+// 1. Liga dorastu 42 € 26 €
+// Liga kadetov 40 € 26 €
+// Extraliga žien 40 € 26 €
+
+// OD 1.1.2021 HR CR
+// Extraliga seniorov (zákl. časť, nadstavba)200 € 120 €
+// Extraliga seniorov (štvrťfinále PO) 225 € 135 €
+// Extraliga seniorov (semifinále PO) 250 € 150 €
+// Extraliga seniorov (finále PO) 300 € 180 €
+// 1. Liga seniorov (zákl. časť, nadstavba) 100 € 60 €
+// 1. Liga seniorov (štvrťfinále PO) 115 € 69 €
+// 1. Liga seniorov (semifinále PO) 130 € 78 €
+// 1. Liga seniorov (finále PO) 150 € 90 €
+// 2. Liga seniorov 55 € 35 €
+// Extraliga juniorov 66 € 38 €
+// Extraliga dorastu 52 € 34 €
+// 1. Liga juniorov 44 € 30 €
+// 1. Liga dorastu 42 € 26 €
+// Liga kadetov 40 € 26 €
+// Extraliga žien 40 € 26 €
+
+// INSTRUKTOR
+// V období od 02.10.2020 do 31.12.2020
+// Úroveň súťaže (odmena v € na zápas)
+// Extraliga seniorov 60 €
+// 1. Liga seniorov 30 €
+// 2. Liga seniorov 25 €
+// Extraliga juniorov 25 €
+// Extraliga dorastu 25 €
+// 1. Liga juniorov 25 €
+// 1. Liga dorastu 25 €
+// Liga kadetov 25 €
+// Extraliga žien 25 €
+// V období od 01.01.2021
+
+// Úroveň súťaže (odmena v € na zápas)
+// Extraliga seniorov 65 €
+// 1. Liga seniorov 45 €
+// 2. Liga seniorov 30 €
+// Extraliga juniorov 30 €
+// Extraliga dorastu 30 €
+// 1. Liga juniorov 30 €
+// 1. Liga dorastu 30 €
+// Liga kadetov 30 €
+// Extraliga žien 30 €
+
+//VIDEO: 35 €
+
+// Extraliga seniorov (zákl. časť, nadstavba)200 € 120 €
+// Extraliga seniorov (štvrťfinále PO) 225 € 135 €
+// Extraliga seniorov (semifinále PO) 250 € 150 €
+// Extraliga seniorov (finále PO) 300 € 180 €
+// 1. Liga seniorov (zákl. časť, nadstavba) 100 € 60 €
+// 1. Liga seniorov (štvrťfinále PO) 115 € 69 €
+// 1. Liga seniorov (semifinále PO) 130 € 78 €
+// 1. Liga seniorov (finále PO) 150 € 90 €
+// 2. Liga seniorov 55 € 35 €
+// Extraliga juniorov 66 € 38 €
+// Extraliga dorastu 52 € 34 €
+// 1. Liga juniorov 44 € 30 €
+// 1. Liga dorastu 42 € 26 €
+// Liga kadetov 40 € 26 €
+// Extraliga žien 40 € 26 €
+
+const containString = (fullString: string, subString: string): boolean => {
+    return includes(fullString.toLowerCase(), subString.toLowerCase());
+};
+
+const getHGameRate = (num: number, gamePart: string): number => {
+    if (num > 0 && num < 500) {
+        if (containString(gamePart, 'finále')) {
+            return 300;
+        }
+        if (containString(gamePart, 'semifinále')) {
+            return 250;
+        }
+        if (containString(gamePart, 'štvrťfinále')) {
+            return 225;
+        }
+        return 200;
+    }
+    if (num > 500 && num < 1000) {
+        if (containString(gamePart, 'finále')) {
+            return 150;
+        }
+        if (containString(gamePart, 'semifinále')) {
+            return 130;
+        }
+        if (containString(gamePart, 'štvrťfinále')) {
+            return 115;
+        }
+        return 100;
+    }
+    if (num > 1000 && num < 2000) return 66;
+    if (num > 2000 && num < 3000) return 52;
+    if (num > 3000 && num < 4000) return 44;
+    if (num > 4000 && num < 9000) return 42;
+    if (num > 9000 && num < 10000) return 40;
+    if (num > 10000 && num < 11000) return 55;
+    if (num > 15000 && num < 16000) return 40;
+    return 0;
+};
+
+const getCGameRate = (num: number, gamePart: string): number => {
+    if (num > 0 && num < 500) {
+        if (gamePart === 'finále') {
+            return 180;
+        }
+        if (gamePart === 'semifinále') {
+            return 150;
+        }
+        if (gamePart === 'štvrťfinále') {
+            return 135;
+        }
+        return 120;
+    }
+    if (num > 500 && num < 1000) {
+        if (gamePart === 'finále') {
+            return 90;
+        }
+        if (gamePart === 'semifinále') {
+            return 78;
+        }
+        if (gamePart === 'štvrťfinále') {
+            return 69;
+        }
+        return 60;
+    }
+    if (num > 1000 && num < 2000) return 38;
+    if (num > 2000 && num < 3000) return 34;
+    if (num > 3000 && num < 4000) return 30;
+    if (num > 4000 && num < 9000) return 26;
+    if (num > 9000 && num < 10000) return 26;
+    if (num > 10000 && num < 11000) return 35;
+    if (num > 15000 && num < 16000) return 26;
+    return 0;
+};
+
+const getIGameRate = (num: number): number => {
+    if (num > 0 && num < 500) return 65;
+    if (num > 500 && num < 1000) return 45;
+    if (num > 1000 && num < 2000) return 30;
+    if (num > 2000 && num < 3000) return 30;
+    if (num > 3000 && num < 4000) return 30;
+    if (num > 4000 && num < 9000) return 30;
+    if (num > 9000 && num < 10000) return 30;
+    if (num > 10000 && num < 11000) return 30;
+    if (num > 15000 && num < 16000) return 30;
+    return 0;
+};
+
+export const getGameRate = (refType: string, num: number, gamePart: string): number => {
+    if (refType === EGameDetail.V) return 35;
+    if (refType === EGameDetail.H1 || refType === EGameDetail.H2)
+        return getHGameRate(num, gamePart);
+    if (refType === EGameDetail.C1 || refType === EGameDetail.C2)
+        return getCGameRate(num, gamePart);
+    if (refType === EGameDetail.I) return getIGameRate(num);
+    return 0;
 };
 
 const defaultListMonth = [
@@ -378,6 +553,8 @@ export const stringToNumber = (text: string): number => {
     const isNum = !isNaN(parsedNum);
     return isNum ? parsedNum : 0;
 };
+
+export const correctNumber = (num: number | undefined): number => (num ? num : 0);
 
 export const getCitiesList = (): String[] => kilometrovnik.map(o => o.city);
 

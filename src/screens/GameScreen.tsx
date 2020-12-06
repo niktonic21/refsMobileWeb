@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import get from 'lodash/get';
-import ZapasDetail from '../components/GameDetail/ZapasDetail';
+import ZapasDetail, { IRefWithType } from '../components/GameDetail/ZapasDetail';
 import StravneDetail from '../components/GameDetail/StravneDetail';
 import CestovneDetail from '../components/GameDetail/CestovneDetail';
 import OstatneDetail from '../components/GameDetail/OstatneDetail';
 import PeniazeDetail from '../components/GameDetail/PeniazeDetail';
 import { Button } from 'react-native-paper';
 import { SAVE_CHANGES } from '@strings';
-import { getCitiesList, getCityObject, getDistance, getGameData, getTravelInfo } from '@utils';
+import { EGameDetail, getCurrentRef, getGameData, getGameRate, stringToNumber } from '@utils';
 
 const styles = StyleSheet.create({
     container: {
@@ -26,37 +26,64 @@ const styles = StyleSheet.create({
     button: { marginHorizontal: 15 }
 });
 
-interface IGameDetail {}
+const getcurrentRefGameType = (name: string, gameRefs: IRefWithType[] = []): string => {
+    let ref = gameRefs.find(ref => ref.name == name.split(',', 2).join());
+    return ref?.refType || EGameDetail.H1;
+};
+interface IGameDetail {
+    countCity?: boolean;
+    travelMoney?: number;
+    mealMoney?: number;
+    rateMoney?: number;
+    refs?: IRefWithType[];
+    fromCity?: string;
+    toCity?: string;
+}
 
-export default function GameScreen({ navigation, route }: any) {
-    let gameDetailsData = {};
+export default function GameScreen({ route }: any) {
+    const [gameDetailsData, setGameDetailsData] = useState<IGameDetail>({});
     const gameId = get(route, 'params.gameId', '');
     const gameData = getGameData(gameId);
     const isBilling = get(route, 'params.isBilling', null);
+    const currentRef = getCurrentRef(gameData.referees);
 
     const _updateDetails = (data: IGameDetail) => {
-        gameDetailsData = { ...gameDetailsData, ...data };
-        console.log('_updateDetails', gameDetailsData);
-        //setGameDetailsData({ ...gameDetailsData, ...data });
-        //dispatch(saveGameData(gameData.gameId));
+        setGameDetailsData(prevState => ({ ...prevState, ...data }));
     };
 
     const _saveChanges = () => {
-        const distance = getTravelInfo(['KOŠICE', 'ČAŇA', 'MISKOLC']);
-        console.log('KM', distance);
-        //console.log('saveBilling', gameData.gameId);
-        //dispatch(saveGameData(gameData.gameId));
+        console.log('gameDetailsData', gameDetailsData);
     };
 
+    console.log('gameData', gameData, gameDetailsData);
+    const currentRefGameType = getcurrentRefGameType(currentRef.name, gameDetailsData?.refs);
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <ZapasDetail gameData={gameData} isBilling={isBilling} updateDetails={_updateDetails} />
             {isBilling ? (
                 <>
-                    <StravneDetail gameData={gameData} updateDetails={_updateDetails} />
-                    <CestovneDetail gameData={gameData} updateDetails={_updateDetails} />
+                    <StravneDetail
+                        fromCity={gameDetailsData.fromCity}
+                        toCity={gameDetailsData.toCity}
+                        updateDetails={_updateDetails}
+                    />
+                    <CestovneDetail
+                        gameData={gameData}
+                        currentRef={currentRef}
+                        updateDetails={_updateDetails}
+                    />
                     <OstatneDetail updateDetails={_updateDetails} />
-                    <PeniazeDetail updateDetails={_updateDetails} />
+                    <PeniazeDetail
+                        rateMoney={getGameRate(
+                            currentRefGameType,
+                            stringToNumber(gameId),
+                            gameData.subligue
+                        )}
+                        countCity={gameDetailsData.countCity}
+                        travelMoney={gameDetailsData.travelMoney}
+                        mealMoney={gameDetailsData.mealMoney}
+                        updateDetails={_updateDetails}
+                    />
                     <Button style={styles.button} mode="contained" onPress={_saveChanges}>
                         {SAVE_CHANGES}
                     </Button>

@@ -21,11 +21,10 @@ const styles = StyleSheet.create({
 });
 
 interface IProps {
-    gameData: IGame;
     updateDetails: (data: any) => void;
 }
 
-export default function OstatneDetail({ gameData, updateDetails }: IProps) {
+export default function OstatneDetail({ updateDetails }: IProps) {
     const [isSecondGame, setIsSecondGame] = useState(false);
     const [isRepeatedGame, setIsRepeatedGame] = useState(false);
     const [secondGameId, setSecondGameId] = useState('');

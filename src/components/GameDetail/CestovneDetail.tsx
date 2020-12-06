@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import uniq from 'lodash/uniq';
+import remove from 'lodash/remove';
 import { EGameDetail, getTravelInfo, IGame } from '@utils';
 import { TRAVEL, CAR_ID, RATE_CITY, PASSENGERS, FROM_TO, WAS_DRIVER, DISTANCE_KM } from '@strings';
 import ItemDetailInput from './ItemDetailInput';
@@ -25,14 +26,15 @@ const styles = StyleSheet.create({
 
 interface IProps {
     gameData: IGame;
+    currentRef: { auto: string; refID: string };
     updateDetails: (data: any) => void;
 }
 
-export default function CestovneDetail({ gameData, updateDetails }: IProps) {
+export default function CestovneDetail({ gameData, currentRef, updateDetails }: IProps) {
     const navigation = useNavigation();
     const [isDriver, setIsDriver] = useState(true);
     const [countCity, setCountCity] = useState(false);
-    const [car, setCar] = useState('KS-1000BS');
+    const [car, setCar] = useState(currentRef.auto);
     const [refsInCar, setRefsInCar] = useState<String[]>([]);
     const [road, setRoad] = useState<String[]>([]);
     const [distance, setDistance] = useState('');
@@ -64,11 +66,18 @@ export default function CestovneDetail({ gameData, updateDetails }: IProps) {
     };
 
     const _onSelectedCities = (cities: string[]) => {
-        setDistance(getTravelInfo(cities).toString());
+        const distance = getTravelInfo(cities) * 2;
+        const travelMoney = distance * 0.2;
+        setDistance(distance.toString());
         setRoad(cities);
+        updateDetails({
+            road: cities,
+            distance: distance,
+            travelMoney: travelMoney
+        });
     };
     const _goToCities = () => {
-        // TODO: stop sending function here use setparaps insted
+        // TODO: stop sending function here use setparaps instead
         navigation.navigate('CitiesScreen', {
             selectedCities: road,
             onSelectedCities: _onSelectedCities
@@ -77,13 +86,15 @@ export default function CestovneDetail({ gameData, updateDetails }: IProps) {
 
     const _onSelectedRefsInCar = (refs: string[]) => {
         setRefsInCar(refs);
+        updateDetails({ refsInCar: refs });
     };
     const _goToGameRefList = () => {
+        const otherRefs = remove(gameData.referees, ({ id }) => id !== currentRef.refID);
         const refList = uniq(
-            gameData.referees.map(ref => ref.name.split(',', 2).join('')),
+            otherRefs.map(({ name }) => name.split(',', 2).join('')),
             false
         );
-        // TODO: stop sending function here use setparams insted
+        // TODO: stop sending function here use setparams instead
         navigation.navigate('GameRefListScreen', {
             selectedRefsInCar: refsInCar,
             onSelectedRefsInCar: _onSelectedRefsInCar,

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Card } from '../Card';
-import { IGame, EGameDetail, stringToNumber } from '@utils';
+import { EGameDetail, stringToNumber, correctNumber } from '@utils';
 import { RATE, RATE_CITY, TRAVEL, TOGETHER, MEAL, NIGHT, POST, OTHER } from '@strings';
 import Separator from './Separator';
 import ItemDetailLineInput from './ItemDetailLineInput';
@@ -20,15 +20,21 @@ const styles = StyleSheet.create({
 });
 
 interface IProps {
-    gameData: IGame;
+    travelMoney?: number;
+    mealMoney?: number;
+    rateMoney?: number;
+    countCity?: boolean;
     updateDetails: (data: any) => void;
 }
 
-export default function PeniazeDetail({ gameData, updateDetails }: IProps) {
-    const [rateMoney, setRateMoney] = useState('');
-    const [travelMoney, setTravelMoney] = useState('');
+export default function PeniazeDetail({
+    travelMoney,
+    mealMoney,
+    rateMoney,
+    // countCity, TODO: make logic for rateCityMoney
+    updateDetails
+}: IProps) {
     const [rateCityMoney, setRateCityMoney] = useState('');
-    const [mealMoney, setMealMoney] = useState('');
     const [nightMoney, setNightMoney] = useState('');
     const [postMoney, setPostMoney] = useState('');
     const [otherMoney, setOtherMoney] = useState('');
@@ -36,10 +42,10 @@ export default function PeniazeDetail({ gameData, updateDetails }: IProps) {
 
     useEffect(() => {
         const all =
-            stringToNumber(rateMoney) +
-            stringToNumber(travelMoney) +
+            correctNumber(rateMoney) +
+            correctNumber(travelMoney) +
             stringToNumber(rateCityMoney) +
-            stringToNumber(mealMoney) +
+            correctNumber(mealMoney) +
             stringToNumber(nightMoney) +
             stringToNumber(postMoney) +
             stringToNumber(otherMoney);
@@ -48,17 +54,8 @@ export default function PeniazeDetail({ gameData, updateDetails }: IProps) {
     }, [rateMoney, travelMoney, rateCityMoney, mealMoney, nightMoney, postMoney]);
 
     const _changeText = (itemKey: string, text: string) => {
-        if (EGameDetail.RATE === itemKey) {
-            setRateMoney(text);
-        }
-        if (EGameDetail.TRAVEL === itemKey) {
-            setTravelMoney(text);
-        }
         if (EGameDetail.RATE_CITY === itemKey) {
             setRateCityMoney(text);
-        }
-        if (EGameDetail.MEAL === itemKey) {
-            setMealMoney(text);
         }
         if (EGameDetail.NIGHT === itemKey) {
             setNightMoney(text);
@@ -72,6 +69,7 @@ export default function PeniazeDetail({ gameData, updateDetails }: IProps) {
         const number = stringToNumber(text);
         updateDetails({ [itemKey]: number });
     };
+    console.log(mealMoney, String(mealMoney), travelMoney?.toString());
 
     return (
         <View style={styles.container}>
@@ -81,14 +79,14 @@ export default function PeniazeDetail({ gameData, updateDetails }: IProps) {
                     itemKey={EGameDetail.RATE}
                     changeNumber={_changeText}
                     label={RATE}
-                    value={rateMoney}
+                    value={String(rateMoney)}
                 />
                 <Separator />
                 <ItemDetailLineInput
                     itemKey={EGameDetail.TRAVEL}
                     changeNumber={_changeText}
                     label={TRAVEL}
-                    value={travelMoney}
+                    value={travelMoney?.toString()}
                 />
                 <Separator />
                 <ItemDetailLineInput
@@ -102,7 +100,7 @@ export default function PeniazeDetail({ gameData, updateDetails }: IProps) {
                     itemKey={EGameDetail.MEAL}
                     changeNumber={_changeText}
                     label={MEAL}
-                    value={mealMoney}
+                    value={mealMoney?.toString()}
                 />
                 <Separator />
                 <ItemDetailLineInput
@@ -133,7 +131,7 @@ export default function PeniazeDetail({ gameData, updateDetails }: IProps) {
                     itemKey={EGameDetail.TOGETHER}
                     changeNumber={_changeText}
                     label={TOGETHER}
-                    value={String(togetherMoney)}
+                    value={togetherMoney?.toString()}
                 />
             </Card>
         </View>

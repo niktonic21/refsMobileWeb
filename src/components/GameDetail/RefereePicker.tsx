@@ -3,8 +3,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { REFS } from '@strings';
 import { EGameDetail } from '@utils';
+import { IRefWithType } from './ZapasDetail';
 
-const refsPickerData = [
+export const refsPickerData = [
     {
         label: 'H1',
         value: EGameDetail.H1
@@ -23,11 +24,11 @@ const refsPickerData = [
     },
     {
         label: 'I',
-        value: EGameDetail.H1
+        value: EGameDetail.I
     },
     {
         label: 'V',
-        value: EGameDetail.H1
+        value: EGameDetail.V
     }
 ];
 
@@ -45,9 +46,8 @@ const styles = StyleSheet.create({
 });
 
 interface IProps {
-    referees: any;
-    saveRefsType;
-    refsWithType;
+    saveRefsType: (refsWithType: IRefWithType[]) => void;
+    refsWithType: IRefWithType[];
 }
 
 interface IPicker {
@@ -55,32 +55,14 @@ interface IPicker {
     value: string;
 }
 
-interface IRefsTypes {
-    refType: string;
-    name: string;
-}
-
-const createRefsWithType = (referees: any) => {
-    return referees.map((ref: { name: string }, index: number) => {
-        const name = ref.name.split(',', 2).join();
-        return { refType: refsPickerData[index].value, name };
-    });
-};
-
-export default function RefereePicker({ referees, saveRefsType, refsWithType }: IProps) {
-    const refereeWithTypes: Array<IRefsTypes> = refsWithType.length
-        ? refsWithType
-        : createRefsWithType(referees);
-
+export default function RefereePicker({ saveRefsType, refsWithType }: IProps) {
     React.useEffect(() => {
-        if (!refsWithType.length) {
-            saveRefsType(refereeWithTypes);
-        }
+        saveRefsType(refsWithType);
     }, []);
 
     const _onPress = (index: number, refType: string) => {
-        refereeWithTypes[index] = { ...refereeWithTypes[index], refType };
-        saveRefsType(refereeWithTypes);
+        refsWithType[index] = { ...refsWithType[index], refType };
+        saveRefsType(refsWithType);
     };
 
     return (
@@ -89,15 +71,15 @@ export default function RefereePicker({ referees, saveRefsType, refsWithType }: 
                 {REFS}
             </Text>
             <View>
-                {refereeWithTypes.map((ref: { name: string }, index: number) => {
+                {refsWithType.map((ref: { name: string }, index: number) => {
                     return (
                         <View
                             key={index}
                             style={[
                                 styles.dropDownWrapper,
                                 {
-                                    zIndex: referees.length - index,
-                                    elevation: referees.length + 1 - index
+                                    zIndex: refsWithType.length - index,
+                                    elevation: refsWithType.length + 1 - index
                                 }
                             ]}
                         >

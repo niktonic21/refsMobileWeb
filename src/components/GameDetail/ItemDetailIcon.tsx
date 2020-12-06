@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
         marginBottom: 5
     },
     labelText: {
+        minHeight: 21,
         fontSize: 18
     },
     textContainer: {
@@ -36,16 +37,16 @@ interface IProps {
 
 export default function ItemDetailIcon({ value = '', placeholder, onPress }: IProps) {
     return (
-        <View style={styles.container}>
+        <RectButton style={styles.container} onPress={onPress}>
             <View style={styles.textContainer}>
                 <Text numberOfLines={1} ellipsizeMode="tail" style={styles.placeholderText}>
                     {placeholder}
                 </Text>
                 <Text style={styles.labelText}>{value}</Text>
             </View>
-            <RectButton style={styles.tapContainer} onPress={onPress}>
+            <View style={styles.tapContainer}>
                 <Ionicons name="ios-arrow-round-forward" size={34} color="grey" />
-            </RectButton>
-        </View>
+            </View>
+        </RectButton>
     );
 }

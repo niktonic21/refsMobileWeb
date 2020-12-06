@@ -17,7 +17,7 @@ import {
     GAME_PLAYED_BEFORE
 } from '@strings';
 import { EGameDetail, IGame } from '@utils';
-import RefereeDownPicker from './RefereePicker';
+import RefereeDownPicker, { refsPickerData } from './RefereePicker';
 
 const styles = StyleSheet.create({
     container: {
@@ -32,19 +32,29 @@ const styles = StyleSheet.create({
     }
 });
 
+const createRefsWithType = (referees: any) => {
+    return referees.map((ref: { name: string }, index: number) => {
+        const name = ref.name.split(',', 2).join();
+        return { refType: refsPickerData[index].value, name };
+    });
+};
+
 interface IProps {
     gameData: IGame;
     isBilling: boolean;
     updateDetails: (data: any) => void;
 }
+export interface IRefWithType {
+    refType: string;
+    name: string;
+}
 
 export default function ZapasDetail({ gameData, isBilling, updateDetails }: IProps) {
     const { home, away, gameId, date, time, subligue, ligue, stadium, round, referees } = gameData;
-    const refNameList = referees.map(ref => ref.name.split(',', 2)).join('\n');
-
     const [playedBefore, setPlayedBefore] = useState(false);
     const [played, setPlayed] = useState(true);
-    const [refsWithType, setRefsWithType] = useState([]);
+    const [refsWithType, setRefsWithType] = useState<IRefWithType[]>(createRefsWithType(referees));
+    const refNameList = referees.map(ref => ref.name.split(',', 2)).join('\n');
 
     useEffect(() => {
         updateDetails({ played, playedBefore });
@@ -62,10 +72,11 @@ export default function ZapasDetail({ gameData, isBilling, updateDetails }: IPro
         }
     };
 
-    const _saveRefsType = (newRefs: Array<{ name: string; refType: string }>) => {
+    const _saveRefsType = (newRefs: IRefWithType[]) => {
+        //const objRefs = newRefs.reduce((acc, ref) => ({ ...acc, [ref.refType]: ref.name }), {});
+        //console.log(objRefs);
         setRefsWithType(newRefs);
-        const objRefs = newRefs.reduce((acc, ref) => ({ ...acc, [ref.refType]: ref.name }), {});
-        updateDetails(objRefs);
+        updateDetails({ refs: newRefs });
     };
 
     return (
@@ -103,11 +114,7 @@ export default function ZapasDetail({ gameData, isBilling, updateDetails }: IPro
                     </>
                 ) : null}
                 {isBilling ? (
-                    <RefereeDownPicker
-                        referees={referees}
-                        saveRefsType={_saveRefsType}
-                        refsWithType={refsWithType}
-                    />
+                    <RefereeDownPicker saveRefsType={_saveRefsType} refsWithType={refsWithType} />
                 ) : (
                     <ItemDetailButton placeholder={REFS} label={refNameList} />
                 )}

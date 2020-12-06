@@ -36,7 +36,12 @@ const ModalWeb: React.FC<IModal> = ({ onClose, isVisible, label, children }) => 
     };
 
     return (
-        <Modal isVisible={isVisible} onBackdropPress={_onClose}>
+        <Modal
+            animationInTiming={0.1}
+            animationOutTiming={0.1}
+            isVisible={isVisible}
+            onBackdropPress={_onClose}
+        >
             <View style={styles.modalView}>
                 <Text style={styles.modalText}>{label}</Text>
                 <View style={styles.separator} />

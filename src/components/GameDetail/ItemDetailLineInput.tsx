@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
 
 interface IProps {
     itemKey?: string;
-    value: string;
+    value?: string;
     label: string;
     editable?: boolean;
     changeNumber?: (itemKey: string, number: string) => void;
@@ -58,7 +58,7 @@ export default function ItemDetailLineInput({
                     returnKeyType={'next'}
                     editable={editable}
                     onChangeText={_onChangeText}
-                    value={value}
+                    value={value && value !== '0' ? value : ''}
                 />
                 <Text style={styles.labelText}>€</Text>
             </View>
