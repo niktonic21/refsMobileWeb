@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     },
     inputText: {
         flex: 1,
+        outlineWidth: 0,
         textAlign: 'right',
         paddingRight: 5,
         fontSize: 18

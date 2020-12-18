@@ -51,7 +51,7 @@ export default function PeniazeDetail({
             stringToNumber(otherMoney);
         setTogetherMoney(all);
         updateDetails({ togetherMoney: all });
-    }, [rateMoney, travelMoney, rateCityMoney, mealMoney, nightMoney, postMoney]);
+    }, [rateMoney, travelMoney, rateCityMoney, mealMoney, nightMoney, postMoney, otherMoney]);
 
     const _changeText = (itemKey: string, text: string) => {
         if (EGameDetail.RATE_CITY === itemKey) {

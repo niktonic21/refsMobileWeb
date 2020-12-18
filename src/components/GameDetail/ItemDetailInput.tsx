@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
         marginBottom: 5
     },
     labelText: {
+        outlineWidth: 0,
         fontSize: 18
     }
 });
