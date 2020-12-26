@@ -37,7 +37,6 @@ export default function TimePicker({ onChange, placeholder, time }: IProps) {
         },
         [setVisible]
     );
-    console.log('time__', time);
 
     return (
         <View style={styles.container}>

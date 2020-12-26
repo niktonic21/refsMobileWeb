@@ -85,18 +85,20 @@ export default function StravneDetail({ fromCity = '', toCity = '', updateDetail
 
     const _changeDateFrom = (date: Date) => {
         setFromDay(date);
+        updateDetails({ [EGameDetail.FROM_DAY]: date });
     };
     const _changeDateTo = (date: Date) => {
         setToDay(date);
+        updateDetails({ [EGameDetail.TO_DAY]: date });
     };
 
     const _changeTimeFrom = (time: string) => {
         setFromTime(time);
-        console.log(time);
+        updateDetails({ [EGameDetail.FROM_TIME]: time });
     };
     const _changeTimeTo = (time: string) => {
         setToTime(time);
-        console.log(time);
+        updateDetails({ [EGameDetail.TO_TIME]: time });
     };
 
     return (

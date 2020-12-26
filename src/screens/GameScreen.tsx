@@ -10,6 +10,8 @@ import PeniazeDetail from '../components/GameDetail/PeniazeDetail';
 import { Button } from 'react-native-paper';
 import { SAVE_CHANGES } from '@strings';
 import { EGameDetail, getCurrentRef, getGameData, getGameRate, stringToNumber } from '@utils';
+import { useDispatch } from 'react-redux';
+import { saveGame } from '@actions';
 
 const styles = StyleSheet.create({
     container: {
@@ -30,7 +32,8 @@ const getcurrentRefGameType = (name: string, gameRefs: IRefWithType[] = []): str
     let ref = gameRefs.find(ref => ref.name == name.split(',', 2).join());
     return ref?.refType || EGameDetail.H1;
 };
-interface IGameDetail {
+export interface IGameDetail {
+    gameId: string;
     countCity?: boolean;
     travelMoney?: number;
     mealMoney?: number;
@@ -41,6 +44,7 @@ interface IGameDetail {
 }
 
 export default function GameScreen({ route }: any) {
+    const dispatch = useDispatch();
     const [gameDetailsData, setGameDetailsData] = useState<IGameDetail>({});
     const gameId = get(route, 'params.gameId', '');
     const gameData = getGameData(gameId);
@@ -52,10 +56,10 @@ export default function GameScreen({ route }: any) {
     };
 
     const _saveChanges = () => {
+        dispatch(saveGame(gameDetailsData));
         console.log('gameDetailsData', gameDetailsData);
     };
 
-    console.log('gameData', gameData, gameDetailsData);
     const currentRefGameType = getcurrentRefGameType(currentRef.name, gameDetailsData?.refs);
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>

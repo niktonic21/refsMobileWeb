@@ -69,7 +69,6 @@ export default function PeniazeDetail({
         const number = stringToNumber(text);
         updateDetails({ [itemKey]: number });
     };
-    console.log(mealMoney, String(mealMoney), travelMoney?.toString());
 
     return (
         <View style={styles.container}>

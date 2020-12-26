@@ -53,6 +53,7 @@ export enum EGameDetail {
     C2 = 'c2',
     I = 'i',
     V = 'v',
+    D = 'd',
     MEAL_ENABLED = 'mealEnabled',
     FROM_CITY = 'fromCity',
     TO_CITY = 'toCity',

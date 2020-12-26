@@ -57,7 +57,7 @@ export default function ZapasDetail({ gameData, isBilling, updateDetails }: IPro
     const refNameList = referees.map(ref => ref.name.split(',', 2)).join('\n');
 
     useEffect(() => {
-        updateDetails({ played, playedBefore });
+        updateDetails({ played, playedBefore, gameId });
     }, []);
 
     const _toggleSwitch = (itemKey: string) => {

@@ -1,4 +1,6 @@
 import { fetchRefs, fetchSeasonGames, fetchUpdateTime } from '../backend';
+import * as firebase from 'firebase';
+import { IGameDetail } from 'src/screens/GameScreen';
 
 export const GAMES_REQUEST = 'games_request';
 export const GAMES_RECEIVE = 'games_receive';
@@ -8,6 +10,9 @@ export const REFS_RECEIVE = 'refs_receive';
 export const REFS_ERROR = 'refs_error';
 export const GAMES_MONTHS = 'games_months';
 export const GAMES_UPDATE = 'games_update';
+export const SAVE_GAME = 'game_data';
+export const SAVE_GAME_SUCCESS = 'game_save_success';
+export const SAVE_GAME_ERROR = 'game_save_error';
 
 export const updateLastUpdatedTime = (lastUpdated: number) => ({
     type: GAMES_UPDATE,
@@ -87,3 +92,40 @@ export const filterMonths = (months: Array<object>) => ({
     type: GAMES_MONTHS,
     months
 });
+
+export const saveGame = (gameData: IGameDetail) => {
+    const currentSeason = '20192020';
+
+    const { currentUser } = firebase.auth();
+    if (!currentUser) return;
+    ///referees/jobbagymartin/seasons/20192020/games/2416
+    firebase
+        .firestore()
+        .collection('referees')
+        .doc(currentUser.uid)
+        .collection('seasons')
+        .doc(currentSeason)
+        .collection('games')
+        .doc(gameData.gameId)
+        .set(gameData, { merge: true })
+        .then(() => {
+            console.log('SAVE_GAME_SUCCESS');
+
+            return {
+                type: SAVE_GAME_SUCCESS
+            };
+        })
+        .catch(error => {
+            console.log('SAVE_GAME_ERROR', error);
+            return {
+                type: SAVE_GAME_ERROR,
+                error
+            };
+        });
+
+    return {
+        type: SAVE_GAME,
+        data: gameData,
+        season: currentSeason
+    };
+};

@@ -6,7 +6,10 @@ import {
     REFS_RECEIVE,
     REFS_ERROR,
     GAMES_MONTHS,
-    GAMES_UPDATE
+    GAMES_UPDATE,
+    SAVE_GAME,
+    SAVE_GAME_SUCCESS,
+    SAVE_GAME_ERROR
 } from '../actions';
 
 const INITIAL_STATE = {
@@ -38,6 +41,11 @@ export default (state = INITIAL_STATE, action: any) => {
         case GAMES_UPDATE: {
             return { ...state, lastUpdated: action.lastUpdated };
         }
+        case SAVE_GAME: {
+            return { ...state, [action.season]: { [action.data.gameId]: action.data } };
+        }
+        case SAVE_GAME_SUCCESS:
+        case SAVE_GAME_ERROR:
         default:
             return state;
     }

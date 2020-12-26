@@ -29,6 +29,10 @@ export const refsPickerData = [
     {
         label: 'V',
         value: EGameDetail.V
+    },
+    {
+        label: 'D',
+        value: EGameDetail.D
     }
 ];
 
