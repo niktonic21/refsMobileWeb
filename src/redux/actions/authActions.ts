@@ -61,7 +61,6 @@ export const loginUser = ({ email, password }: { email: string; password: string
     dispatch: any
 ) => {
     dispatch({ type: LOGIN_USER });
-
     firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
@@ -79,14 +78,24 @@ export const logOut = () => {
     };
 };
 
-export const updateProfileData = (profileData: { mesto: string; auto: string; email: string }) => {
+export const updateProfileData = (profileData: {
+    mesto: string;
+    auto: string;
+    email: string;
+    season: string;
+}) => {
     return {
         type: PROFILE_UPDATE,
         payload: profileData
     };
 };
 
-export const saveProfileData = (profileData: { mesto: string; auto: string; email: string }) => {
+export const saveProfileData = (profileData: {
+    mesto: string;
+    auto: string;
+    email: string;
+    season: string;
+}) => {
     const { currentUser } = firebase.auth();
     if (!profileData || !currentUser) return;
 

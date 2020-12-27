@@ -18,6 +18,7 @@ const INITIAL_STATE = {
     loading: false,
     loggedIn: null,
     profile: {
+        season: '20192020',
         mesto: '',
         auto: '',
         email: '',

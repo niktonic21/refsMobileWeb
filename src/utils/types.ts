@@ -31,7 +31,7 @@ export interface IGame {
     round: string;
     stadium: string;
     delegation: number;
-    referees: Array<IRef>;
+    referees: IRef[];
 }
 
 export interface IItemButton {
@@ -57,7 +57,7 @@ export enum EGameDetail {
     MEAL_ENABLED = 'mealEnabled',
     FROM_CITY = 'fromCity',
     TO_CITY = 'toCity',
-    FROM_DAY = 'fromdDay',
+    FROM_DAY = 'fromDay',
     TO_DAY = 'toDay',
     FROM_TIME = 'fromTime',
     TO_TIME = 'toTime',

@@ -12,7 +12,6 @@ import {
     FROM_TIME,
     TO_TIME
 } from '@strings';
-import ItemDetailInput from './ItemDetailInput';
 import ItemDetailSwitch from './ItemDetailSwitch';
 import Separator from './Separator';
 import ItemDetailIcon from './ItemDetailIcon';
@@ -36,16 +35,24 @@ const styles = StyleSheet.create({
 interface IProps {
     fromCity?: string;
     toCity?: string;
+    fromDay?: Date;
+    fromTime?: string;
+    toDay?: Date;
+    toTime?: string;
     updateDetails: (data: any) => void;
 }
 
-export default function StravneDetail({ fromCity = '', toCity = '', updateDetails }: IProps) {
+export default function StravneDetail({
+    fromCity = '',
+    toCity = '',
+    fromDay,
+    fromTime = '',
+    toDay,
+    toTime = '',
+    updateDetails
+}: IProps) {
     const navigation = useNavigation();
     const [isMealEnabled, setIsMealEnabled] = useState(true);
-    const [fromDay, setFromDay] = useState<Date>();
-    const [toDay, setToDay] = useState<Date>();
-    const [fromTime, setFromTime] = useState('');
-    const [toTime, setToTime] = useState('');
 
     const _toggleSwitch = (itemKey: string) => {
         if (EGameDetail.MEAL_ENABLED === itemKey) {
@@ -84,20 +91,16 @@ export default function StravneDetail({ fromCity = '', toCity = '', updateDetail
     };
 
     const _changeDateFrom = (date: Date) => {
-        setFromDay(date);
         updateDetails({ [EGameDetail.FROM_DAY]: date });
     };
     const _changeDateTo = (date: Date) => {
-        setToDay(date);
         updateDetails({ [EGameDetail.TO_DAY]: date });
     };
 
     const _changeTimeFrom = (time: string) => {
-        setFromTime(time);
         updateDetails({ [EGameDetail.FROM_TIME]: time });
     };
     const _changeTimeTo = (time: string) => {
-        setToTime(time);
         updateDetails({ [EGameDetail.TO_TIME]: time });
     };
 

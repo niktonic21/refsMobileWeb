@@ -35,3 +35,4 @@ export const FROM_TO = 'Odkiaľ a kam';
 export const DISTANCE_KM = 'Spolu KM';
 export const CAR_ID = 'Špz vozidla';
 export const WAS_DRIVER = 'Bol som vodič';
+export const SEASON = 'Sezóna';

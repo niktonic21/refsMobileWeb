@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import uniq from 'lodash/uniq';
 import remove from 'lodash/remove';
-import { EGameDetail, getTravelInfo, IGame } from '@utils';
+import { EGameDetail, getTravelInfo, IRef } from '@utils';
 import { TRAVEL, CAR_ID, RATE_CITY, PASSENGERS, FROM_TO, WAS_DRIVER, DISTANCE_KM } from '@strings';
 import ItemDetailInput from './ItemDetailInput';
 import ItemDetailSwitch from './ItemDetailSwitch';
@@ -25,19 +25,27 @@ const styles = StyleSheet.create({
 });
 
 interface IProps {
-    gameData: IGame;
+    referees: IRef[];
+    countCity?: boolean;
+    refsInCar?: IRef[];
+    road?: String[];
+    distance?: number;
     currentRef: { auto: string; refID: string };
     updateDetails: (data: any) => void;
 }
 
-export default function CestovneDetail({ gameData, currentRef, updateDetails }: IProps) {
+export default function CestovneDetail({
+    referees,
+    currentRef,
+    countCity = false,
+    refsInCar = [],
+    road = [],
+    distance,
+    updateDetails
+}: IProps) {
     const navigation = useNavigation();
     const [isDriver, setIsDriver] = useState(true);
-    const [countCity, setCountCity] = useState(false);
     const [car, setCar] = useState(currentRef.auto);
-    const [refsInCar, setRefsInCar] = useState<String[]>([]);
-    const [road, setRoad] = useState<String[]>([]);
-    const [distance, setDistance] = useState('');
 
     useEffect(() => {
         updateDetails({ isDriver, countCity });
@@ -46,11 +54,9 @@ export default function CestovneDetail({ gameData, currentRef, updateDetails }: 
     const _toggleSwitch = (itemKey: string) => {
         if (EGameDetail.IS_DRIVER === itemKey) {
             setIsDriver(!isDriver);
-            updateDetails({ isDriver: !isDriver });
             return;
         }
         if (EGameDetail.COUNT_CITY === itemKey) {
-            setCountCity(!countCity);
             updateDetails({ countCity: !countCity });
         }
     };
@@ -59,17 +65,12 @@ export default function CestovneDetail({ gameData, currentRef, updateDetails }: 
         if (EGameDetail.CAR === itemKey) {
             setCar(text);
         }
-        if (EGameDetail.DISTANCE === itemKey) {
-            setDistance(text);
-        }
         updateDetails({ [itemKey]: text });
     };
 
     const _onSelectedCities = (cities: string[]) => {
         const distance = getTravelInfo(cities) * 2;
         const travelMoney = distance * 0.2;
-        setDistance(distance.toString());
-        setRoad(cities);
         updateDetails({
             road: cities,
             distance: distance,
@@ -85,11 +86,11 @@ export default function CestovneDetail({ gameData, currentRef, updateDetails }: 
     };
 
     const _onSelectedRefsInCar = (refs: string[]) => {
-        setRefsInCar(refs);
         updateDetails({ refsInCar: refs });
     };
+
     const _goToGameRefList = () => {
-        const otherRefs = remove(gameData.referees, ({ id }) => id !== currentRef.refID);
+        const otherRefs = remove([...referees], ({ id }) => id !== currentRef.refID);
         const refList = uniq(
             otherRefs.map(({ name }) => name.split(',', 2).join('')),
             false
@@ -147,7 +148,7 @@ export default function CestovneDetail({ gameData, currentRef, updateDetails }: 
                             itemKey={EGameDetail.DISTANCE}
                             placeholder={DISTANCE_KM}
                             onChangeText={_changeText}
-                            value={distance}
+                            value={String(distance)}
                         />
                     </>
                 ) : null}

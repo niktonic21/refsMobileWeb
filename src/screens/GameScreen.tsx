@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import get from 'lodash/get';
@@ -9,9 +9,9 @@ import OstatneDetail from '../components/GameDetail/OstatneDetail';
 import PeniazeDetail from '../components/GameDetail/PeniazeDetail';
 import { Button } from 'react-native-paper';
 import { SAVE_CHANGES } from '@strings';
-import { EGameDetail, getCurrentRef, getGameData, getGameRate, stringToNumber } from '@utils';
-import { useDispatch } from 'react-redux';
-import { saveGame } from '@actions';
+import { EGameDetail, getCurrentRef, getGameData, getGameRate, IRef, stringToNumber } from '@utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { getGameById, saveGame } from '@actions';
 
 const styles = StyleSheet.create({
     container: {
@@ -34,22 +34,43 @@ const getcurrentRefGameType = (name: string, gameRefs: IRefWithType[] = []): str
 };
 export interface IGameDetail {
     gameId: string;
+    fromDay?: Date;
+    fromTime?: string;
+    toDay?: Date;
+    toTime?: string;
     countCity?: boolean;
+    refsInCar?: IRef[];
+    road?: String[];
+    distance?: number;
     travelMoney?: number;
     mealMoney?: number;
     rateMoney?: number;
     refs?: IRefWithType[];
     fromCity?: string;
     toCity?: string;
+    playedBefore?: boolean;
+    played?: boolean;
 }
 
 export default function GameScreen({ route }: any) {
     const dispatch = useDispatch();
-    const [gameDetailsData, setGameDetailsData] = useState<IGameDetail>({});
+
     const gameId = get(route, 'params.gameId', '');
     const gameData = getGameData(gameId);
     const isBilling = get(route, 'params.isBilling', null);
     const currentRef = getCurrentRef(gameData.referees);
+    const currentSeason = useSelector(state => get(state, 'auth.profile.season', '20192020'));
+    const gameUserData = useSelector(state =>
+        get(state, `userGames.seasons.${currentSeason}.${gameId}`, {})
+    );
+    const [gameDetailsData, setGameDetailsData] = useState<IGameDetail>(gameUserData);
+
+    console.log('gameUserData', gameUserData);
+
+    // download latest data from server
+    useEffect(() => {
+        isBilling && dispatch(getGameById(gameId));
+    }, []);
 
     const _updateDetails = (data: IGameDetail) => {
         setGameDetailsData(prevState => ({ ...prevState, ...data }));
@@ -63,16 +84,30 @@ export default function GameScreen({ route }: any) {
     const currentRefGameType = getcurrentRefGameType(currentRef.name, gameDetailsData?.refs);
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-            <ZapasDetail gameData={gameData} isBilling={isBilling} updateDetails={_updateDetails} />
+            <ZapasDetail
+                gameData={gameData}
+                played={gameDetailsData?.played}
+                playedBefore={gameDetailsData?.playedBefore}
+                isBilling={isBilling}
+                updateDetails={_updateDetails}
+            />
             {isBilling ? (
                 <>
                     <StravneDetail
                         fromCity={gameDetailsData.fromCity}
                         toCity={gameDetailsData.toCity}
+                        fromDay={gameDetailsData.fromDay}
+                        fromTime={gameDetailsData.fromTime}
+                        toDay={gameDetailsData.toDay}
+                        toTime={gameDetailsData.toTime}
                         updateDetails={_updateDetails}
                     />
                     <CestovneDetail
-                        gameData={gameData}
+                        referees={gameData.referees}
+                        countCity={gameDetailsData.countCity}
+                        refsInCar={gameDetailsData.refsInCar}
+                        road={gameDetailsData.road}
+                        distance={gameDetailsData.distance}
                         currentRef={currentRef}
                         updateDetails={_updateDetails}
                     />
@@ -81,7 +116,8 @@ export default function GameScreen({ route }: any) {
                         rateMoney={getGameRate(
                             currentRefGameType,
                             stringToNumber(gameId),
-                            gameData.subligue
+                            gameData.subligue,
+                            gameDetailsData.playedBefore
                         )}
                         countCity={gameDetailsData.countCity}
                         travelMoney={gameDetailsData.travelMoney}

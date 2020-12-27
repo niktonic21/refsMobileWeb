@@ -42,6 +42,8 @@ const createRefsWithType = (referees: any) => {
 interface IProps {
     gameData: IGame;
     isBilling: boolean;
+    played?: boolean;
+    playedBefore?: boolean;
     updateDetails: (data: any) => void;
 }
 export interface IRefWithType {
@@ -49,10 +51,14 @@ export interface IRefWithType {
     name: string;
 }
 
-export default function ZapasDetail({ gameData, isBilling, updateDetails }: IProps) {
+export default function ZapasDetail({
+    gameData,
+    isBilling,
+    played = true,
+    playedBefore = false,
+    updateDetails
+}: IProps) {
     const { home, away, gameId, date, time, subligue, ligue, stadium, round, referees } = gameData;
-    const [playedBefore, setPlayedBefore] = useState(false);
-    const [played, setPlayed] = useState(true);
     const [refsWithType, setRefsWithType] = useState<IRefWithType[]>(createRefsWithType(referees));
     const refNameList = referees.map(ref => ref.name.split(',', 2)).join('\n');
 
@@ -62,12 +68,10 @@ export default function ZapasDetail({ gameData, isBilling, updateDetails }: IPro
 
     const _toggleSwitch = (itemKey: string) => {
         if (EGameDetail.PLAYED === itemKey) {
-            setPlayed(!played);
             updateDetails({ played: !played });
             return;
         }
         if (EGameDetail.PLAYED_BEFORE === itemKey) {
-            setPlayedBefore(!playedBefore);
             updateDetails({ playedBefore: !playedBefore });
         }
     };

@@ -40,8 +40,10 @@ export default function DatePicker({ onChange, placeholder, date }: IProps) {
 
     const _onChange = useCallback(({ date }) => {
         setVisible(false);
-        onChange(date);
+        onChange(date.toString());
     }, []);
+
+    const correctDate = typeof date === 'string' ? new Date(date) : date;
 
     return (
         <View style={styles.container}>
@@ -49,7 +51,7 @@ export default function DatePicker({ onChange, placeholder, date }: IProps) {
                 mode="single"
                 visible={visible}
                 onDismiss={onDismiss}
-                date={date || new Date()}
+                date={correctDate || new Date()}
                 onConfirm={_onChange}
                 saveLabel="Ulož" // optional
                 label="Vyber dátum" // optional
@@ -58,7 +60,7 @@ export default function DatePicker({ onChange, placeholder, date }: IProps) {
                 {placeholder}
             </Text>
             <Text style={styles.labelText} onPress={() => setVisible(true)}>
-                {getDateString(date)}
+                {getDateString(correctDate)}
             </Text>
         </View>
     );

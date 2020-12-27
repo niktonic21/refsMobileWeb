@@ -5,6 +5,7 @@ import Logo from './profileUI/Logo';
 import Header from './profileUI/Header';
 import Button from './profileUI/Button';
 import TextInput from './profileUI/TextInput';
+import SeasonPicker from './profileUI/SeasonPicker';
 import { useSelector, useDispatch } from 'react-redux';
 import { logOut, saveProfileData, updateProfileData } from '@actions';
 import { emailValidator } from '@utils';
@@ -22,12 +23,15 @@ const styles = StyleSheet.create({
 const ProfileScreen = () => {
     const dispatch = useDispatch();
     const { user: userAuth } = useSelector(state => state.auth.user);
-    const { mesto: mestoProp, auto: autoProp } = useSelector(state => state.auth.profile);
+    const { mesto: mestoProp, auto: autoProp, season: seasonProp } = useSelector(
+        state => state.auth.profile
+    );
     const { displayName, email: emailProp, uid: userId } = userAuth;
 
     const [email, setEmail] = useState({ value: emailProp, error: '' });
     const [mesto, setMesto] = useState(mestoProp);
     const [auto, setAuto] = useState(autoProp);
+    const [season, setSeason] = useState(seasonProp);
 
     useEffect(() => {
         if (mestoProp !== mesto) {
@@ -35,6 +39,9 @@ const ProfileScreen = () => {
         }
         if (autoProp !== auto) {
             setAuto(autoProp);
+        }
+        if (seasonProp !== season) {
+            setAuto(season);
         }
     }, [autoProp, mestoProp]);
 
@@ -59,7 +66,9 @@ const ProfileScreen = () => {
             setEmail({ ...email, error: emailError });
             return;
         }
-        dispatch(saveProfileData({ mesto, auto, email: email.value }));
+        console.log('season', season);
+
+        dispatch(saveProfileData({ mesto, auto, email: email.value, season }));
     };
 
     const _logOut = () => {
@@ -70,6 +79,7 @@ const ProfileScreen = () => {
         <View style={styles.container}>
             <Logo />
             <Header>{displayName}</Header>
+            <SeasonPicker season={season} saveSeason={text => setSeason(text)} />
             <TextInput
                 label="Email"
                 returnKeyType="next"

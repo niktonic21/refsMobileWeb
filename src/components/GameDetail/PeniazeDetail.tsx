@@ -28,24 +28,26 @@ interface IProps {
 }
 
 export default function PeniazeDetail({
-    travelMoney,
-    mealMoney,
+    travelMoney: travelM,
     rateMoney,
+    // mealMoney, TODO: make logic for mealMoney
     // countCity, TODO: make logic for rateCityMoney
     updateDetails
 }: IProps) {
     const [rateCityMoney, setRateCityMoney] = useState('');
     const [nightMoney, setNightMoney] = useState('');
+    const [travelMoney, setTravelMoney] = useState(travelM?.toString() || '');
     const [postMoney, setPostMoney] = useState('');
+    const [mealMoney, setMealMoney] = useState('');
     const [otherMoney, setOtherMoney] = useState('');
     const [togetherMoney, setTogetherMoney] = useState(0);
 
     useEffect(() => {
         const all =
             correctNumber(rateMoney) +
-            correctNumber(travelMoney) +
+            stringToNumber(travelMoney) +
             stringToNumber(rateCityMoney) +
-            correctNumber(mealMoney) +
+            stringToNumber(mealMoney) +
             stringToNumber(nightMoney) +
             stringToNumber(postMoney) +
             stringToNumber(otherMoney);
@@ -54,8 +56,14 @@ export default function PeniazeDetail({
     }, [rateMoney, travelMoney, rateCityMoney, mealMoney, nightMoney, postMoney, otherMoney]);
 
     const _changeText = (itemKey: string, text: string) => {
+        if (EGameDetail.TRAVEL === itemKey) {
+            setTravelMoney(text);
+        }
         if (EGameDetail.RATE_CITY === itemKey) {
             setRateCityMoney(text);
+        }
+        if (EGameDetail.MEAL === itemKey) {
+            setMealMoney(text);
         }
         if (EGameDetail.NIGHT === itemKey) {
             setNightMoney(text);
@@ -85,7 +93,7 @@ export default function PeniazeDetail({
                     itemKey={EGameDetail.TRAVEL}
                     changeNumber={_changeText}
                     label={TRAVEL}
-                    value={travelMoney?.toString()}
+                    value={travelMoney}
                 />
                 <Separator />
                 <ItemDetailLineInput
@@ -99,7 +107,7 @@ export default function PeniazeDetail({
                     itemKey={EGameDetail.MEAL}
                     changeNumber={_changeText}
                     label={MEAL}
-                    value={mealMoney?.toString()}
+                    value={mealMoney}
                 />
                 <Separator />
                 <ItemDetailLineInput

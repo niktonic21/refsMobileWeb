@@ -237,13 +237,27 @@ const getIGameRate = (num: number): number => {
     return 0;
 };
 
-export const getGameRate = (refType: string, num: number, gamePart: string): number => {
-    if (refType === EGameDetail.V) return 35;
-    if (refType === EGameDetail.H1 || refType === EGameDetail.H2)
-        return getHGameRate(num, gamePart);
-    if (refType === EGameDetail.C1 || refType === EGameDetail.C2)
-        return getCGameRate(num, gamePart);
-    if (refType === EGameDetail.I) return getIGameRate(num);
+const gameBeforeRate = 1.5;
+
+export const getGameRate = (
+    refType: string,
+    num: number,
+    gamePart: string,
+    playedBefore?: boolean
+): number => {
+    if (refType === EGameDetail.V) return playedBefore ? 35 * gameBeforeRate : 35;
+    if (refType === EGameDetail.H1 || refType === EGameDetail.H2) {
+        const rate = getHGameRate(num, gamePart);
+        return playedBefore ? rate * gameBeforeRate : rate;
+    }
+    if (refType === EGameDetail.C1 || refType === EGameDetail.C2) {
+        const rate = getCGameRate(num, gamePart);
+        return playedBefore ? rate * gameBeforeRate : rate;
+    }
+    if (refType === EGameDetail.I) {
+        const rate = getIGameRate(num);
+        return playedBefore ? rate * gameBeforeRate : rate;
+    }
     return 0;
 };
 
@@ -573,7 +587,6 @@ export const getTravelInfo = (cities: string[]): number => {
 
 export const getDistance = (cityFrom: string, cityTo: string): number => {
     const sortedCities = [cityFrom, cityTo].sort((a, b) => slovakSort(a, b));
-    console.log(sortedCities);
     const cityObject = getCityObject(sortedCities[0]);
     return get(cityObject, `${sortedCities[1]}`, 0);
 };
