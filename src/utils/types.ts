@@ -66,7 +66,7 @@ export enum EGameDetail {
     CAR = 'car',
     REFS_IN_CAR = 'refsInCar',
     ROAD = 'road',
-    DISTANCE = 'km',
+    DISTANCE = 'distance',
     IS_REPEATED_GAME = 'isRepeatedGame',
     IS_SECOND_GAME = 'isSecondGame',
     SECOND_GAME = 'secondGame',

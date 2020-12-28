@@ -28,7 +28,7 @@ interface IProps {
 }
 
 export default function PeniazeDetail({
-    travelMoney: travelM,
+    travelMoney: travelMoneyProp,
     rateMoney,
     // mealMoney, TODO: make logic for mealMoney
     // countCity, TODO: make logic for rateCityMoney
@@ -36,11 +36,15 @@ export default function PeniazeDetail({
 }: IProps) {
     const [rateCityMoney, setRateCityMoney] = useState('');
     const [nightMoney, setNightMoney] = useState('');
-    const [travelMoney, setTravelMoney] = useState(travelM?.toString() || '');
+    const [travelMoney, setTravelMoney] = useState(travelMoneyProp?.toString() || '');
     const [postMoney, setPostMoney] = useState('');
     const [mealMoney, setMealMoney] = useState('');
     const [otherMoney, setOtherMoney] = useState('');
     const [togetherMoney, setTogetherMoney] = useState(0);
+
+    useEffect(() => {
+        travelMoneyProp && setTravelMoney(travelMoneyProp.toString());
+    }, [travelMoneyProp]);
 
     useEffect(() => {
         const all =
@@ -51,8 +55,9 @@ export default function PeniazeDetail({
             stringToNumber(nightMoney) +
             stringToNumber(postMoney) +
             stringToNumber(otherMoney);
-        setTogetherMoney(all);
-        updateDetails({ togetherMoney: all });
+        const allFixed = stringToNumber(all.toFixed(2));
+        setTogetherMoney(allFixed);
+        updateDetails({ togetherMoney: allFixed });
     }, [rateMoney, travelMoney, rateCityMoney, mealMoney, nightMoney, postMoney, otherMoney]);
 
     const _changeText = (itemKey: string, text: string) => {

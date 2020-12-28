@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import get from 'lodash/get';
+import isEmpty from 'lodash/isEmpty';
 import ZapasDetail, { IRefWithType } from '../components/GameDetail/ZapasDetail';
 import StravneDetail from '../components/GameDetail/StravneDetail';
 import CestovneDetail from '../components/GameDetail/CestovneDetail';
@@ -50,6 +51,10 @@ export interface IGameDetail {
     toCity?: string;
     playedBefore?: boolean;
     played?: boolean;
+    isSecondGame?: boolean;
+    isRepeatedGame?: boolean;
+    secondGame?: string;
+    notes?: string;
 }
 
 export default function GameScreen({ route }: any) {
@@ -65,12 +70,19 @@ export default function GameScreen({ route }: any) {
     );
     const [gameDetailsData, setGameDetailsData] = useState<IGameDetail>(gameUserData);
 
-    console.log('gameUserData', gameUserData);
+    console.log('gameLocalData', gameDetailsData);
 
     // download latest data from server
     useEffect(() => {
         isBilling && dispatch(getGameById(gameId));
+        console.log('gameReduxData', gameUserData);
     }, []);
+
+    useEffect(() => {
+        !isEmpty(gameUserData) &&
+            setGameDetailsData(prevState => ({ ...gameUserData, ...prevState }));
+        console.log('newGameReduxData', gameUserData);
+    }, [gameUserData]);
 
     const _updateDetails = (data: IGameDetail) => {
         setGameDetailsData(prevState => ({ ...prevState, ...data }));
@@ -78,7 +90,7 @@ export default function GameScreen({ route }: any) {
 
     const _saveChanges = () => {
         dispatch(saveGame(gameDetailsData));
-        console.log('gameDetailsData', gameDetailsData);
+        console.log('gameLocalData', gameDetailsData);
     };
 
     const currentRefGameType = getcurrentRefGameType(currentRef.name, gameDetailsData?.refs);
@@ -111,7 +123,13 @@ export default function GameScreen({ route }: any) {
                         currentRef={currentRef}
                         updateDetails={_updateDetails}
                     />
-                    <OstatneDetail updateDetails={_updateDetails} />
+                    <OstatneDetail
+                        updateDetails={_updateDetails}
+                        isSecondGame={gameDetailsData.isSecondGame}
+                        isRepeatedGame={gameDetailsData.isRepeatedGame}
+                        secondGame={gameDetailsData.secondGame}
+                        notes={gameDetailsData.notes}
+                    />
                     <PeniazeDetail
                         rateMoney={getGameRate(
                             currentRefGameType,
