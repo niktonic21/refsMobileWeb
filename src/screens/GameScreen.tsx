@@ -70,18 +70,17 @@ export default function GameScreen({ route }: any) {
     );
     const [gameDetailsData, setGameDetailsData] = useState<IGameDetail>(gameUserData);
 
-    console.log('gameLocalData', gameDetailsData);
+    console.log('gameLocalData', gameData, gameDetailsData);
+    console.log('gameReduxData', gameUserData);
 
     // download latest data from server
     useEffect(() => {
         isBilling && dispatch(getGameById(gameId));
-        console.log('gameReduxData', gameUserData);
     }, []);
 
     useEffect(() => {
         !isEmpty(gameUserData) &&
             setGameDetailsData(prevState => ({ ...gameUserData, ...prevState }));
-        console.log('newGameReduxData', gameUserData);
     }, [gameUserData]);
 
     const _updateDetails = (data: IGameDetail) => {
@@ -90,7 +89,6 @@ export default function GameScreen({ route }: any) {
 
     const _saveChanges = () => {
         dispatch(saveGame(gameDetailsData));
-        console.log('gameLocalData', gameDetailsData);
     };
 
     const currentRefGameType = getcurrentRefGameType(currentRef.name, gameDetailsData?.refs);

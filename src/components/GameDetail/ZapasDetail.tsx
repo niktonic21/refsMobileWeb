@@ -58,7 +58,19 @@ export default function ZapasDetail({
     playedBefore = false,
     updateDetails
 }: IProps) {
-    const { home, away, gameId, date, time, subligue, ligue, stadium, round, referees } = gameData;
+    const {
+        home,
+        away,
+        gameId,
+        day,
+        date,
+        time,
+        subligue,
+        ligue,
+        stadium,
+        round,
+        referees
+    } = gameData;
     const [refsWithType, setRefsWithType] = useState<IRefWithType[]>(createRefsWithType(referees));
     const refNameList = referees.map(ref => ref.name.split(',', 2)).join('\n');
 
@@ -93,7 +105,7 @@ export default function ZapasDetail({
                 <Separator />
                 <ItemDetailButton placeholder={KC} label={`${gameId}, ${round}`} />
                 <Separator />
-                <ItemDetailButton placeholder={DATE_TIME} label={`${date}, ${time}`} />
+                <ItemDetailButton placeholder={DATE_TIME} label={`${day} ${date} o ${time}`} />
                 <Separator />
                 <ItemDetailButton placeholder={STADIUM} label={stadium} />
                 <Separator />
