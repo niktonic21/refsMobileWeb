@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, FlatList, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import includes from 'lodash/includes';
 import remove from 'lodash/remove';
 import get from 'lodash/get';
@@ -9,20 +10,9 @@ import { RadioButton } from '../components/RadioButton';
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#fafafa'
-    },
-    contentContainer: {
-        maxWidth: 800,
-        width: '100%',
-        flex: 1,
-        alignSelf: 'center',
-        paddingVertical: 15
+        backgroundColor: 'white'
     },
     headerText: {
-        maxWidth: 800,
-        width: '100%',
-        alignSelf: 'center',
         fontWeight: 'bold',
         padding: 15
     },
@@ -31,6 +21,11 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         alignSelf: 'stretch',
         backgroundColor: 'grey'
+    },
+    separatorMain: {
+        height: 1,
+        alignSelf: 'stretch',
+        backgroundColor: '#ccc'
     }
 });
 
@@ -78,9 +73,9 @@ export default function CitiesScreen({ route }: IProp) {
             <Text style={styles.headerText}>
                 {headerPrefix}: {choosenCities.toString()}
             </Text>
+            <View style={styles.separatorMain} />
             <FlatList
                 style={styles.container}
-                contentContainerStyle={styles.contentContainer}
                 data={data}
                 extraData={choosenCities}
                 initialNumToRender={10}

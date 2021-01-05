@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, FlatList, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import includes from 'lodash/includes';
 import remove from 'lodash/remove';
 import get from 'lodash/get';
@@ -7,17 +8,6 @@ import get from 'lodash/get';
 import { RadioButton } from '../components/RadioButton';
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fafafa'
-    },
-    contentContainer: {
-        maxWidth: 800,
-        width: '100%',
-        flex: 1,
-        alignSelf: 'center',
-        paddingVertical: 15
-    },
     headerText: {
         maxWidth: 800,
         width: '100%',
@@ -63,8 +53,6 @@ export default function GameRefListScreen({ route }: any) {
         <>
             <Text style={styles.headerText}>Rozhodcovia: {choosenRefs.toString()}</Text>
             <FlatList
-                style={styles.container}
-                contentContainerStyle={styles.contentContainer}
                 data={refList}
                 extraData={choosenRefs}
                 initialNumToRender={10}

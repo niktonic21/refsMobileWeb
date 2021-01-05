@@ -12,7 +12,10 @@ import useColorScheme from '../utils/hooks/useColorScheme';
 import MatchesScreen from '../screens/MatchesScreen';
 // import HomeScreen from '../screens/HomeScreen';
 // import LinksScreen from '../screens/LinksScreen';
+// import LinksScreen from '../screens/LinksScreen';
+
 import BillingScreen from '../screens/BillingScreen';
+import PDFScreen from '../screens/PDFScreen';
 import GameScreen from '../screens/GameScreen';
 import UserScreen from '../screens/UserScreen';
 import CitiesScreen from '../screens/CitiesScreen';
@@ -101,6 +104,11 @@ function HomeNavigator() {
                 name="BillingScreen"
                 component={BillingScreen}
                 options={{ headerTitle: 'Vyuctovanie' }}
+            />
+            <BillingStack.Screen
+                name="PDFScreen"
+                component={PDFScreen}
+                options={{ headerTitle: 'PDF' }}
             />
             <BillingStack.Screen
                 name="GameScreen"

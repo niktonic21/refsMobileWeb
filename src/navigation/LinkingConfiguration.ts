@@ -26,6 +26,10 @@ export default {
                                 name: 'BillingScreen',
                                 path: '/'
                             },
+                            PDFScreen: {
+                                name: 'PDFScreen',
+                                path: 'pdf/:gameId'
+                            },
                             GameScreen: {
                                 name: 'GameScreen',
                                 path: 'game/:gameId/:isBilling?'

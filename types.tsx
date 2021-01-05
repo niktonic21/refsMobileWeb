@@ -21,6 +21,9 @@ export type BillingParamList = {
     GameScreen: {
         gameId: string;
     };
+    PDFScreen: {
+        gameId: string;
+    };
     CitiesScreen: {
         selectedCities: string[];
         onSelectedCities: () => {};

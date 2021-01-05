@@ -21,6 +21,15 @@ const styles = StyleSheet.create({
         paddingTop: 0,
         paddingBottom: 15
     },
+    pdfContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    pdfText: {
+        fontSize: 16,
+        marginTop: 1
+    },
     option: {
         flex: 1,
         backgroundColor: '#fff',
@@ -31,6 +40,7 @@ const styles = StyleSheet.create({
         borderWidth: StyleSheet.hairlineWidth,
         borderBottomWidth: 0,
         borderColor: '#ededed',
+        justifyContent: 'space-between',
         flexDirection: 'row'
     },
     optionText: {
@@ -53,7 +63,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         margin: 2
     },
-    separatorItem: { width: 1, alignSelf: 'stretch', backgroundColor: 'red' },
+    separatorItem: { width: 1, alignSelf: 'stretch', backgroundColor: 'grey' },
     separator: { height: 10, alignSelf: 'stretch' },
     noMatches: {
         alignSelf: 'center',
@@ -62,7 +72,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '700'
     },
-    matchInfo: { flex: 3, flexDirection: 'column', justifyContent: 'space-between' },
+    matchInfo: {
+        flex: 4,
+        flexDirection: 'column',
+        justifyContent: 'space-between'
+    },
     refsContainer: { flex: 2, paddingLeft: 4, flexDirection: 'column' }
 });
 
@@ -94,18 +108,26 @@ export default function BillingScreen({ navigation }) {
             navigation.navigate('GameScreen', { gameId: gameId, isBilling: true });
         };
 
+        const _onPDFPress = () => {
+            navigation.navigate('PDFScreen', { gameId: gameId });
+        };
+
         return (
             <ScreenContainer>
-                <RectButton key={gameId} style={styles.option} onPress={_onPress}>
-                    <View style={styles.matchInfo}>
+                <View style={styles.option} key={gameId}>
+                    <RectButton style={styles.matchInfo} onPress={_onPress}>
                         <Text style={styles.optionText}>{ligue}</Text>
                         <Text style={styles.optionText}>{home}</Text>
                         <Text style={styles.optionText}>{away}</Text>
                         <Text style={styles.optionText}>
                             {date} o {time}, {day}
                         </Text>
-                    </View>
-                </RectButton>
+                    </RectButton>
+                    <View style={styles.separatorItem} />
+                    <RectButton style={styles.pdfContainer} key={gameId} onPress={_onPDFPress}>
+                        <Text style={styles.pdfText}>PDF</Text>
+                    </RectButton>
+                </View>
             </ScreenContainer>
         );
     };

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Platform } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
@@ -16,7 +16,11 @@ const styles = StyleSheet.create({
     },
     inputText: {
         flex: 1,
-        outlineWidth: 0,
+        ...Platform.select({
+            web: {
+                outlineWidth: 0
+            }
+        }),
         textAlign: 'right',
         paddingRight: 5,
         fontSize: 18
