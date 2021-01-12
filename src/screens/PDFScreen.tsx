@@ -5,6 +5,10 @@ import * as Sharing from 'expo-sharing';
 import { WebView } from 'react-native-webview';
 import { ScrollView } from 'react-native-gesture-handler';
 import { isWeb } from '@layout';
+import get from 'lodash/get';
+import { getGameData, EGameDetail, getDateString } from '@utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { IGameDetail } from './GameScreen';
 
 const styles = StyleSheet.create({
     container: {
@@ -19,7 +23,18 @@ const styles = StyleSheet.create({
     }
 });
 
-export default function PDFScreen({ navigation }: any) {
+export default function PDFScreen({ route }: any) {
+    const dispatch = useDispatch();
+
+    const gameId = get(route, 'params.gameId', '');
+    const gameData = getGameData(gameId);
+    const currentSeason = useSelector(state => get(state, 'auth.profile.season', '20192020'));
+    const gameUserData: IGameDetail = useSelector(state =>
+        get(state, `userGames.seasons.${currentSeason}.${gameId}`, {})
+    );
+
+    console.log('aaa', gameData, gameUserData);
+
     const val = 'MARTIN';
     const gamePlayed = true;
     const gamePage = `
@@ -36,39 +51,39 @@ export default function PDFScreen({ navigation }: any) {
       </div>
       <div class="flex-container">
         <div style="flex-grow: 3">Súťaž:
-          <div class="text-dotted"> EXTRALIGA</div>
+          <div class="text-dotted">${gameData.ligue}</div>
         </div>
         <div style="flex-grow: 2">Číslo stretnutia: 
-          <div class="text-dotted"> 123</div>
+          <div class="text-dotted">${gameData.gameId}</div>
         </div>
         <div style="flex-grow: 3">Dátum stretnutia: 
-          <div class="text-dotted"> 10.10.2020</div>
+          <div class="text-dotted">${gameData.date}</div>
         </div>
       </div>
       <div class="flex-container">
         <div style="flex-grow: 3">Úradný začiatok stretnutia (čas):
-          <div class="text-dotted">18:00</div>
+          <div class="text-dotted">${gameData.time}</div>
         </div>
         <div style="flex-grow: 2">Stretnutie sa hralo v pracovný deň pred 16:00 hod:
           <strong> ANO</strong>
-          <input type="checkbox" ${false && 'checked'}/>
+          <input type="checkbox" ${gameUserData.playedBefore && 'checked'}/>
         </div>
       </div>
       <div class="flex-container">
         <div style="width: 50%">Domáci: 
-          <div class="text-dotted"> EXTRALIGA</div>
+          <div class="text-dotted">${gameData.home}</div>
         </div>
         <div style="width: 50%">Hostia: 
-          <div class="text-dotted"> 123</div>
+          <div class="text-dotted">${gameData.away}</div>
         </div>
       </div>
       <div class="flex-container">
         <div style="flex-grow: 1">Stretnutie sa hralo:
           <strong>HRALO</strong>
-          <input type="checkbox" ${true && 'checked'}/>- 
+          <input type="checkbox" ${gameUserData.played && 'checked'}/>- 
           <strong>NEHRALO</strong>
-          <input type="checkbox" ${false && 'checked'}/>na ZŠ v:
-          <div class="text-dotted"> Kosice</div>
+          <input type="checkbox" ${!gameUserData.played && 'checked'}/>na ZŠ v:
+          <div class="text-dotted">${gameData.stadium}</div>
         </div>
       </div>
       <div class="flex-container">
@@ -82,49 +97,65 @@ export default function PDFScreen({ navigation }: any) {
       <div class="separator" style="height: 2px"/>
       <div class="flex-container">
         <div style="width: 50%">1. hlavný rozhodca: 
-          <div class="text-dotted"> ${val}</div>
+          <div class="text-dotted">${
+              gameUserData.refs?.find(r => r.refType === EGameDetail.H1)?.name || ''
+          }</div>
         </div>
         <div style="width: 50%">2. hlavný rozhodca: 
-          <div class="text-dotted"> meno</div>
+          <div class="text-dotted">${
+              gameUserData.refs?.find(r => r.refType === EGameDetail.H2)?.name || ''
+          }</div>
         </div>
       </div>
       <div class="flex-container">
         <div style="width: 50%">1. čiarový rozhodca: 
-          <div class="text-dotted"> meno</div>
+          <div class="text-dotted">${
+              gameUserData.refs?.find(r => r.refType === EGameDetail.C1)?.name || ''
+          }</div>
         </div>
         <div style="width: 50%">2. čiarový rozhodca: 
-          <div class="text-dotted"> meno</div>
+          <div class="text-dotted">${
+              gameUserData.refs?.find(r => r.refType === EGameDetail.C2)?.name || ''
+          }</div>
         </div>
       </div>
       <div class="flex-container">
         <div style="width: 50%">Inštruktor rozhodcov: 
-          <div class="text-dotted"> meno</div>
+          <div class="text-dotted">${
+              gameUserData.refs?.find(r => r.refType === EGameDetail.I)?.name || ''
+          }</div>
         </div>
         <div style="width: 50%">Videobránkový rozhodca: 
-          <div class="text-dotted"> meno</div>
+          <div class="text-dotted">${
+              gameUserData.refs?.find(r => r.refType === EGameDetail.V)?.name || ''
+          }</div>
         </div>
       </div>
       <div class="separator"/>
       <div class="flex-container">
         <div style="width: 60%">Odchod z miesta bydliska do: 
-          <div class="text-dotted"> meno</div>
+          <div class="text-dotted">${gameUserData.fromCity || ''}</div>
         </div>
         <div style="width: 25%">dňa: 
-          <div class="text-dotted"> meno</div>
+          <div class="text-dotted">${
+              gameUserData.fromDay ? getDateString(new Date(gameUserData.fromDay)) : ''
+          }</div>
         </div>
         <div style="width: 15%">o: 
-          <div class="text-dotted"> meno</div>hod.
+          <div class="text-dotted">${gameUserData.fromTime || ''}</div>hod.
         </div>
       </div>
       <div class="flex-container">
         <div style="width: 60%">Príchod do miesta bydliska z: 
-          <div class="text-dotted"> meno</div>
+          <div class="text-dotted">${gameUserData.toCity || ''}</div>
         </div>
         <div style="width: 25%">dňa: 
-          <div class="text-dotted"> meno</div>
+          <div class="text-dotted">${
+              gameUserData.toDay ? getDateString(new Date(gameUserData.toDay)) : ''
+          }</div>
         </div>
         <div style="width: 15%">o: 
-          <div class="text-dotted"> meno</div>hod.
+          <div class="text-dotted">${gameUserData.toTime || ''}</div>hod.
         </div>
       </div>
       <div class="separator"/>
@@ -138,12 +169,12 @@ export default function PDFScreen({ navigation }: any) {
       </div>
       <div class="flex-container">
         <div style="width: 100%">Spolucestujúci: 
-          <div class="text-dotted"> spolucestujuci</div>
+          <div class="text-dotted">${gameUserData.refsInCar?.toString() || ''}</div>
         </div>
       </div>
       <div class="flex-container">
         <div style="width: 100%">Odkiaľ a kam – presný popis cesty tam aj späť: 
-          <div class="text-dotted"> cesta</div>
+          <div class="text-dotted">${gameUserData.road || ''}</div>
         </div>
       </div>
       <div class="flex-container">
@@ -156,26 +187,26 @@ export default function PDFScreen({ navigation }: any) {
         <div style="flex-grow: 1">(Vyplňuje len vodič !) </div>
         <div>Opakované stretnutie :
           <strong>ANO</strong>
-          <input type="checkbox" ${true && 'checked'}/>- 
+          <input type="checkbox" ${gameUserData.isRepeatedGame && 'checked'}/>- 
           <strong>NIE</strong>
-          <input type="checkbox" ${false && 'checked'}/>
+          <input type="checkbox" ${!gameUserData.isRepeatedGame && 'checked'}/>
         </div>
       </div>
       <div class="flex-container">
         <div style="width: 65%">V uvedený deň som rozhodoval dve stretnutia :
           <strong>ANO</strong>
-          <input type="checkbox" checked/>- 
+          <input type="checkbox" ${gameUserData.isSecondGame && 'checked'}/>- 
           <strong>NIE</strong>
-          <input type="checkbox"/>
+          <input type="checkbox" ${!gameUserData.isSecondGame && 'checked'}/>
         </div>
         <div style="width: 35%">číslo druhého stretnutia: 
-          <div class="text-dotted"> ecv</div>
+          <div class="text-dotted">${gameUserData.secondGame || ''}</div>
         </div>
       </div>
       <div class="flex-container">
         <div style="width: 100%">
           <strong>Poznámka:</strong>
-          <div class="text-dotted"> cesta</div>
+          <div class="text-dotted">${gameUserData.notes || ''}</div>
         </div>
       </div>
       <div class="flex-container">
@@ -185,10 +216,10 @@ export default function PDFScreen({ navigation }: any) {
       </div>
       <div class="flex-container">
         <div style="width:25%; margin: 10px 20px 0px;">Paušál: EUR: 
-          <div class="text-dotted"> vodic</div>
+          <div class="text-dotted">${gameUserData.rateMoney || ''}</div>
         </div>
         <div style="width: 30%; margin: 10px 20px 0px;">Počet odjazdených km: 
-          <div class="text-dotted"> ecv</div>
+          <div class="text-dotted">${gameUserData.distance || ''}</div>
         </div>
       </div>
       <div class="flex-container">
@@ -201,7 +232,7 @@ export default function PDFScreen({ navigation }: any) {
             <strong>Stravné:</strong>
           </div>
           <div style="width:150px">EUR: 
-            <div class="text-dotted"> cesta</div>
+            <div class="text-dotted">${gameUserData.mealMoney || ''}</div>
           </div>
         </div>
         <div class="flex-container">
@@ -209,7 +240,7 @@ export default function PDFScreen({ navigation }: any) {
             <strong>Cestovné</strong> (Priložiť cestovné lístky alebo podľa kilometrovného!):
           </div>
           <div style="width:150px">EUR: 
-            <div class="text-dotted"> cesta</div>
+            <div class="text-dotted">${gameUserData.travelMoney || ''}</div>
           </div>
         </div>
         <div class="flex-container">
@@ -217,7 +248,7 @@ export default function PDFScreen({ navigation }: any) {
             <strong>Sadzba mesto</strong> (jazda v meste):
           </div>
           <div style="width:150px">EUR: 
-            <div class="text-dotted"> cesta</div>
+            <div class="text-dotted">${gameUserData.rateCityMoney || ''}</div>
           </div>
         </div>
         <div class="flex-container">
@@ -225,7 +256,7 @@ export default function PDFScreen({ navigation }: any) {
             <strong>Nocľažné</strong> (Priložiť doklady!):
           </div>
           <div style="width:150px">EUR: 
-            <div class="text-dotted"> cesta</div>
+            <div class="text-dotted">${gameUserData.nightMoney || ''}</div>
           </div>
         </div>
         <div class="flex-container">
@@ -233,7 +264,7 @@ export default function PDFScreen({ navigation }: any) {
             <strong>Poštovné:</strong>
           </div>
           <div style="width:150px">EUR: 
-            <div class="text-dotted"> cesta</div>
+            <div class="text-dotted">${gameUserData.postMoney || ''}</div>
           </div>
         </div>
         <div class="flex-container">
@@ -241,7 +272,7 @@ export default function PDFScreen({ navigation }: any) {
             <strong>Ostatné:</strong>
           </div>
           <div  style="width:150px">EUR: 
-            <div class="text-dotted"> cesta</div>
+            <div class="text-dotted">${gameUserData.otherMoney || ''}</div>
           </div>
         </div>
         <div class="flex-container">
@@ -249,7 +280,7 @@ export default function PDFScreen({ navigation }: any) {
             <strong>SPOLU</strong> (Bez sumy paušálu!):
           </div>
           <div style="width:150px">EUR: 
-            <div class="text-dotted"> cesta</div>
+            <div class="text-dotted">${gameUserData.togetherMoney || ''}</div>
           </div>
         </div>
         <div class="flex-container" style="margin-top: 25px; flex-direction: column; align-items: flex-end">

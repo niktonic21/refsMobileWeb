@@ -613,3 +613,11 @@ const slovakSort = (s1: string, s2: string): number => {
         ? -1
         : 0;
 };
+
+export const getDateString = (date?: Date) => {
+    if (!date) return;
+    var DD = ('0' + date.getDate()).slice(-2);
+    var MM = ('0' + (date.getMonth() + 1)).slice(-2);
+    var YYYY = date.getFullYear();
+    return `${DD}.${MM}.${YYYY}`;
+};

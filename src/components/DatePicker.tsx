@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { DatePickerModal } from 'react-native-paper-dates';
+import { getDateString } from '@utils';
 
 const styles = StyleSheet.create({
     container: {
@@ -17,14 +18,6 @@ const styles = StyleSheet.create({
         fontSize: 18
     }
 });
-
-const getDateString = (date?: Date) => {
-    if (!date) return;
-    var DD = ('0' + date.getDate()).slice(-2);
-    var MM = ('0' + (date.getMonth() + 1)).slice(-2);
-    var YYYY = date.getFullYear();
-    return `${DD}.${MM}.${YYYY}`;
-};
 
 interface IProps {
     onChange: (data: any) => void;

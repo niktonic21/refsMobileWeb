@@ -46,6 +46,11 @@ export interface IGameDetail {
     travelMoney?: number;
     mealMoney?: number;
     rateMoney?: number;
+    rateCityMoney?: number;
+    nightMoney?: number;
+    postMoney?: number;
+    otherMoney?: number;
+    togetherMoney?: number;
     refs?: IRefWithType[];
     fromCity?: string;
     toCity?: string;

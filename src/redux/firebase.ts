@@ -1,3 +1,4 @@
+import 'expo-firestore-offline-persistence';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 
@@ -14,23 +15,7 @@ const firebaseConfig = {
 export const initFirebase = () => {
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
-        console.log('firebase init_done');
-        firebase
-            .firestore()
-            .enablePersistence({ synchronizeTabs: true })
-            .then(err => console.log('firebase enablePersistence success'))
-            .catch(err => {
-                if (err.code == 'failed-precondition') {
-                    // Multiple tabs open, persistence can only be enabled
-                    // in one tab at a a time.
-                    // ...
-                } else if (err.code == 'unimplemented') {
-                    // The current browser does not support all of the
-                    // features required to enable persistence
-                    // ...
-                }
-                console.warn('fireabse enablePersistence', err);
-            });
+        firebase.firestore().enablePersistence();
     }
 };
 
