@@ -7,7 +7,13 @@ export const SAVE_GAME_ERROR = 'user_game_save_error';
 
 export const saveGame = (gameData: IGameDetail) => (dispatch: any) => {
     const currentSeason = '20192020';
+    dispatch({
+        type: SAVE_GAME,
+        data: gameData,
+        season: currentSeason
+    });
     const { currentUser } = firebase.auth();
+
     if (!currentUser) return;
     ///referees/jobbagymartin/seasons/20192020/games/2416
     firebase
@@ -30,12 +36,6 @@ export const saveGame = (gameData: IGameDetail) => (dispatch: any) => {
                 error
             });
         });
-
-    return {
-        type: SAVE_GAME,
-        data: gameData,
-        season: currentSeason
-    };
 };
 
 export const getGameById = (gameId: string) => (dispatch: any) => {

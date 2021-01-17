@@ -20,27 +20,37 @@ const styles = StyleSheet.create({
 });
 
 interface IProps {
-    travelMoney?: number;
-    mealMoney?: number;
     rateMoney?: number;
-    countCity?: boolean;
+    travelMoney?: number;
+    rateCityMoney?: number;
+    mealMoney?: number;
+    nightMoney?: number;
+    postMoney?: number;
+    otherMoney?: number;
     updateDetails: (data: any) => void;
 }
 
 export default function PeniazeDetail({
-    travelMoney: travelMoneyProp,
     rateMoney,
-    // mealMoney, TODO: make logic for mealMoney
-    // countCity, TODO: make logic for rateCityMoney
+    travelMoney: travelMoneyProp,
+    rateCityMoney: rateCityMoneyProp,
+    mealMoney: mealMoneyProp,
+    nightMoney: nightMoneyProp,
+    postMoney: postMoneyProp,
+    otherMoney: otherMoneyProp,
     updateDetails
 }: IProps) {
-    const [rateCityMoney, setRateCityMoney] = useState('');
-    const [nightMoney, setNightMoney] = useState('');
+    const [rateCityMoney, setRateCityMoney] = useState(rateCityMoneyProp?.toString() || '');
+    const [nightMoney, setNightMoney] = useState(nightMoneyProp?.toString() || '');
     const [travelMoney, setTravelMoney] = useState(travelMoneyProp?.toString() || '');
-    const [postMoney, setPostMoney] = useState('');
-    const [mealMoney, setMealMoney] = useState('');
-    const [otherMoney, setOtherMoney] = useState('');
+    const [postMoney, setPostMoney] = useState(postMoneyProp?.toString() || '');
+    const [mealMoney, setMealMoney] = useState(mealMoneyProp?.toString() || '');
+    const [otherMoney, setOtherMoney] = useState(otherMoneyProp?.toString() || '');
     const [togetherMoney, setTogetherMoney] = useState(0);
+
+    useEffect(() => {
+        updateDetails({ rateMoney: rateMoney });
+    }, []);
 
     useEffect(() => {
         travelMoneyProp && setTravelMoney(travelMoneyProp.toString());

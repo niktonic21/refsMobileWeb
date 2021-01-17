@@ -141,6 +141,10 @@ export default function GameScreen({ route }: any) {
                             gameDetailsData.playedBefore
                         )}
                         countCity={gameDetailsData.countCity}
+                        rateCityMoney={gameDetailsData.rateCityMoney}
+                        nightMoney={gameDetailsData.nightMoney}
+                        postMoney={gameDetailsData.postMoney}
+                        otherMoney={gameDetailsData.otherMoney}
                         travelMoney={gameDetailsData.travelMoney}
                         mealMoney={gameDetailsData.mealMoney}
                         updateDetails={_updateDetails}
