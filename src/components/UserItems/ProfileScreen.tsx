@@ -2,20 +2,22 @@ import React, { memo, useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import * as firebase from 'firebase';
 import Logo from './profileUI/Logo';
-import Header from './profileUI/Header';
 import Button from './profileUI/Button';
 import TextInput from './profileUI/TextInput';
 import SeasonPicker from './profileUI/SeasonPicker';
 import { useSelector, useDispatch } from 'react-redux';
 import { logOut, saveProfileData, updateProfileData } from '@actions';
 import { emailValidator } from '@utils';
-import { SAVE_CHANGES, LOG_OUT, CITY, CAR_ID } from '@strings';
+import { SAVE_CHANGES, LOG_OUT, CITY, CAR_ID, NAME } from '@strings';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginHorizontal: 16,
-        marginTop: 16,
+        marginTop: 16
+    },
+    contentContainer: {
         alignItems: 'center'
     }
 });
@@ -23,15 +25,16 @@ const styles = StyleSheet.create({
 const ProfileScreen = () => {
     const dispatch = useDispatch();
     const { user: userAuth } = useSelector(state => state.auth.user);
-    const { mesto: mestoProp, auto: autoProp, season: seasonProp } = useSelector(
+    const { mesto: mestoProp, auto: autoProp, season: seasonProp, name: nameProps } = useSelector(
         state => state.auth.profile
     );
-    const { displayName, email: emailProp, uid: userId } = userAuth;
+    const { email: emailProp, uid: userId } = userAuth;
 
     const [email, setEmail] = useState({ value: emailProp, error: '' });
     const [mesto, setMesto] = useState(mestoProp);
     const [auto, setAuto] = useState(autoProp);
     const [season, setSeason] = useState(seasonProp);
+    const [name, setName] = useState(nameProps);
 
     useEffect(() => {
         if (mestoProp !== mesto) {
@@ -43,7 +46,10 @@ const ProfileScreen = () => {
         if (seasonProp !== season) {
             setAuto(season);
         }
-    }, [autoProp, mestoProp]);
+        if (nameProps !== name) {
+            setName(name);
+        }
+    }, [autoProp, mestoProp, season, name]);
 
     useEffect(() => {
         const unsubscribe = firebase
@@ -52,6 +58,8 @@ const ProfileScreen = () => {
             .doc(userId)
             .onSnapshot(doc => {
                 if (doc.exists) {
+                    console.log(doc.data());
+
                     dispatch(updateProfileData(doc.data()));
                 } else {
                     console.warn('Profile: no data to be stored');
@@ -68,7 +76,7 @@ const ProfileScreen = () => {
         }
         console.log('season', season);
 
-        dispatch(saveProfileData({ mesto, auto, email: email.value, season }));
+        dispatch(saveProfileData({ mesto, auto, email: email.value, season, name }));
     };
 
     const _logOut = () => {
@@ -76,10 +84,10 @@ const ProfileScreen = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <Logo />
-            <Header>{displayName}</Header>
             <SeasonPicker season={season} saveSeason={text => setSeason(text)} />
+            <TextInput label={NAME} onChangeText={text => setName(text)} value={name} />
             <TextInput
                 label="Email"
                 returnKeyType="next"
@@ -102,7 +110,7 @@ const ProfileScreen = () => {
             <Button mode="outlined" onPress={_logOut}>
                 {LOG_OUT}
             </Button>
-        </View>
+        </ScrollView>
     );
 };
 

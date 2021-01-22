@@ -83,6 +83,7 @@ export const updateProfileData = (profileData: {
     auto: string;
     email: string;
     season: string;
+    name: string;
 }) => {
     return {
         type: PROFILE_UPDATE,
@@ -95,6 +96,7 @@ export const saveProfileData = (profileData: {
     auto: string;
     email: string;
     season: string;
+    name: string;
 }) => {
     const { currentUser } = firebase.auth();
     if (!profileData || !currentUser) return;

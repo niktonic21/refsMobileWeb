@@ -19,6 +19,7 @@ const INITIAL_STATE = {
     loggedIn: null,
     profile: {
         season: '20192020',
+        name: '',
         mesto: '',
         auto: '',
         email: '',

@@ -26,11 +26,18 @@ const styles = StyleSheet.create({
 
 const scaledValue = (value: number) => (isIos ? value : (value * 4) / 3);
 
+const createGameHTML = () => {
+    const gameHtml = '';
+    //ak cislo tak jeden zapas ak mesiac tak dotiahni vsetky zapasy sa mesiac
+    return gameHtml;
+};
+
 export default function PDFScreen({ route }: any) {
     const gameId = get(route, 'params.gameId', '');
     const gameData = getGameData(gameId);
-    const { mesto, auto, season: currentSeason } = useSelector(state => get(state, 'auth.profile'));
-    const userName = useSelector(state => get(state, 'auth.user.displayName', ''));
+    const { mesto, auto, season: currentSeason, name } = useSelector(state =>
+        get(state, 'auth.profile')
+    );
 
     const gameUserData: IGameDetail = useSelector(state =>
         get(state, `userGames.seasons.${currentSeason}.${gameId}`, {})
@@ -103,10 +110,10 @@ export default function PDFScreen({ route }: any) {
             </div>
             <div class="flex-container">
                 <div style="flex-grow: 1">Meno a priezvisko:
-                    <div class="text-dotted">${userName}</div>
+                    <div class="text-dotted">${name || ''}</div>
                 </div>
                 <div style="flex-grow: 1">Bydlisko /mesto:
-                    <div class="text-dotted">${mesto}</div>
+                    <div class="text-dotted">${mesto || ''}</div>
                 </div>
             </div>
 
@@ -182,7 +189,7 @@ export default function PDFScreen({ route }: any) {
 
             <div class="flex-container">
                 <div style="width: 70%">Vodič:
-                    <div class="text-dotted">${gameUserData.distance ? userName : ''}</div>
+                    <div class="text-dotted">${gameUserData.distance ? name : ''}</div>
                 </div>
                 <div style="width: 30%">EČV:
                     <div class="text-dotted">${gameUserData.distance ? auto : ''}</div>
@@ -411,7 +418,6 @@ export default function PDFScreen({ route }: any) {
         </style>
         </head>
         <body>
-            ${gamePage}
             ${gamePage}
         </body>
       </html>    
