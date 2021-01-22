@@ -36,6 +36,14 @@ export default function PDFScreen({ route }: any) {
         get(state, `userGames.seasons.${currentSeason}.${gameId}`, {})
     );
 
+    const dataRoad = gameUserData.road?.toString();
+    const road1 = dataRoad ? dataRoad.slice(0, 36) : '';
+    const road2 = road1 && dataRoad?.slice(36, 100) ? dataRoad?.slice(36, 100) : '';
+
+    const dateNotes = gameUserData.notes;
+    const notes1 = dateNotes ? dateNotes.slice(0, 48) : '';
+    const notes2 = notes1 && dateNotes?.slice(48, 120) ? dateNotes?.slice(48, 120) : '';
+
     const gamePage = `
         <div class="wrapper">
             <div class="flex-container" >
@@ -187,18 +195,18 @@ export default function PDFScreen({ route }: any) {
             </div>
             <div class="flex-container">
                 <div style="width: 100%">Odkiaľ a kam – presný popis cesty tam aj späť:
-                    <div class="text-dotted">${gameUserData.road || ''}</div>
+                    <div class="text-dotted">${road1}</div>
                 </div>
             </div>
             <div class="flex-container">
                 <div style="width: 100%">
-                    <div class="text-dotted"> ...</div>
+                    <div class="text-dotted">${road2}</div>
                 </div>
             </div>
 
             <hr class="solid">
 
-            <div class="flex-container" style="line-height: ${scaledValue(20)}pxpx">
+            <div class="flex-container" style="line-height: ${scaledValue(20)}px">
                 <div style="flex-grow: 1">(Vyplňuje len vodič !) </div>
                 <div>Opakované stretnutie :
                     <strong>ANO</strong>
@@ -221,29 +229,35 @@ export default function PDFScreen({ route }: any) {
             <div class="flex-container">
                 <div style="width: 100%">
                     <strong>Poznámka:</strong>
-                    <div class="text-dotted">${gameUserData.notes || ''}</div>
+                    <div class="text-dotted">${notes1}</div>
                 </div>
             </div>
             <div class="flex-container">
                 <div style="width: 100%">
-                    <div class="text-dotted"> ...</div>
+                    <div class="text-dotted">${notes2}</div>
                 </div>
             </div>
             <div class="flex-container">
-                <div style="width:25%; margin: 10px 20px 0px;">Paušál: EUR:
+                <div style="width:25%; 
+                margin: ${scaledValue(10)}px ${scaledValue(20)}px 0px; 
+                    "><strong>Paušál: EUR:</strong>
                     <div class="text-dotted">${gameUserData.rateMoney || ''}</div>
                 </div>
-                <div style="width: 30%; margin: 10px 20px 0px;">Počet odjazdených km:
+                <div style="width: 30%; 
+                margin: ${scaledValue(10)}px ${scaledValue(20)}px 0px; 
+                "><strong>Počet odjazdených km:</strong>
                     <div class="text-dotted">${gameUserData.distance || ''}</div>
                 </div>
             </div>
             <div class="flex-container">
-                <div style="width: 25%;line-height: ${scaledValue(13)}px; font-size: ${scaledValue(
-        11
-    )}px; margin: 0px ${scaledValue(20)}px;">( podľa smernice)</div>
-                <div style="width: 30%;line-height: ${scaledValue(13)}px; font-size: ${scaledValue(
-        11
-    )}px; margin: 0px ${scaledValue(20)}px;">( podľa kilometrovníka SZĽH)</div>
+                <div style="width: 25%;line-height: ${scaledValue(13)}px; 
+                    font-size: ${scaledValue(9)}px; font-weight: 600;
+                    margin: 0px ${scaledValue(20)}px;">( podľa smernice)
+                </div>
+                <div style="width: 30%;line-height: ${scaledValue(13)}px; 
+                    font-size: ${scaledValue(9)}px; font-weight: 600; 
+                    margin: 0px ${scaledValue(20)}px;">( podľa kilometrovníka SZĽH)
+                </div>
             </div>
             <div style="margin: ${scaledValue(5)}px ${scaledValue(10)}px ${scaledValue(20)}px">
                 <div class="flex-container">
@@ -302,17 +316,22 @@ export default function PDFScreen({ route }: any) {
                         <div class="text-dotted">${gameUserData.togetherMoney || ''}</div>
                     </div>
                 </div>
-                <div class="flex-container" style="margin-top: ${scaledValue(
-                    25
-                )}px; flex-direction: column; align-items: flex-end">
-                    <div class="text-dotted" style="border-bottom: ${scaledValue(
-                        1
-                    )}px solid; width: ${scaledValue(180)}pxpx; margin-right: ${scaledValue(
-        10
-    )}px"></div>
-                    <div style="width:${scaledValue(120)}px; line-height: ${scaledValue(
-        13
-    )}px; font-size: ${scaledValue(11)}px; margin: 0px ${scaledValue(20)}px">Podpis účtujúceho</div>
+                <div class="flex-container" 
+                    style="margin-top: ${scaledValue(25)}px; flex-direction: column; 
+                    align-items: flex-end">
+                    <div class="text-dotted" 
+                        style="border-bottom: ${scaledValue(1)}px solid; 
+                        width: ${scaledValue(180)}px; margin-right: ${scaledValue(10)}px"
+                    >
+                    </div>
+                    <div 
+                        style="width:${scaledValue(120)}px; 
+                        line-height: ${scaledValue(13)}px; 
+                        font-size: ${scaledValue(11)}px; 
+                        margin: 0px ${scaledValue(20)}px"
+                    >
+                     Podpis účtujúceho
+                    </div>
                 </div>
             </div>
             <div class="flex-container" style="margin-top: -${scaledValue(25)}px">
@@ -323,7 +342,7 @@ export default function PDFScreen({ route }: any) {
                     <div class="text-dotted"></div>
                 </div>
             </div>
-            <div class="flex-container" style="margin: ${scaledValue(4)}px ${scaledValue(4)}px; 
+            <div class="flex-container" style="margin: ${scaledValue(3)}px ${scaledValue(4)}px; 
                 text-align: center; font-weight: 600">
                 Vyučtovanie bude spracované iba v prípade vyplnenia, doloženia originálnych príslušných dokladov a podpísania účtujúceho.
             </div>
@@ -367,27 +386,23 @@ export default function PDFScreen({ route }: any) {
             .flex-container > div {
                 display: flex;
                 align-items: flex-start;
-                margin-top: ${scaledValue(3)}px;
+                margin-top: ${scaledValue(4)}px;
                 text-align: left;
-                font-size: ${scaledValue(13)}px;
-                line-height: ${scaledValue(17)}px;
+                font-size: ${scaledValue(10)}px;
+                line-height: ${scaledValue(16)}px;
             }
             .text-dotted {
                 flex-grow: 1;
+                margin-top: -${scaledValue(3)}px;
                 padding-left: ${scaledValue(2)}px;
-                font-size: ${scaledValue(14)}px;
-                height: ${scaledValue(14)}px;
+                font-size: ${scaledValue(16)}px;
+                height: ${scaledValue(16)}px;
                 border-bottom: ${scaledValue(1)}px dotted;
             }
             .money-label {
                 flex-grow: 1; 
                 justify-content: flex-end;
                 margin-right: ${scaledValue(40)}px
-            }
-            .separator {
-                width: 100%;
-                height: ${scaledValue(1)}px;
-                background-color:black;
             }
             hr.solid {
                 margin: 0;
