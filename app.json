@@ -15,6 +15,7 @@
         "updates": {
             "fallbackToCacheTimeout": 0
         },
+        "privacy" : "unlisted",
         "assetBundlePatterns": ["**/*"],
         "ios": {
             "supportsTablet": true

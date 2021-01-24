@@ -5,23 +5,23 @@ export const SAVE_GAME = 'user_game_data';
 export const SAVE_GAME_SUCCESS = 'user_game_save_success';
 export const SAVE_GAME_ERROR = 'user_game_save_error';
 
-export const saveGame = (gameData: IGameDetail) => (dispatch: any) => {
-    const currentSeason = '20192020';
+export const saveGame = (gameData: IGameDetail) => (dispatch: any, state) => {
+    const season = state().auth.profile.season;
     dispatch({
         type: SAVE_GAME,
         data: gameData,
-        season: currentSeason
+        season: season
     });
-    const { currentUser } = firebase.auth();
+    const { user } = state().auth.user;
 
-    if (!currentUser) return;
+    if (!user) return;
     ///referees/jobbagymartin/seasons/20192020/games/2416
     firebase
         .firestore()
         .collection('referees')
-        .doc(currentUser.uid)
+        .doc(user.uid)
         .collection('seasons')
-        .doc(currentSeason)
+        .doc(season)
         .collection('games')
         .doc(gameData.gameId)
         .set(gameData, { merge: true })
@@ -38,19 +38,18 @@ export const saveGame = (gameData: IGameDetail) => (dispatch: any) => {
         });
 };
 
-export const getGameById = (gameId: string) => (dispatch: any) => {
-    const currentSeason = '20192020';
-    const { currentUser } = firebase.auth();
+export const getGameById = (gameId: string) => (dispatch: any, state: any) => {
+    const season = state().auth.profile.season;
+    const { user } = state().auth.user;
 
-    if (!currentUser) return;
-    ///referees/jobbagymartin/seasons/20192020/games/2416
+    if (!user) return;
 
     firebase
         .firestore()
         .collection('referees')
-        .doc(currentUser.uid)
+        .doc(user.uid)
         .collection('seasons')
-        .doc(currentSeason)
+        .doc(season)
         .collection('games')
         .doc(gameId)
         .onSnapshot(doc => {
@@ -58,10 +57,9 @@ export const getGameById = (gameId: string) => (dispatch: any) => {
                 dispatch({
                     type: SAVE_GAME,
                     data: doc.data(),
-                    season: currentSeason
+                    season: season
                 });
             } else {
-                console.warn('GAME DATA: no data to be stored for gameId', gameId);
                 dispatch({
                     type: SAVE_GAME_ERROR,
                     error: 'No firebase data'

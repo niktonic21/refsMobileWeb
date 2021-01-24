@@ -31,7 +31,7 @@ interface IProps {
 }
 
 export default function PeniazeDetail({
-    rateMoney,
+    rateMoney: rateMoneyProp,
     travelMoney: travelMoneyProp,
     rateCityMoney: rateCityMoneyProp,
     mealMoney: mealMoneyProp,
@@ -40,6 +40,7 @@ export default function PeniazeDetail({
     otherMoney: otherMoneyProp,
     updateDetails
 }: IProps) {
+    const [rateMoney, setRateMoney] = useState(rateMoneyProp?.toString() || '');
     const [rateCityMoney, setRateCityMoney] = useState(rateCityMoneyProp?.toString() || '');
     const [nightMoney, setNightMoney] = useState(nightMoneyProp?.toString() || '');
     const [travelMoney, setTravelMoney] = useState(travelMoneyProp?.toString() || '');
@@ -57,8 +58,12 @@ export default function PeniazeDetail({
     }, [travelMoneyProp]);
 
     useEffect(() => {
+        rateMoneyProp && setRateMoney(rateMoneyProp.toString());
+    }, [rateMoneyProp]);
+
+    useEffect(() => {
         const all =
-            correctNumber(rateMoney) +
+            stringToNumber(rateMoney) +
             stringToNumber(travelMoney) +
             stringToNumber(rateCityMoney) +
             stringToNumber(mealMoney) +
@@ -71,6 +76,9 @@ export default function PeniazeDetail({
     }, [rateMoney, travelMoney, rateCityMoney, mealMoney, nightMoney, postMoney, otherMoney]);
 
     const _changeText = (itemKey: string, text: string) => {
+        if (EGameDetail.RATE === itemKey) {
+            setRateMoney(text);
+        }
         if (EGameDetail.TRAVEL === itemKey) {
             setTravelMoney(text);
         }
@@ -90,6 +98,7 @@ export default function PeniazeDetail({
             setOtherMoney(text);
         }
         const number = stringToNumber(text);
+
         updateDetails({ [itemKey]: number });
     };
 
@@ -101,7 +110,7 @@ export default function PeniazeDetail({
                     itemKey={EGameDetail.RATE}
                     changeNumber={_changeText}
                     label={RATE}
-                    value={String(rateMoney)}
+                    value={rateMoney}
                 />
                 <Separator />
                 <ItemDetailLineInput

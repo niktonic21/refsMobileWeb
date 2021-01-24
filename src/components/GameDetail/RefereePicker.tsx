@@ -8,31 +8,38 @@ import { IRefWithType } from './ZapasDetail';
 export const refsPickerData = [
     {
         label: 'H1',
-        value: EGameDetail.H1
+        value: EGameDetail.H1,
+        class: 'referee-referee'
     },
     {
         label: 'H2',
-        value: EGameDetail.H2
+        value: EGameDetail.H2,
+        class: 'referee-referee_2'
     },
     {
         label: 'Č1',
-        value: EGameDetail.C1
+        value: EGameDetail.C1,
+        class: 'referee-linesmen_1'
     },
     {
         label: 'Č2',
-        value: EGameDetail.C2
+        value: EGameDetail.C2,
+        class: 'referee-linesmen_2'
     },
     {
         label: 'I',
-        value: EGameDetail.I
+        value: EGameDetail.I,
+        class: 'referee-referee_instructor'
     },
     {
         label: 'V',
-        value: EGameDetail.V
+        value: EGameDetail.V,
+        class: 'referee-video_goal_judge'
     },
     {
         label: 'D',
-        value: EGameDetail.D
+        value: EGameDetail.D,
+        class: 'referee-delegate'
     }
 ];
 

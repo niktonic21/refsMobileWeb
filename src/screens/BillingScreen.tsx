@@ -4,7 +4,7 @@ import { RectButton } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 import get from 'lodash/get';
 import { createBillingSections } from '@utils';
-import { IItemButton, IGame } from '../utils/types';
+import { IItemButton } from '../utils/types';
 import ScreenContainer from '../components/ScreenContainer';
 import SectionHeader from '../components/SectionHeader';
 

@@ -24,7 +24,12 @@ const styles = StyleSheet.create({
     }
 });
 
-const scaledValue = (value: number) => (isIos ? value : (value * 4) / 3);
+const scaledValue = (value: number): number => (isIos ? value : (value * 4) / 3);
+
+const getLineFontSize = (text: string): number =>
+    (scaledValue(325) * 1.5) / text.length < scaledValue(16)
+        ? (scaledValue(325) * 1.5) / text.length
+        : scaledValue(16);
 
 const createGameHTML = () => {
     const gameHtml = '';
@@ -90,13 +95,17 @@ export default function PDFScreen({ route }: any) {
                     <strong> ANO</strong>
                     <input type="checkbox" ${gameUserData.playedBefore && 'checked'} />
                 </div>
-            </div>
+            </div>  
             <div class="flex-container">
-                <div style="flex-grow: 1">Domáci:
-                    <div class="text-dotted">${gameData.home}</div>
+                <div style="width:50%">Domáci:
+                    <div class="text-dotted" 
+                    style="font-size: ${getLineFontSize(gameData.home)}px; overflow: hidden;
+                    white-space: nowrap;">${gameData.home}</div>
                 </div>
-                <div style="flex-grow: 1">Hostia:
-                    <div class="text-dotted">${gameData.away}</div>
+                <div style="width:50%">Hostia:
+                    <div class="text-dotted" 
+                    style="font-size: ${getLineFontSize(gameData.away)}px; overflow: hidden;
+                    white-space: nowrap;">${gameData.away}</div>
                 </div>
             </div>
             <div class="flex-container">

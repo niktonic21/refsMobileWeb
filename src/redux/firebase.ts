@@ -1,6 +1,7 @@
 import 'expo-firestore-offline-persistence';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
+import alert from '../utils/alert';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDYFLQYIcPzj1j-J6hO87hPAOoyKb5TTH4',
@@ -23,7 +24,9 @@ export const resetPassword = (email: string) => {
     const auth = firebase.auth();
     auth.sendPasswordResetEmail(email)
         .then(function () {
-            console.log('Request sent');
+            alert('Žiadosť odoslaná', '', [{ text: 'OK', onPress: () => {} }], {
+                cancelable: false
+            });
         })
         .catch(function (error) {
             console.warn('Request error', error);

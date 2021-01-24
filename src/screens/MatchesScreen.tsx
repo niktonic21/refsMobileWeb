@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, SectionList, SectionListData } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import get from 'lodash/get';
+import { checkNewData } from '@actions';
 import { createGameSections, filterGameSections } from '../utils/gameUtils';
 import { IItemButton, IGame } from '../utils/types';
 import FilterButtons from '../components/FilterButtons';
@@ -69,12 +70,21 @@ const _renderSectionHeader = ({ section }: any) => <SectionHeader section={secti
 
 const _renderSeparator = () => <View style={styles.separator} />;
 
-const _keyExtractor = (item: { gameId: string }) => item.gameId;
+const _keyExtractor = (item: { gameId: string; home: string }) => item.gameId;
 
 export default function MatchesScreen({ navigation }) {
+    const dispatch = useDispatch();
     const [modalKey, setModalKey] = React.useState('');
     const games = useSelector(state => get(state, 'games.games', []));
     const filterData = useSelector(state => get(state, 'filter', []));
+    const season = useSelector(state => get(state, 'auth.profile.season', ''));
+
+    React.useEffect(() => {
+        if (season) {
+            dispatch(checkNewData(''));
+        }
+    }, [season]);
+
     const gameSections: Array<SectionListData<any>> = createGameSections(games);
     const filteredGameSections: Array<SectionListData<IGame>> = filterGameSections(
         gameSections,

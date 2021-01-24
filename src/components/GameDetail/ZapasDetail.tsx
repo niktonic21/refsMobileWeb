@@ -16,7 +16,7 @@ import {
     GAME_PLAYED,
     GAME_PLAYED_BEFORE
 } from '@strings';
-import { EGameDetail, IGame } from '@utils';
+import { EGameDetail, IGame, IRef } from '@utils';
 import RefereeDownPicker, { refsPickerData } from './RefereePicker';
 
 const styles = StyleSheet.create({
@@ -33,9 +33,11 @@ const styles = StyleSheet.create({
 });
 
 const createRefsWithType = (referees: any) => {
-    return referees.map((ref: { name: string }, index: number) => {
+    return referees.map((ref: IRef, index: number) => {
         const name = ref.name.split(',', 2).join();
-        return { refType: refsPickerData[index].value, name };
+        const refType =
+            refsPickerData.find(r => r.class === ref.class)?.value || refsPickerData[index].value;
+        return { refType: refType, name, id: ref.id };
     });
 };
 
@@ -49,6 +51,7 @@ interface IProps {
 export interface IRefWithType {
     refType: string;
     name: string;
+    id: string;
 }
 
 export default function ZapasDetail({
@@ -90,7 +93,6 @@ export default function ZapasDetail({
 
     const _saveRefsType = (newRefs: IRefWithType[]) => {
         //const objRefs = newRefs.reduce((acc, ref) => ({ ...acc, [ref.refType]: ref.name }), {});
-        //console.log(objRefs);
         setRefsWithType(newRefs);
         updateDetails({ refs: newRefs });
     };

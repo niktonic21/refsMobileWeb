@@ -17,6 +17,7 @@ export interface ISection {
 export interface IRef {
     id: string;
     name: string;
+    class: string;
 }
 
 export interface IGame {

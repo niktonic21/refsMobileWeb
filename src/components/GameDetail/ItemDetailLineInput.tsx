@@ -63,7 +63,7 @@ export default function ItemDetailLineInput({
                     returnKeyType={'next'}
                     editable={editable}
                     onChangeText={_onChangeText}
-                    value={value && value !== '0' ? value : ''}
+                    value={value ? value : ''}
                 />
                 <Text style={styles.labelText}>€</Text>
             </View>

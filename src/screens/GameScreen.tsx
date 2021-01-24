@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { Button } from 'react-native-paper';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
+import { EGameDetail, getCurrentRef, getGameData, getGameRate, IRef, stringToNumber } from '@utils';
+import alert from '../utils/alert';
+import { useDispatch, useSelector } from 'react-redux';
+import { getGameById, saveGame } from '@actions';
+import { SAVE_CHANGES } from '@strings';
+
 import ZapasDetail, { IRefWithType } from '../components/GameDetail/ZapasDetail';
 import StravneDetail from '../components/GameDetail/StravneDetail';
 import CestovneDetail from '../components/GameDetail/CestovneDetail';
 import OstatneDetail from '../components/GameDetail/OstatneDetail';
 import PeniazeDetail from '../components/GameDetail/PeniazeDetail';
-import { Button } from 'react-native-paper';
-import { SAVE_CHANGES } from '@strings';
-import { EGameDetail, getCurrentRef, getGameData, getGameRate, IRef, stringToNumber } from '@utils';
-import { useDispatch, useSelector } from 'react-redux';
-import { getGameById, saveGame } from '@actions';
 
 const styles = StyleSheet.create({
     container: {
@@ -29,8 +31,8 @@ const styles = StyleSheet.create({
     button: { marginHorizontal: 15 }
 });
 
-const getcurrentRefGameType = (name: string, gameRefs: IRefWithType[] = []): string => {
-    let ref = gameRefs.find(ref => ref.name == name.split(',', 2).join());
+const getcurrentRefGameType = (refId: string, gameRefs: IRefWithType[] = []): string => {
+    let ref = gameRefs.find(ref => ref.id == refId);
     return ref?.refType || EGameDetail.H1;
 };
 export interface IGameDetail {
@@ -75,9 +77,6 @@ export default function GameScreen({ route }: any) {
     );
     const [gameDetailsData, setGameDetailsData] = useState<IGameDetail>(gameUserData);
 
-    console.log('gameLocalData', gameData, gameDetailsData);
-    console.log('gameReduxData', gameUserData);
-
     // download latest data from server
     useEffect(() => {
         isBilling && dispatch(getGameById(gameId));
@@ -94,9 +93,18 @@ export default function GameScreen({ route }: any) {
 
     const _saveChanges = () => {
         dispatch(saveGame(gameDetailsData));
+        alert('Zapas uložený', '', [{ text: 'OK', onPress: () => {} }], {
+            cancelable: false
+        });
     };
 
-    const currentRefGameType = getcurrentRefGameType(currentRef.name, gameDetailsData?.refs);
+    const gameRate = getGameRate(
+        getcurrentRefGameType(currentRef.id, gameDetailsData.refs),
+        stringToNumber(gameId),
+        gameData.subligue,
+        gameDetailsData.playedBefore
+    );
+
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <ZapasDetail
@@ -134,12 +142,7 @@ export default function GameScreen({ route }: any) {
                         notes={gameDetailsData.notes}
                     />
                     <PeniazeDetail
-                        rateMoney={getGameRate(
-                            currentRefGameType,
-                            stringToNumber(gameId),
-                            gameData.subligue,
-                            gameDetailsData.playedBefore
-                        )}
+                        rateMoney={gameRate}
                         countCity={gameDetailsData.countCity}
                         rateCityMoney={gameDetailsData.rateCityMoney}
                         nightMoney={gameDetailsData.nightMoney}

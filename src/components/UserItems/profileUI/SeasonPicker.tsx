@@ -17,7 +17,7 @@ export const seasonsPickerData = [
 const styles = StyleSheet.create({
     container: { paddingTop: 18, paddingBottom: 58, alignItems: 'center' },
     placeholderText: {
-        color: '#888',
+        color: '#111',
         fontSize: 16,
         marginBottom: 5
     },

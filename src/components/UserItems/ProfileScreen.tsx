@@ -1,7 +1,7 @@
 import React, { memo, useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import * as firebase from 'firebase';
-import Logo from './profileUI/Logo';
+// import Logo from './profileUI/Logo';
 import Button from './profileUI/Button';
 import TextInput from './profileUI/TextInput';
 import SeasonPicker from './profileUI/SeasonPicker';
@@ -43,13 +43,13 @@ const ProfileScreen = () => {
         if (autoProp !== auto) {
             setAuto(autoProp);
         }
-        if (seasonProp !== season) {
-            setAuto(season);
+        if (season && seasonProp !== season) {
+            setSeason(season);
         }
         if (nameProps !== name) {
             setName(name);
         }
-    }, [autoProp, mestoProp, season, name]);
+    }, [autoProp, mestoProp, seasonProp, nameProps]);
 
     useEffect(() => {
         const unsubscribe = firebase
@@ -58,8 +58,6 @@ const ProfileScreen = () => {
             .doc(userId)
             .onSnapshot(doc => {
                 if (doc.exists) {
-                    console.log(doc.data());
-
                     dispatch(updateProfileData(doc.data()));
                 } else {
                     console.warn('Profile: no data to be stored');
@@ -74,7 +72,6 @@ const ProfileScreen = () => {
             setEmail({ ...email, error: emailError });
             return;
         }
-        console.log('season', season);
 
         dispatch(saveProfileData({ mesto, auto, email: email.value, season, name }));
     };
@@ -85,8 +82,8 @@ const ProfileScreen = () => {
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-            <Logo />
-            <SeasonPicker season={season} saveSeason={text => setSeason(text)} />
+            {/* <Logo /> */}
+            <SeasonPicker season={season} saveSeason={text => text && setSeason(text)} />
             <TextInput label={NAME} onChangeText={text => setName(text)} value={name} />
             <TextInput
                 label="Email"
