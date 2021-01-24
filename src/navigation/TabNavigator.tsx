@@ -40,6 +40,7 @@ export default function TabNavigator() {
 
     return (
         <Tab.Navigator
+            swipeEnabled={!isWeb}
             initialRouteName="Matches"
             tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
         >

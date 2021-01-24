@@ -1,6 +1,12 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, SectionList, SectionListData } from 'react-native';
-import { RectButton } from 'react-native-gesture-handler';
+import {
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity,
+    SectionList,
+    SectionListData
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import get from 'lodash/get';
 import { checkNewData } from '@actions';
@@ -108,7 +114,7 @@ export default function MatchesScreen({ navigation }) {
 
         return (
             <ScreenContainer>
-                <RectButton key={gameId} style={styles.option} onPress={_onPress}>
+                <TouchableOpacity key={gameId} style={styles.option} onPress={_onPress}>
                     <View style={styles.matchInfo}>
                         <Text style={styles.optionText}>{home}</Text>
                         <Text style={styles.optionText}>{away}</Text>
@@ -134,7 +140,7 @@ export default function MatchesScreen({ navigation }) {
                               ))
                             : null}
                     </View>
-                </RectButton>
+                </TouchableOpacity>
             </ScreenContainer>
         );
     };

@@ -1,6 +1,12 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, SectionList, SectionListData } from 'react-native';
-import { RectButton } from 'react-native-gesture-handler';
+import {
+    StyleSheet,
+    Text,
+    View,
+    SectionList,
+    SectionListData,
+    TouchableOpacity
+} from 'react-native';
 import { useSelector } from 'react-redux';
 import get from 'lodash/get';
 import { createBillingSections } from '@utils';
@@ -115,18 +121,22 @@ export default function BillingScreen({ navigation }) {
         return (
             <ScreenContainer>
                 <View style={styles.option} key={gameId}>
-                    <RectButton style={styles.matchInfo} onPress={_onPress}>
+                    <TouchableOpacity style={styles.matchInfo} onPress={_onPress}>
                         <Text style={styles.optionText}>{ligue}</Text>
                         <Text style={styles.optionText}>{home}</Text>
                         <Text style={styles.optionText}>{away}</Text>
                         <Text style={styles.optionText}>
                             {date} o {time}, {day}
                         </Text>
-                    </RectButton>
+                    </TouchableOpacity>
                     <View style={styles.separatorItem} />
-                    <RectButton style={styles.pdfContainer} key={gameId} onPress={_onPDFPress}>
+                    <TouchableOpacity
+                        style={styles.pdfContainer}
+                        key={gameId}
+                        onPress={_onPDFPress}
+                    >
                         <Text style={styles.pdfText}>PDF</Text>
-                    </RectButton>
+                    </TouchableOpacity>
                 </View>
             </ScreenContainer>
         );

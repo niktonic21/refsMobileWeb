@@ -10,6 +10,7 @@ import { logOut, saveProfileData, updateProfileData } from '@actions';
 import { emailValidator } from '@utils';
 import { SAVE_CHANGES, LOG_OUT, CITY, CAR_ID, NAME } from '@strings';
 import { ScrollView } from 'react-native-gesture-handler';
+import alert from '../../utils/alert';
 
 const styles = StyleSheet.create({
     container: {
@@ -72,7 +73,9 @@ const ProfileScreen = () => {
             setEmail({ ...email, error: emailError });
             return;
         }
-
+        alert('Zmeny uložené', '', [{ text: 'OK', onPress: () => {} }], {
+            cancelable: false
+        });
         dispatch(saveProfileData({ mesto, auto, email: email.value, season, name }));
     };
 
