@@ -86,9 +86,7 @@ export default function MatchesScreen({ navigation }) {
     const season = useSelector(state => get(state, 'auth.profile.season', ''));
 
     React.useEffect(() => {
-        if (season) {
-            dispatch(checkNewData(''));
-        }
+        season && dispatch(checkNewData(''));
     }, [season]);
 
     const gameSections: Array<SectionListData<any>> = createGameSections(games);

@@ -6,6 +6,7 @@ import remove from 'lodash/remove';
 import get from 'lodash/get';
 
 import { RadioButton } from '../components/RadioButton';
+import { BackButtonWeb } from '../components/BackButtonWeb';
 
 const styles = StyleSheet.create({
     headerText: {
@@ -51,6 +52,7 @@ export default function GameRefListScreen({ route }: any) {
 
     return (
         <>
+            <BackButtonWeb />
             <Text style={styles.headerText}>Rozhodcovia: {choosenRefs.toString()}</Text>
             <FlatList
                 data={refList}

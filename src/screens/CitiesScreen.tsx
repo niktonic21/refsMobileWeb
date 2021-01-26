@@ -7,6 +7,7 @@ import get from 'lodash/get';
 import { getCitiesList } from '@utils';
 
 import { RadioButton } from '../components/RadioButton';
+import { BackButtonWeb } from '../components/BackButtonWeb';
 
 const styles = StyleSheet.create({
     container: {
@@ -38,9 +39,10 @@ interface IProp {
         selectedCities: string[] | undefined;
         single: boolean;
     };
+    navigation: any;
 }
 
-export default function CitiesScreen({ route }: IProp) {
+export default function CitiesScreen({ navigation, route }: IProp) {
     const onSelectedCities = get(route, 'params.onSelectedCities', () => {});
     const selectedCities = get(route, 'params.selectedCities', []);
     const isSingleCity = get(route, 'params.single', false);
@@ -70,6 +72,7 @@ export default function CitiesScreen({ route }: IProp) {
     const headerPrefix = isSingleCity ? 'Mesto' : 'Mestá';
     return (
         <>
+            <BackButtonWeb />
             <Text style={styles.headerText}>
                 {headerPrefix}: {choosenCities.toString()}
             </Text>

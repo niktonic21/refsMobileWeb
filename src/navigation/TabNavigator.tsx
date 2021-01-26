@@ -3,17 +3,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import get from 'lodash/get';
 import { isWeb } from '@layout';
 import store from '../redux/store';
 import Colors from '../../constants/Colors';
 import useColorScheme from '../utils/hooks/useColorScheme';
 import MatchesScreen from '../screens/MatchesScreen';
-// import HomeScreen from '../screens/HomeScreen';
-// import LinksScreen from '../screens/LinksScreen';
-// import LinksScreen from '../screens/LinksScreen';
-
 import BillingScreen from '../screens/BillingScreen';
 import PDFScreen from '../screens/PDFScreen';
 import GameScreen from '../screens/GameScreen';
@@ -46,6 +42,7 @@ export default function TabNavigator() {
         >
             <Tab.Screen
                 name="Zapasy"
+                title="aaa"
                 component={MatchesNavigator}
                 options={{
                     tabBarIcon: ({ color }) => <TabBarIcon name="ios-list" color={color} />
@@ -85,12 +82,12 @@ function MatchesNavigator() {
             <MatchesStack.Screen
                 name="MatchesScreen"
                 component={MatchesScreen}
-                options={{ headerTitle: 'Delegacka' }}
+                options={{ headerTitle: 'Delegačné listy' }}
             />
             <MatchesStack.Screen
                 name="GameScreen"
                 component={GameScreen}
-                options={{ headerTitle: 'Datial zapasu' }}
+                options={{ headerTitle: 'Datial zápasu' }}
             />
         </MatchesStack.Navigator>
     );
@@ -104,7 +101,7 @@ function HomeNavigator() {
             <BillingStack.Screen
                 name="BillingScreen"
                 component={BillingScreen}
-                options={{ headerTitle: 'Vyuctovanie' }}
+                options={{ headerTitle: 'Vyúčtovanie' }}
             />
             <BillingStack.Screen
                 name="PDFScreen"
@@ -114,12 +111,12 @@ function HomeNavigator() {
             <BillingStack.Screen
                 name="GameScreen"
                 component={GameScreen}
-                options={{ headerTitle: 'Datial zapasu' }}
+                options={{ headerTitle: 'Datial zápasu' }}
             />
             <BillingStack.Screen
                 name="CitiesScreen"
                 component={CitiesScreen}
-                options={{ headerTitle: 'Mesta' }}
+                options={{ headerTitle: 'Mestá' }}
             />
             <BillingStack.Screen
                 name="GameRefListScreen"
