@@ -32,7 +32,7 @@ export const BackButtonWeb: React.FC<IProps> = ({ title = 'Uložiť', style, onP
                     icon="arrow-left"
                     contentStyle={[styles.button, style]}
                     mode="text"
-                    color="blue"
+                    color="#007AFF"
                     onPress={_onBack}
                 >
                     {title}

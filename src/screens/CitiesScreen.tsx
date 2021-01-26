@@ -11,6 +11,12 @@ import { BackButtonWeb } from '../components/BackButtonWeb';
 
 const styles = StyleSheet.create({
     container: {
+        maxWidth: 800,
+        width: '100%',
+        alignSelf: 'center',
+        justifyContent: 'center'
+    },
+    listContainer: {
         backgroundColor: 'white'
     },
     headerText: {
@@ -42,7 +48,7 @@ interface IProp {
     navigation: any;
 }
 
-export default function CitiesScreen({ navigation, route }: IProp) {
+export default function CitiesScreen({ route }: IProp) {
     const onSelectedCities = get(route, 'params.onSelectedCities', () => {});
     const selectedCities = get(route, 'params.selectedCities', []);
     const isSingleCity = get(route, 'params.single', false);
@@ -72,13 +78,16 @@ export default function CitiesScreen({ navigation, route }: IProp) {
     const headerPrefix = isSingleCity ? 'Mesto' : 'Mestá';
     return (
         <>
-            <BackButtonWeb />
-            <Text style={styles.headerText}>
-                {headerPrefix}: {choosenCities.toString()}
-            </Text>
+            <View style={styles.container}>
+                <BackButtonWeb />
+                <Text style={styles.headerText}>
+                    {headerPrefix}: {choosenCities.toString()}
+                </Text>
+            </View>
             <View style={styles.separatorMain} />
             <FlatList
-                style={styles.container}
+                style={styles.listContainer}
+                contentContainerStyle={styles.container}
                 data={data}
                 extraData={choosenCities}
                 initialNumToRender={10}

@@ -15,6 +15,7 @@ import StravneDetail from '../components/GameDetail/StravneDetail';
 import CestovneDetail from '../components/GameDetail/CestovneDetail';
 import OstatneDetail from '../components/GameDetail/OstatneDetail';
 import PeniazeDetail from '../components/GameDetail/PeniazeDetail';
+import { BackButtonWeb } from '../components/BackButtonWeb';
 
 const styles = StyleSheet.create({
     container: {
@@ -112,6 +113,7 @@ export default function GameScreen({ navigation, route }: any) {
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+            <BackButtonWeb title="Späť" />
             <ZapasDetail
                 gameData={gameData}
                 played={gameDetailsData?.played}

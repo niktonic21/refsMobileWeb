@@ -9,10 +9,13 @@ import { RadioButton } from '../components/RadioButton';
 import { BackButtonWeb } from '../components/BackButtonWeb';
 
 const styles = StyleSheet.create({
-    headerText: {
+    container: {
         maxWidth: 800,
         width: '100%',
         alignSelf: 'center',
+        justifyContent: 'center'
+    },
+    headerText: {
         fontWeight: 'bold',
         padding: 15
     },
@@ -52,9 +55,12 @@ export default function GameRefListScreen({ route }: any) {
 
     return (
         <>
-            <BackButtonWeb />
-            <Text style={styles.headerText}>Rozhodcovia: {choosenRefs.toString()}</Text>
+            <View style={styles.container}>
+                <BackButtonWeb />
+                <Text style={styles.headerText}>Rozhodcovia: {choosenRefs.toString()}</Text>
+            </View>
             <FlatList
+                contentContainerStyle={styles.container}
                 data={refList}
                 extraData={choosenRefs}
                 initialNumToRender={10}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Button, PixelRatio } from 'react-native';
+import { StyleSheet, View, Button } from 'react-native';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { WebView } from 'react-native-webview';
@@ -7,18 +7,23 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { isIos, isWeb } from '@layout';
 import { szlhLogo } from '@strings';
 import get from 'lodash/get';
-import { getGameData, EGameDetail, getDateString, monthToNumber } from '@utils';
+import { getGameData, EGameDetail, getDateString } from '@utils';
 import { useSelector } from 'react-redux';
 import { IGameDetail } from './GameScreen';
+import { BackButtonWeb } from '../components/BackButtonWeb';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1
     },
     contentContainer: {
-        alignItems: 'center'
+        maxWidth: 800,
+        width: '100%',
+        alignSelf: 'center',
+        justifyContent: 'center'
     },
     button: {
+        alignSelf: 'center',
         margin: 20,
         maxWidth: 200
     }
@@ -453,6 +458,7 @@ export default function PDFScreen({ route }: any) {
                     style={styles.container}
                     contentContainerStyle={styles.contentContainer}
                 >
+                    <BackButtonWeb title="Späť" />
                     <View style={styles.button}>
                         <Button title="Generuj" onPress={() => execute()} />
                     </View>
