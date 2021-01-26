@@ -1,7 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { RectButton } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
@@ -33,12 +32,12 @@ interface IRadioButton {
 }
 
 export const RadioButton: React.FC<IRadioButton> = ({ label, checked, onPress }) => (
-    <RectButton style={styles.option} onPress={onPress}>
+    <TouchableOpacity style={styles.option} onPress={onPress}>
         <View style={styles.container}>
             <Text style={styles.optionText}>{label}</Text>
             <View style={styles.optionIconContainer}>
                 {checked && <Ionicons name={'ios-checkmark'} size={45} color="grey" />}
             </View>
         </View>
-    </RectButton>
+    </TouchableOpacity>
 );

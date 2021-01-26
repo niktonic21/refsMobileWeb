@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { RectButton } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const styles = StyleSheet.create({
@@ -37,7 +36,7 @@ interface IProps {
 
 export default function ItemDetailIcon({ value = '', placeholder, onPress }: IProps) {
     return (
-        <RectButton style={styles.container} onPress={onPress}>
+        <TouchableOpacity style={styles.container} onPress={onPress}>
             <View style={styles.textContainer}>
                 <Text numberOfLines={1} ellipsizeMode="tail" style={styles.placeholderText}>
                     {placeholder}
@@ -47,6 +46,6 @@ export default function ItemDetailIcon({ value = '', placeholder, onPress }: IPr
             <View style={styles.tapContainer}>
                 <Ionicons name="ios-arrow-round-forward" size={34} color="grey" />
             </View>
-        </RectButton>
+        </TouchableOpacity>
     );
 }
