@@ -78,7 +78,7 @@ export default function ZapasDetail({
     const refNameList = referees.map(ref => ref.name.split(',', 2)).join('\n');
 
     useEffect(() => {
-        updateDetails({ played, playedBefore, gameId });
+        updateDetails({ played, playedBefore, gameId, refs: refsWithType });
     }, []);
 
     const _toggleSwitch = (itemKey: string) => {

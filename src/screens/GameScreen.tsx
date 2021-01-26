@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-paper';
 import get from 'lodash/get';
@@ -8,7 +8,7 @@ import { EGameDetail, getCurrentRef, getGameData, getGameRate, IRef, stringToNum
 import alert from '../utils/alert';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGameById, saveGame } from '@actions';
-import { SAVE_CHANGES } from '@strings';
+import { CHECK_PDF, SAVE_CHANGES } from '@strings';
 
 import ZapasDetail, { IRefWithType } from '../components/GameDetail/ZapasDetail';
 import StravneDetail from '../components/GameDetail/StravneDetail';
@@ -28,10 +28,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingVertical: 15
     },
+    separator: { height: 20 },
     button: { marginHorizontal: 15 }
 });
 
-const getcurrentRefGameType = (refId: string, gameRefs: IRefWithType[] = []): string => {
+const getCurrentRefGameType = (refId: string, gameRefs: IRefWithType[] = []): string => {
     let ref = gameRefs.find(ref => ref.id == refId);
     return ref?.refType || EGameDetail.H1;
 };
@@ -64,7 +65,7 @@ export interface IGameDetail {
     notes?: string;
 }
 
-export default function GameScreen({ route }: any) {
+export default function GameScreen({ navigation, route }: any) {
     const dispatch = useDispatch();
 
     const gameId = get(route, 'params.gameId', '');
@@ -91,15 +92,19 @@ export default function GameScreen({ route }: any) {
         setGameDetailsData(prevState => ({ ...prevState, ...data }));
     };
 
+    const _onPDFPress = () => {
+        navigation.navigate('PDFScreen', { gameId });
+    };
+
     const _saveChanges = () => {
-        dispatch(saveGame(gameDetailsData));
         alert('Zapas uložený', '', [{ text: 'OK', onPress: () => {} }], {
             cancelable: false
         });
+        dispatch(saveGame(gameDetailsData));
     };
 
     const gameRate = getGameRate(
-        getcurrentRefGameType(currentRef.id, gameDetailsData.refs),
+        getCurrentRefGameType(currentRef.id, gameDetailsData.refs),
         stringToNumber(gameId),
         gameData.subligue,
         gameDetailsData.playedBefore
@@ -152,6 +157,10 @@ export default function GameScreen({ route }: any) {
                         mealMoney={gameDetailsData.mealMoney}
                         updateDetails={_updateDetails}
                     />
+                    <Button style={styles.button} mode="outlined" onPress={_onPDFPress}>
+                        {CHECK_PDF}
+                    </Button>
+                    <View style={styles.separator} />
                     <Button style={styles.button} mode="contained" onPress={_saveChanges}>
                         {SAVE_CHANGES}
                     </Button>

@@ -7,7 +7,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { isIos, isWeb } from '@layout';
 import { szlhLogo } from '@strings';
 import get from 'lodash/get';
-import { getGameData, EGameDetail, getDateString } from '@utils';
+import { getGameData, EGameDetail, getDateString, monthToNumber } from '@utils';
 import { useSelector } from 'react-redux';
 import { IGameDetail } from './GameScreen';
 
@@ -31,14 +31,7 @@ const getLineFontSize = (text: string): number =>
         ? (scaledValue(325) * 1.5) / text.length
         : scaledValue(16);
 
-const createGameHTML = () => {
-    const gameHtml = '';
-    //ak cislo tak jeden zapas ak mesiac tak dotiahni vsetky zapasy sa mesiac
-    return gameHtml;
-};
-
-export default function PDFScreen({ route }: any) {
-    const gameId = get(route, 'params.gameId', '');
+const createGameHTML = (gameId: string) => {
     const gameData = getGameData(gameId);
     const { mesto, auto, season: currentSeason, name } = useSelector(state =>
         get(state, 'auth.profile')
@@ -364,6 +357,13 @@ export default function PDFScreen({ route }: any) {
             </div>
         </div>
     `;
+    return gamePage;
+};
+
+export default function PDFScreen({ route }: any) {
+    const gameId = get(route, 'params.gameId', '');
+    const idList: string[] = gameId.split(',');
+    const gamesHTML: string[] = idList.map(id => createGameHTML(id));
 
     const html = `
         <!DOCTYPE html>
@@ -427,7 +427,7 @@ export default function PDFScreen({ route }: any) {
         </style>
         </head>
         <body>
-            ${gamePage}
+            ${gamesHTML.join('')}
         </body>
       </html>    
     `;

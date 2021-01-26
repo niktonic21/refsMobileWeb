@@ -1,5 +1,5 @@
 import React, { memo, useState, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import * as firebase from 'firebase';
 // import Logo from './profileUI/Logo';
 import Button from './profileUI/Button';
@@ -26,18 +26,21 @@ const styles = StyleSheet.create({
 const ProfileScreen = () => {
     const dispatch = useDispatch();
     const { user: userAuth } = useSelector(state => state.auth.user);
-    const { mesto: mestoProp, auto: autoProp, season: seasonProp, name: nameProps } = useSelector(
+    const { mesto: mestoProp, auto: autoProp, season: seasonProp, name: nameProp } = useSelector(
         state => state.auth.profile
     );
     const { email: emailProp, uid: userId } = userAuth;
 
+    const [name, setName] = useState(nameProp);
     const [email, setEmail] = useState({ value: emailProp, error: '' });
     const [mesto, setMesto] = useState(mestoProp);
     const [auto, setAuto] = useState(autoProp);
     const [season, setSeason] = useState(seasonProp);
-    const [name, setName] = useState(nameProps);
 
     useEffect(() => {
+        if (nameProp && nameProp !== name) {
+            setName(name);
+        }
         if (mestoProp !== mesto) {
             setMesto(mestoProp);
         }
@@ -47,10 +50,7 @@ const ProfileScreen = () => {
         if (season && seasonProp !== season) {
             setSeason(season);
         }
-        if (nameProps !== name) {
-            setName(name);
-        }
-    }, [autoProp, mestoProp, seasonProp, nameProps]);
+    }, [autoProp, mestoProp, seasonProp, nameProp]);
 
     useEffect(() => {
         const unsubscribe = firebase
@@ -76,7 +76,7 @@ const ProfileScreen = () => {
         alert('Zmeny uložené', '', [{ text: 'OK', onPress: () => {} }], {
             cancelable: false
         });
-        dispatch(saveProfileData({ mesto, auto, email: email.value, season, name }));
+        dispatch(saveProfileData({ name, mesto, auto, email: email.value, season }));
     };
 
     const _logOut = () => {
@@ -87,7 +87,7 @@ const ProfileScreen = () => {
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             {/* <Logo /> */}
             <SeasonPicker season={season} saveSeason={text => text && setSeason(text)} />
-            <TextInput label={NAME} onChangeText={text => setName(text)} value={name} />
+            <TextInput label={NAME} onChangeText={text => setName(text)} value={name || nameProp} />
             <TextInput
                 label="Email"
                 returnKeyType="next"

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import get from 'lodash/get';
-import { createBillingSections } from '@utils';
+import { createBillingSections, monthToNumber } from '@utils';
 import { IItemButton } from '../utils/types';
 import ScreenContainer from '../components/ScreenContainer';
 import SectionHeader from '../components/SectionHeader';
@@ -86,8 +86,6 @@ const styles = StyleSheet.create({
     refsContainer: { flex: 2, paddingLeft: 4, flexDirection: 'column' }
 });
 
-const _renderSectionHeader = ({ section }: any) => <SectionHeader section={section} />;
-
 const _renderSeparator = () => <View style={styles.separator} />;
 
 const _keyExtractor = (item: { gameId: string }) => item.gameId;
@@ -107,15 +105,24 @@ export default function BillingScreen({ navigation }) {
         navigation.navigate('Profil');
     };
 
+    const _onPDFPress = (data: any) => {
+        const idList = data.map(({ gameId }) => gameId);
+        navigation.navigate('PDFScreen', { gameId: idList.toString() });
+    };
+
+    const _renderSectionHeader = ({ section }: any) => (
+        <SectionHeader
+            section={section}
+            buttonLabel="PDF"
+            onPress={() => _onPDFPress(section.data)}
+        />
+    );
+
     const _renderItem = ({ item }: IItemButton) => {
         const { home, away, gameId, ligue, day, time, date } = item;
 
         const _onPress = () => {
             navigation.navigate('GameScreen', { gameId: gameId, isBilling: true });
-        };
-
-        const _onPDFPress = () => {
-            navigation.navigate('PDFScreen', { gameId: gameId });
         };
 
         return (
@@ -128,14 +135,6 @@ export default function BillingScreen({ navigation }) {
                         <Text style={styles.optionText}>
                             {date} o {time}, {day}
                         </Text>
-                    </TouchableOpacity>
-                    <View style={styles.separatorItem} />
-                    <TouchableOpacity
-                        style={styles.pdfContainer}
-                        key={gameId}
-                        onPress={_onPDFPress}
-                    >
-                        <Text style={styles.pdfText}>PDF</Text>
                     </TouchableOpacity>
                 </View>
             </ScreenContainer>
