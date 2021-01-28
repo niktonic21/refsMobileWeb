@@ -538,6 +538,19 @@ export const getGameData = (gameId: string): IGame => {
     return game;
 };
 
+const sortByCurrentDate = (currentDayInMonth: number, day1: string, day2: string): number => {
+    const dayA = parseInt(parseDate(day1)?.day, 10);
+    const dayB = parseInt(parseDate(day2)?.day, 10);
+
+    if (currentDayInMonth > dayA && currentDayInMonth > dayB) {
+        return dayA - dayB;
+    }
+    if (currentDayInMonth <= dayA && currentDayInMonth <= dayB) {
+        return dayB + dayA;
+    }
+    return dayB - dayA;
+};
+
 const filterGamesListByRozhodca = (games: any, rozhodcaId: string) => {
     const filteredGames = filter(
         games,
@@ -573,7 +586,21 @@ export const createBillingSections = (
         return section;
     });
 
-    return result?.sort((a, b) => a.id - b.id);
+    const sorted = result.sort((a, b) => a.id - b.id);
+
+    const currentMonth = new Date().getUTCMonth() + 1;
+    const currentDayInMonth = new Date().getUTCDate();
+    const sortedCurrentMonth = sorted?.map(montObj => {
+        if (montObj.id === sortedMonthNum(currentMonth) && montObj.data?.length > 1) {
+            const sortedMonthData = montObj.data.sort((a, b) =>
+                sortByCurrentDate(currentDayInMonth, a?.date, b?.date)
+            );
+            return { ...montObj, data: sortedMonthData };
+        }
+        return montObj;
+    });
+
+    return sortedCurrentMonth;
 };
 
 export const stringToNumber = (text: string): number => {
