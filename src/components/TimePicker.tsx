@@ -44,10 +44,11 @@ export default function TimePicker({ onChange, placeholder, time }: IProps) {
                 visible={visible}
                 onDismiss={onDismiss}
                 onConfirm={_onConfirm}
-                hours={12} // default: current hours
-                minutes={30} // default: current minutes
+                locale={'sk'}
+                hours={11} // default: current hours
+                minutes={0} // default: current minutes
                 label="Vyber čas" // optional, default 'Select time'
-                cancelLabel="Cancel" // optional, default: 'Cancel'
+                cancelLabel="Zrušiť" // optional, default: 'Cancel'
                 confirmLabel="Ok" // optional, default: 'Ok'
             />
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.placeholderText}>

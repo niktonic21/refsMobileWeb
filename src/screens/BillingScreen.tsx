@@ -107,7 +107,7 @@ export default function BillingScreen({ navigation }) {
 
     const _onPDFPress = (data: any) => {
         const idList = data.map(({ gameId }) => gameId);
-        navigation.navigate('PDFScreen', { gameId: idList.toString() });
+        navigation.navigate('PDFScreen', { gameId: idList.join('-') });
     };
 
     const _renderSectionHeader = ({ section }: any) => (

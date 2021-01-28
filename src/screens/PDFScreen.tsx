@@ -367,7 +367,8 @@ const createGameHTML = (gameId: string) => {
 
 export default function PDFScreen({ route }: any) {
     const gameId = get(route, 'params.gameId', '');
-    const idList: string[] = gameId.split(',');
+    const idList: string[] = gameId.split('-');
+
     const gamesHTML: string[] = idList.map(id => createGameHTML(id));
 
     const html = `
@@ -375,7 +376,7 @@ export default function PDFScreen({ route }: any) {
         <html>
         <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="initial-scale=1.0" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1.00001, viewport-fit=cover">
         <style>
 
             @page {
@@ -446,6 +447,8 @@ export default function PDFScreen({ route }: any) {
         } else {
             const { uri } = await Print.printToFileAsync({
                 html: html
+                // width: 422,
+                // height: 596
             });
             Sharing.shareAsync(uri);
         }

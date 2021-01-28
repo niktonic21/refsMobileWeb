@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Card } from '../Card';
 import { EGameDetail } from '@utils';
@@ -18,6 +18,43 @@ import ItemDetailIcon from './ItemDetailIcon';
 import { useNavigation } from '@react-navigation/native';
 import DatePicker from '../DatePicker';
 import TimePicker from '../TimePicker';
+
+const timeStringToFloat = (time: string): number => {
+    const hoursMinutes = time.split(/[.:]/);
+    const hours = parseInt(hoursMinutes[0], 10);
+    const minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1], 10) : 0;
+    return hours + minutes / 60;
+};
+
+const timeDiff = (start: string, end: string): number => {
+    const startArr: string[] = start.split(':');
+    const endArr: string[] = end.split(':');
+    const startDate = new Date(0, 0, 0, parseInt(startArr[0]), parseInt(startArr[1]), 0);
+    const endDate = new Date(0, 0, 0, parseInt(endArr[0]), parseInt(endArr[1]), 0);
+    let diff = endDate.getTime() - startDate.getTime();
+    let hours = Math.floor(diff / 1000 / 60 / 60);
+    diff -= hours * 1000 * 60 * 60;
+    const minutes = Math.floor(diff / 1000 / 60);
+
+    // If using time pickers with 24 hours format, add the below line get exact hours
+    if (hours < 0) hours = hours + 24;
+    const stringRes = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes;
+    const numberRes = timeStringToFloat(stringRes);
+    return numberRes;
+};
+
+const getMealMoney = (hours: number): string => {
+    if (hours >= 18) {
+        return '11.60';
+    }
+    if (hours >= 12) {
+        return '7.60';
+    }
+    if (hours >= 5) {
+        return '5.10';
+    }
+    return '';
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -54,6 +91,15 @@ export default function StravneDetail({
     const navigation = useNavigation();
     const [isMealEnabled, setIsMealEnabled] = useState(true);
 
+    useEffect(() => {
+        if (fromTime && toTime) {
+            const hoursNum = timeDiff(fromTime, toTime);
+            const mealMoney = getMealMoney(hoursNum);
+
+            updateDetails({ [EGameDetail.MEAL]: mealMoney });
+        }
+    }, [fromTime, toTime]);
+
     const _toggleSwitch = (itemKey: string) => {
         if (EGameDetail.MEAL_ENABLED === itemKey) {
             setIsMealEnabled(!isMealEnabled);
@@ -62,9 +108,9 @@ export default function StravneDetail({
 
     const _onSelectedFromCities = (cities: string[]) => {
         if (!toCity) {
-            updateDetails({ fromCity: cities[0], toCity: cities[0] });
+            updateDetails({ [EGameDetail.FROM_CITY]: cities[0], [EGameDetail.TO_CITY]: cities[0] });
         } else {
-            updateDetails({ fromCity: cities[0] });
+            updateDetails({ [EGameDetail.FROM_CITY]: cities[0] });
         }
     };
 
@@ -78,7 +124,7 @@ export default function StravneDetail({
     };
 
     const _onSelectedToCities = (cities: string[]) => {
-        updateDetails({ toCity: cities[0] });
+        updateDetails({ [EGameDetail.TO_CITY]: cities[0] });
     };
 
     const _goToCitiesTo = () => {

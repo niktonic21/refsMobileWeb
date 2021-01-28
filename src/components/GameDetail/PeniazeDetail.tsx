@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Card } from '../Card';
-import { EGameDetail, stringToNumber, correctNumber } from '@utils';
+import { EGameDetail, stringToNumber } from '@utils';
 import { RATE, RATE_CITY, TRAVEL, TOGETHER, MEAL, NIGHT, POST, OTHER } from '@strings';
 import Separator from './Separator';
 import ItemDetailLineInput from './ItemDetailLineInput';
@@ -50,8 +50,12 @@ export default function PeniazeDetail({
     const [togetherMoney, setTogetherMoney] = useState(0);
 
     useEffect(() => {
-        updateDetails({ rateMoney: rateMoney });
+        updateDetails({ [EGameDetail.RATE]: rateMoney });
     }, []);
+
+    useEffect(() => {
+        mealMoneyProp && setMealMoney(mealMoneyProp.toString());
+    }, [mealMoneyProp]);
 
     useEffect(() => {
         travelMoneyProp && setTravelMoney(travelMoneyProp.toString());
@@ -72,7 +76,7 @@ export default function PeniazeDetail({
             stringToNumber(otherMoney);
         const allFixed = stringToNumber(all.toFixed(2));
         setTogetherMoney(allFixed);
-        updateDetails({ togetherMoney: allFixed });
+        updateDetails({ [EGameDetail.TOGETHER]: allFixed });
     }, [rateMoney, travelMoney, rateCityMoney, mealMoney, nightMoney, postMoney, otherMoney]);
 
     const _changeText = (itemKey: string, text: string) => {
