@@ -261,22 +261,36 @@ export const getGameRate = (
     return 0;
 };
 
-const defaultListMonth = [
-    'Neznáme',
-    'Júl',
-    'August',
-    'September',
-    'Október',
-    'November',
-    'December',
-    'Január',
-    'Február',
-    'Marec',
-    'Apríl',
-    'Máj',
-    'Jún',
-    'Mesiac'
-];
+export const sortedMonthNum = (num: number): number => {
+    switch (num) {
+        case 1:
+            return 6;
+        case 2:
+            return 5;
+        case 3:
+            return 4;
+        case 4:
+            return 3;
+        case 5:
+            return 2;
+        case 6:
+            return 1;
+        case 7:
+            return 12;
+        case 8:
+            return 11;
+        case 9:
+            return 10;
+        case 10:
+            return 9;
+        case 11:
+            return 8;
+        case 12:
+            return 7;
+        default:
+            return 13;
+    }
+};
 
 export const numberToMonth2 = (num: number): string => {
     switch (num) {
@@ -472,7 +486,7 @@ export const filterGameSections = (games: any, filter: IFilter) => {
         result = filterGamesByRozhodca(result, filter.rozhodca);
     }
 
-    return result;
+    return result?.sort((a, b) => a.id - b.id);
 };
 
 export const getRefList = () => {
@@ -545,7 +559,7 @@ export const createBillingSections = (
         if (!categoryMap[category]) {
             sections.push({
                 sectionName: category,
-                id: parseInt(parseDate(game.date).month, 10)
+                id: sortedMonthNum(parseInt(parseDate(game.date).month, 10))
             });
             categoryMap[category] = [];
         }
@@ -559,7 +573,7 @@ export const createBillingSections = (
         return section;
     });
 
-    return result;
+    return result?.sort((a, b) => a.id - b.id);
 };
 
 export const stringToNumber = (text: string): number => {

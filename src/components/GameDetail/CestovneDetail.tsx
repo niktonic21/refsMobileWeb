@@ -44,7 +44,7 @@ export default function CestovneDetail({
     updateDetails
 }: IProps) {
     const navigation = useNavigation();
-    const [isDriver, setIsDriver] = useState(true);
+    const [isDriver, setIsDriver] = useState(road.length > 0);
     const [distance, setDistance] = useState(distanceProp ? String(distanceProp) : '');
     const [car, setCar] = useState(currentRef.auto);
 

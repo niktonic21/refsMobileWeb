@@ -89,7 +89,7 @@ export default function StravneDetail({
     updateDetails
 }: IProps) {
     const navigation = useNavigation();
-    const [isMealEnabled, setIsMealEnabled] = useState(true);
+    const [isMealEnabled, setIsMealEnabled] = useState(Boolean(fromCity));
 
     useEffect(() => {
         if (fromTime && toTime) {
