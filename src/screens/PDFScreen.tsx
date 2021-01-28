@@ -59,7 +59,7 @@ const createGameHTML = (gameId: string) => {
             <div class="flex-container" >
                 <img height="${scaledValue(50)}px" src="${szlhLogo}"/>
                 <div style="flex-direction: column; min-width: ${scaledValue(
-                    472
+                    491
                 )}px; align-items: center;">
                     <div style="justify-content: center; margin: ${scaledValue(5)}px 0px; 
                     max-width: ${scaledValue(270)}px; text-align: center;
@@ -376,7 +376,7 @@ export default function PDFScreen({ route }: any) {
         <html>
         <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1.00001, viewport-fit=cover">
+        <meta name="viewport" content="initial-scale=1">
         <style>
 
             @page {
