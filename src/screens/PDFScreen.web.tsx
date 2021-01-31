@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { isIos } from '@layout';
 import { szlhLogo } from '@strings';
 import get from 'lodash/get';
-import { getGameData, EGameDetail, getDateString, getFilledPDF } from '@utils';
+import { getGameData, EGameDetail, getDateString, getFilledPDF, IGame } from '@utils';
 import { useSelector } from 'react-redux';
 import { IGameDetail } from './GameScreen';
 import { BackButtonWeb } from '../components/BackButtonWeb';
@@ -13,8 +13,7 @@ import { PDFDocument } from 'pdf-lib';
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: 'red'
+        flex: 1
     },
     contentContainer: {
         maxWidth: 800,
@@ -29,7 +28,13 @@ const styles = StyleSheet.create({
     }
 });
 
-let dataArray = [];
+let dataArray: {
+    gameData: IGame;
+    gameUserData: IGameDetail;
+    mesto: string;
+    auto: string;
+    name: string;
+}[] = [];
 const scaledValue = (value: number): number => (isIos ? value : (value * 4) / 3);
 
 const getLineFontSize = (text: string): number =>
