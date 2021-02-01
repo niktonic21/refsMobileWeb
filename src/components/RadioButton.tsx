@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     optionIconContainer: {
-        height: 30,
+        height: 45,
         width: 25
     },
     option: {

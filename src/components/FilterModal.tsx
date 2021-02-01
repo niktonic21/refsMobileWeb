@@ -9,27 +9,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { filterChanged } from '../redux/actions';
 import { ISection } from 'src/utils/types';
 
-// const dataMesiac = [
-//     { label: 'Vsetky', key: 'mesiac', value: 0 },
-//     { label: 'Januar', key: 'mesiac', value: 1 },
-//     { label: 'Februar', key: 'mesiac', value: 2 },
-//     { label: 'Marec', key: 'mesiac', value: 3 }
-// ];
-
-// const dataRozhodca = [
-//     { label: 'Vsetci', key: 'rozhodca', value: 0 },
-//     { label: 'Jobbagy', key: 'rozhodca', value: 1 },
-//     { label: 'Bogdan', key: 'rozhodca', value: 2 },
-//     { label: 'Korba', key: 'rozhodca', value: 3 }
-// ];
-
-// const dataLiga = [
-//     { label: 'Vsetky', key: 'liga', value: 0 },
-//     { label: 'Extraliga', key: 'liga', value: 1 },
-//     { label: '1.liga', key: 'liga', value: 2 },
-//     { label: '2.liga', key: 'liga', value: 3 }
-// ];
-
 const styles = StyleSheet.create({
     separator: {
         height: 1,

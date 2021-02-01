@@ -94,9 +94,7 @@ const _renderEmptyListItem = () => <Text style={styles.noMatches}>Žiadne zápas
 
 export default function BillingScreen({ navigation }) {
     const isLoggedId = useSelector<{ auth: { loggedIn: boolean } }>(state => state.auth.loggedIn);
-    const refId = useSelector<{ auth: { profile: { refID: string } } }>(
-        state => state.auth.profile.refID
-    );
+    const refId: string = useSelector(state => get(state, 'auth.profile.refID', ''));
     const games = useSelector(state => get(state, 'games.games', []));
 
     const billingSections: Array<SectionListData<any>> = createBillingSections(games, refId);

@@ -493,7 +493,7 @@ export const getRefList = () => {
     const refs = get(store.reduxStore.getState(), 'games.refs', []);
     const sortedRefs = sortBy(refs, ['name']);
     const refList = sortedRefs.map(({ name, id }) => ({ label: name, key: 'Rozhodca', value: id }));
-    const result = [{ label: 'Vsetci', key: 'Rozhodca', value: '' }].concat(refList);
+    const result = [{ label: 'Všetci', key: 'Rozhodca', value: '' }].concat(refList);
     return result;
 };
 
@@ -503,7 +503,7 @@ export const getLigueList = (gameSections: ISection) => {
         key: 'Liga',
         value: id
     }));
-    const result = [{ label: 'Vsetky', key: 'Liga', value: 0 }].concat(ligueList);
+    const result = [{ label: 'Všetky', key: 'Liga', value: 0 }].concat(ligueList);
     return result;
 };
 
@@ -514,7 +514,7 @@ export const getMonthList = () => {
         key: 'Mesiac',
         value: value
     }));
-    const result = [{ label: 'Vsetky', key: 'Mesiac', value: 0 }].concat(monthList);
+    const result = [{ label: 'Všetky', key: 'Mesiac', value: 0 }].concat(monthList);
 
     return result;
 };
