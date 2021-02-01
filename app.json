@@ -18,7 +18,14 @@
         "privacy" : "unlisted",
         "assetBundlePatterns": ["**/*"],
         "ios": {
+            "bundleIdentifier": "com.jobb.refsmobileweb",
+            "buildNumber": "1.0.0",
             "supportsTablet": true
+          },
+        "android": {
+            "package": "com.jobb.refsmobileweb",
+            "versionCode": 1,
+            "permissions" : []
         }
     }
 }

@@ -474,7 +474,7 @@ export default function PDFScreen({ route }: any) {
                 </ScrollView>
             ) : (
                 <View style={styles.container}>
-                    <Button title="Print and Share" onPress={() => execute()} />
+                    <Button title="Vytlačiť alebo poslať" onPress={() => execute()} />
                     <WebView
                         source={{ html: html }}
                         scalesPageToFit={false}
