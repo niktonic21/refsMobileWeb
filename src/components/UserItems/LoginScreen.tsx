@@ -55,7 +55,7 @@ const LoginScreen = ({ navigation }: Props) => {
 
     return (
         <View style={styles.container}>
-            <Header>Prihlasenie</Header>
+            <Header>Prihlásenie</Header>
             <TextInput
                 label="Email"
                 returnKeyType="next"
@@ -70,7 +70,7 @@ const LoginScreen = ({ navigation }: Props) => {
                 keyboardType="email-address"
             />
             <TextInput
-                label="Password"
+                label="Heslo"
                 returnKeyType="done"
                 onFocus={_onFocus}
                 value={password.value}
@@ -81,11 +81,11 @@ const LoginScreen = ({ navigation }: Props) => {
             />
             <View style={styles.forgotPassword}>
                 <TouchableOpacity onPress={() => navigation.navigate('ForgotPasswordScreen')}>
-                    <Text style={styles.label}>Forgot your password?</Text>
+                    <Text style={styles.label}>Zabudnuté heslo?</Text>
                 </TouchableOpacity>
             </View>
             <Button mode="contained" onPress={_onLoginPressed}>
-                {loading ? <ActivityIndicator /> : 'Login'}
+                {loading ? <ActivityIndicator /> : 'Prihlásiť'}
             </Button>
             {firebaseError ? <Paragraph>{firebaseError}</Paragraph> : null}
         </View>

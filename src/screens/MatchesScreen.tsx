@@ -89,8 +89,8 @@ export default function MatchesScreen({ navigation }) {
         season && dispatch(checkNewData(''));
     }, [season]);
 
-    const gameSections: Array<SectionListData<any>> = createGameSections(games);
-    const filteredGameSections: Array<SectionListData<IGame>> = filterGameSections(
+    const gameSections = createGameSections(games);
+    const filteredGameSections: SectionListData<IGame>[] = filterGameSections(
         gameSections,
         filterData
     );
@@ -166,7 +166,7 @@ export default function MatchesScreen({ navigation }) {
                     SectionSeparatorComponent={_renderSeparator}
                 />
             ) : (
-                <Text style={styles.noMatches}>Ziadne zapasy</Text>
+                <Text style={styles.noMatches}>Žiadne zápasy</Text>
             )}
         </View>
     );

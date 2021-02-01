@@ -1654,7 +1654,7 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
-"@pdf-lib/fontkit@^1.1.1":
+"@pdf-lib/fontkit@1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@pdf-lib/fontkit/-/fontkit-1.1.1.tgz#f18473892b65e3253eb73f4569785abd2c03b1e0"
   integrity sha512-KjMd7grNapIWS/Dm0gvfHEilSyAmeLvrEGVcqLGi0VYebuqqzTbgF29efCx7tvx+IEbG3zQciRSWl3GkUSvjZg==
@@ -3763,7 +3763,7 @@ dot-prop@^4.2.1:
   dependencies:
     is-obj "^1.0.0"
 
-downloadjs@^1.4.7:
+downloadjs@1.4.7:
   version "1.4.7"
   resolved "https://registry.yarnpkg.com/downloadjs/-/downloadjs-1.4.7.tgz#f69f96f940e0d0553dac291139865a3cd0101e3c"
   integrity sha1-9p+W+UDg0FU9rCkROYZaPNAQHjw=
@@ -4375,6 +4375,13 @@ expo-linking@~1.0.4:
     qs "^6.5.0"
     url-parse "^1.4.4"
 
+expo-localization@~10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/expo-localization/-/expo-localization-10.0.0.tgz#e819fb2d999a6d6e57bd8e85f1abd70c8f925833"
+  integrity sha512-xCLEwJ0TCrlIzzE/udji3zXWAwRR9CKc75u02Umzj0t9MLm1ALlrote+Tb3lPN5IsoLBCK/F8n56lpWwE9U0Tg==
+  dependencies:
+    rtl-detect "^1.0.2"
+
 expo-location@~9.0.0:
   version "9.0.1"
   resolved "https://registry.yarnpkg.com/expo-location/-/expo-location-9.0.1.tgz#adf93b8adf5e9dcf9570cba1d66c8e3831329156"
@@ -4390,10 +4397,10 @@ expo-print@~9.1.0:
   resolved "https://registry.yarnpkg.com/expo-print/-/expo-print-9.1.0.tgz#b5ed2285af5ebc049a0cff8e669ca098577ce44a"
   integrity sha512-yMUQ9MQAKTQ8NcQZOqS0Ecf5CbZlF44LmUQnXvBojvMavnfqMxDwzhLj0MA8E+vH6xWoqlWw/kXJjX8r+e1diQ==
 
-expo-sharing@^8.4.0:
-  version "8.5.0"
-  resolved "https://registry.yarnpkg.com/expo-sharing/-/expo-sharing-8.5.0.tgz#8f54774fc0b2405bf63183c235544b7f978a7765"
-  integrity sha512-k5vz5O1bu9xMpIc3TTQSOwo0g/hvDGOLZzeN9F4dW6GbicC3PTRgFxHOw6vOMS5LXphAxfYcC+9ZtbocVJ7C0g==
+expo-sharing@~8.4.0:
+  version "8.4.1"
+  resolved "https://registry.yarnpkg.com/expo-sharing/-/expo-sharing-8.4.1.tgz#250e537d970af861a45fd194bd804e9389fdc25a"
+  integrity sha512-Qg6CJQPwE00lm3cZrq4spJT+ahsZa8z1g1FwItQ5FFIUTfli97P6i6g5q12jL5KWaGycbw+La/5/vgT40I9Oxg==
 
 expo-splash-screen@^0.6.0, expo-splash-screen@~0.6.0:
   version "0.6.2"
@@ -5416,6 +5423,11 @@ internal-slot@^1.0.2:
     es-abstract "^1.17.0-next.1"
     has "^1.0.3"
     side-channel "^1.0.2"
+
+intl@~1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/intl/-/intl-1.2.5.tgz#82244a2190c4e419f8371f5aa34daa3420e2abde"
+  integrity sha1-giRKIZDE5Bn4Nx9ao02qNCDiq94=
 
 invariant@2.2.4, invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
@@ -7993,7 +8005,7 @@ path-type@^2.0.0:
   dependencies:
     pify "^2.0.0"
 
-pdf-lib@^1.16.0:
+pdf-lib@1.16.0:
   version "1.16.0"
   resolved "https://registry.yarnpkg.com/pdf-lib/-/pdf-lib-1.16.0.tgz#63cacec0d6139bf7a670dea8bad747ebf4c1fb42"
   integrity sha512-P/1SSmElOBKrPlbc+Sn7UxikRQbzVA64+4Dh6/uczPscvq/NatP9eryoOguyBTpTnzICNiG8EnMH4Ziqp2TnFA==
@@ -8543,7 +8555,7 @@ react-timer-mixin@^0.13.4:
   resolved "https://registry.yarnpkg.com/react-timer-mixin/-/react-timer-mixin-0.13.4.tgz#75a00c3c94c13abe29b43d63b4c65a88fc8264d3"
   integrity sha512-4+ow23tp/Tv7hBM5Az5/Be/eKKF7DIvJ09voz5LyHGQaqqz9WV8YMs31eFvcYQs7d451LSg7kDJV70XYN/Ug/Q==
 
-react-window@^1.8.6:
+react-window@~1.8.6:
   version "1.8.6"
   resolved "https://registry.yarnpkg.com/react-window/-/react-window-1.8.6.tgz#d011950ac643a994118632665aad0c6382e2a112"
   integrity sha512-8VwEEYyjz6DCnGBsd+MgkD0KJ2/OXFULyDtorIiTz+QzwoP94tBoA7CnbtyXMm+cCeAUER5KJcPtWl9cpKbOBg==
@@ -8920,6 +8932,11 @@ rsvp@^4.8.4:
   version "4.8.5"
   resolved "https://registry.yarnpkg.com/rsvp/-/rsvp-4.8.5.tgz#c8f155311d167f68f21e168df71ec5b083113734"
   integrity sha512-nfMOlASu9OnRJo1mbEk2cz0D56a1MBNrJ7orjRZQG10XDyuvwksKbuXNp6qa+kbn839HwjwhBzhFmdsaEAfauA==
+
+rtl-detect@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/rtl-detect/-/rtl-detect-1.0.2.tgz#8eca316f5c6563d54df4e406171dd7819adda67f"
+  integrity sha512-5X1422hvphzg2a/bo4tIDbjFjbJUOaPZwqE6dnyyxqwFqfR+tBcvfqapJr0o0VygATVCGKiODEewhZtKF+90AA==
 
 run-async@^2.2.0:
   version "2.4.1"
@@ -10628,11 +10645,6 @@ yargs@^3.10.0:
     string-width "^1.0.1"
     window-size "^0.1.4"
     y18n "^3.2.0"
-
-yarn@^1.22.10:
-  version "1.22.10"
-  resolved "https://registry.yarnpkg.com/yarn/-/yarn-1.22.10.tgz#c99daa06257c80f8fa2c3f1490724e394c26b18c"
-  integrity sha512-IanQGI9RRPAN87VGTF7zs2uxkSyQSrSPsju0COgbsKQOOXr5LtcVPeyXWgwVa0ywG3d8dg6kSYKGBuYK021qeA==
 
 yauzl@^2.10.0:
   version "2.10.0"

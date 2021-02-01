@@ -6,7 +6,7 @@ export default {
         screens: {
             Root: {
                 screens: {
-                    Zapasy: {
+                    Zápasy: {
                         path: 'matches',
                         screens: {
                             MatchesScreen: {
@@ -19,7 +19,7 @@ export default {
                             }
                         }
                     },
-                    Vyuctovanie: {
+                    Vyúčtovanie: {
                         path: 'billing',
                         screens: {
                             BillingScreen: {

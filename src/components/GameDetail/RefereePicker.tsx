@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     },
     labelText: { paddingLeft: 10, fontSize: 18 },
     dropDownWrapper: { flexDirection: 'row', marginVertical: 5, alignItems: 'center' },
-    containerSize: { height: 40, width: 60 },
+    containerSize: { height: 40, width: 62 },
     itemStyle: { justifyContent: 'flex-start' }
 });
 

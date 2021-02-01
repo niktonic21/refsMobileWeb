@@ -41,15 +41,14 @@ export default function TabNavigator() {
             tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
         >
             <Tab.Screen
-                name="Zapasy"
-                title="aaa"
+                name="Zápasy"
                 component={MatchesNavigator}
                 options={{
                     tabBarIcon: ({ color }) => <TabBarIcon name="ios-list" color={color} />
                 }}
             />
             <Tab.Screen
-                name="Vyuctovanie"
+                name="Vyúčtovanie"
                 component={HomeNavigator}
                 options={{
                     tabBarIcon: ({ color }) => <TabBarIcon name="ios-wallet" color={color} />

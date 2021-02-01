@@ -75,7 +75,9 @@ export default function ZapasDetail({
         referees
     } = gameData;
     const [refsWithType, setRefsWithType] = useState<IRefWithType[]>(createRefsWithType(referees));
-    const refNameList = referees.map(ref => ref.name.split(',', 2)).join('\n');
+    const refNameList = refsWithType
+        .map(ref => `${ref.refType.toUpperCase()} - ${ref.name}`)
+        .join('\n');
 
     useEffect(() => {
         updateDetails({ played, playedBefore, gameId, refs: refsWithType });

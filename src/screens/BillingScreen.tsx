@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import get from 'lodash/get';
-import { createBillingSections, monthToNumber } from '@utils';
+import { createBillingSections } from '@utils';
 import { IItemButton } from '../utils/types';
 import ScreenContainer from '../components/ScreenContainer';
 import SectionHeader from '../components/SectionHeader';
@@ -90,7 +90,7 @@ const _renderSeparator = () => <View style={styles.separator} />;
 
 const _keyExtractor = (item: { gameId: string }) => item.gameId;
 
-const _renderEmptyListItem = () => <Text style={styles.noMatches}>Ziadne zapasy</Text>;
+const _renderEmptyListItem = () => <Text style={styles.noMatches}>Žiadne zápasy</Text>;
 
 export default function BillingScreen({ navigation }) {
     const isLoggedId = useSelector<{ auth: { loggedIn: boolean } }>(state => state.auth.loggedIn);
