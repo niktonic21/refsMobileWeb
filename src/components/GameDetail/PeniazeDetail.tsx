@@ -83,7 +83,6 @@ export default function PeniazeDetail({
 
     useEffect(() => {
         const all =
-            stringToNumber(rateMoney) +
             stringToNumber(travelMoney) +
             stringToNumber(rateCityMoney) +
             stringToNumber(mealMoney) +
@@ -93,7 +92,7 @@ export default function PeniazeDetail({
         const allFixed = stringToNumber(all.toFixed(2));
         setTogetherMoney(allFixed);
         updateDetails({ [EGameDetail.TOGETHER]: allFixed });
-    }, [rateMoney, travelMoney, rateCityMoney, mealMoney, nightMoney, postMoney, otherMoney]);
+    }, [travelMoney, rateCityMoney, mealMoney, nightMoney, postMoney, otherMoney]);
 
     const _changeText = (itemKey: string, text: string) => {
         if (EGameDetail.RATE === itemKey) {
