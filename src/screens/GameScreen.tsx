@@ -159,12 +159,12 @@ export default function GameScreen({ navigation, route }: any) {
                         mealMoney={gameDetailsData.mealMoney}
                         updateDetails={_updateDetails}
                     />
-                    <Button style={styles.button} mode="outlined" onPress={_onPDFPress}>
-                        {CHECK_PDF}
-                    </Button>
-                    <View style={styles.separator} />
                     <Button style={styles.button} mode="contained" onPress={_saveChanges}>
                         {SAVE_CHANGES}
+                    </Button>
+                    <View style={styles.separator} />
+                    <Button style={styles.button} mode="outlined" onPress={_onPDFPress}>
+                        {CHECK_PDF}
                     </Button>
                 </>
             ) : null}

@@ -1,8 +1,9 @@
 import { PDFDocument } from 'pdf-lib';
 import { pdfBase64 } from '@strings';
 import fontkit from '@pdf-lib/fontkit';
-import { EGameDetail } from './types';
+import { EGameDetail, IGame } from './types';
 import { getDateString } from './gameUtils';
+import { IGameDetail } from '../screens/GameScreen';
 
 import robotoFont from '../../assets/fonts/Roboto-Regular.ttf';
 
@@ -15,7 +16,15 @@ const base64ToUint8Array = () => {
     return uint8Array;
 };
 
-export const getFilledPDF = async ({ gameData, gameUserData, mesto, auto, name }) => {
+interface IPDFdata {
+    gameData: IGame;
+    gameUserData: IGameDetail;
+    mesto: string;
+    auto: string;
+    name: string;
+}
+
+export const getFilledPDF = async ({ gameData, gameUserData, mesto, auto, name }: IPDFdata) => {
     const url = robotoFont;
     const fontBytes = await fetch(url).then(res => res.arrayBuffer());
 
@@ -116,15 +125,15 @@ export const getFilledPDF = async ({ gameData, gameUserData, mesto, auto, name }
     druhyZ.setText(gameUserData.secondGame || '');
     poznamka1.setText(notes1);
     poznamka2.setText(notes2);
-    pausal.setText(gameUserData.rateMoney || '');
+    pausal.setText(gameUserData.rateMoney?.toString() || '');
     km.setText(gameUserData.distance?.toString() || '');
-    stravne.setText(gameUserData.mealMoney || '');
-    cestovne.setText(gameUserData.travelMoney || '');
-    sadzbaM.setText(gameUserData.rateCityMoney || '');
-    noclazne.setText(gameUserData.nightMoney || '');
-    postovne.setText(gameUserData.postMoney || '');
-    ostatne.setText(gameUserData.otherMoney || '');
-    spolu.setText(gameUserData.togetherMoney || '');
+    stravne.setText(gameUserData.mealMoney?.toString() || '');
+    cestovne.setText(gameUserData.travelMoney?.toString() || '');
+    sadzbaM.setText(gameUserData.rateCityMoney?.toString() || '');
+    noclazne.setText(gameUserData.nightMoney?.toString() || '');
+    postovne.setText(gameUserData.postMoney?.toString() || '');
+    ostatne.setText(gameUserData.otherMoney?.toString() || '');
+    spolu.setText(gameUserData.togetherMoney?.toString() || '');
 
     form.updateFieldAppearances(ubuntuFont);
 

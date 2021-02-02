@@ -54,16 +54,32 @@ export default function PeniazeDetail({
     }, []);
 
     useEffect(() => {
-        mealMoneyProp && setMealMoney(mealMoneyProp.toString());
-    }, [mealMoneyProp]);
+        rateMoneyProp && setRateMoney(rateMoneyProp.toString());
+    }, [rateMoneyProp]);
 
     useEffect(() => {
         travelMoneyProp && setTravelMoney(travelMoneyProp.toString());
     }, [travelMoneyProp]);
 
     useEffect(() => {
-        rateMoneyProp && setRateMoney(rateMoneyProp.toString());
-    }, [rateMoneyProp]);
+        rateCityMoneyProp && setRateCityMoney(rateCityMoneyProp.toString());
+    }, [rateCityMoneyProp]);
+
+    useEffect(() => {
+        mealMoneyProp && setMealMoney(mealMoneyProp.toString());
+    }, [mealMoneyProp]);
+
+    useEffect(() => {
+        nightMoneyProp && setNightMoney(nightMoneyProp.toString());
+    }, [nightMoneyProp]);
+
+    useEffect(() => {
+        postMoneyProp && setPostMoney(postMoneyProp.toString());
+    }, [postMoneyProp]);
+
+    useEffect(() => {
+        otherMoneyProp && setOtherMoney(otherMoneyProp.toString());
+    }, [otherMoneyProp]);
 
     useEffect(() => {
         const all =

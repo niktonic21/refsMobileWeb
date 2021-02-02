@@ -79,5 +79,5 @@ export enum EGameDetail {
     NIGHT = 'nightMoney',
     POST = 'postMoney',
     OTHER = 'otherMoney',
-    TOGETHER = 'together'
+    TOGETHER = 'togetherMoney'
 }

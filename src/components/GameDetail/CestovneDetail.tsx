@@ -126,13 +126,13 @@ export default function CestovneDetail({
                 />
                 {isDriver ? (
                     <>
-                        <Separator />
+                        {/* <Separator />
                         <ItemDetailSwitch
                             itemKey={EGameDetail.COUNT_CITY}
                             isEnabled={countCity}
                             toggleSwitch={_toggleSwitch}
                             label={RATE_CITY}
-                        />
+                        /> */}
                         <Separator />
                         <ItemDetailInput
                             itemKey={EGameDetail.CAR}
