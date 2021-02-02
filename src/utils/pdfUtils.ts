@@ -117,7 +117,7 @@ export const getFilledPDF = async ({ gameData, gameUserData, mesto, auto, name }
     poznamka1.setText(notes1);
     poznamka2.setText(notes2);
     pausal.setText(gameUserData.rateMoney || '');
-    km.setText(gameUserData.distance || '');
+    km.setText(gameUserData.distance?.toString() || '');
     stravne.setText(gameUserData.mealMoney || '');
     cestovne.setText(gameUserData.travelMoney || '');
     sadzbaM.setText(gameUserData.rateCityMoney || '');

@@ -59,7 +59,7 @@ export default function ItemDetailLineInput({
                 <TextInput
                     style={styles.inputText}
                     placeholder={'0.0'}
-                    keyboardType="decimal-pad"
+                    keyboardType="numbers-and-punctuation"
                     returnKeyType={'next'}
                     editable={editable}
                     onChangeText={_onChangeText}
