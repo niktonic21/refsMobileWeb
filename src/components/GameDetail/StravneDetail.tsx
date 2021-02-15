@@ -89,6 +89,7 @@ export default function StravneDetail({
     updateDetails
 }: IProps) {
     const navigation = useNavigation();
+
     const [isMealEnabled, setIsMealEnabled] = useState(Boolean(fromCity));
 
     useEffect(() => {
@@ -99,6 +100,10 @@ export default function StravneDetail({
             updateDetails({ [EGameDetail.MEAL]: mealMoney });
         }
     }, [fromTime, toTime]);
+
+    useEffect(() => {
+        setIsMealEnabled(Boolean(fromCity));
+    }, [fromCity]);
 
     const _toggleSwitch = (itemKey: string) => {
         if (EGameDetail.MEAL_ENABLED === itemKey) {

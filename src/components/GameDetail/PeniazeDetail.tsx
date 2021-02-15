@@ -16,6 +16,10 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         marginVertical: 10,
         fontSize: 20
+    },
+    rateContainer: {
+        marginHorizontal: 15,
+        maxWidth: 120
     }
 });
 
@@ -124,14 +128,15 @@ export default function PeniazeDetail({
     return (
         <View style={styles.container}>
             <Text style={styles.headerText}>{TOGETHER}</Text>
-            <Card>
+            <View style={styles.rateContainer}>
                 <ItemDetailLineInput
                     itemKey={EGameDetail.RATE}
                     changeNumber={_changeText}
                     label={RATE}
                     value={rateMoney}
                 />
-                <Separator />
+            </View>
+            <Card>
                 <ItemDetailLineInput
                     itemKey={EGameDetail.TRAVEL}
                     changeNumber={_changeText}

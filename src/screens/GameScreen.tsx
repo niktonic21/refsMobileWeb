@@ -4,7 +4,15 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-paper';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
-import { EGameDetail, getCurrentRef, getGameData, getGameRate, IRef, stringToNumber } from '@utils';
+import {
+    EGameDetail,
+    getCurrentRef,
+    getGameData,
+    getGameRate,
+    IRef,
+    parseDate,
+    stringToNumber
+} from '@utils';
 import alert from '../utils/alert';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGameById, saveGame } from '@actions';
@@ -111,6 +119,9 @@ export default function GameScreen({ navigation, route }: any) {
         gameDetailsData.playedBefore
     );
 
+    const parsedDate = parseDate(gameData.date);
+    const defaultDate = Date.parse(`${parsedDate?.year}-${parsedDate?.month}-${parsedDate?.day}`);
+
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <BackButtonWeb title="Späť" />
@@ -126,9 +137,9 @@ export default function GameScreen({ navigation, route }: any) {
                     <StravneDetail
                         fromCity={gameDetailsData.fromCity}
                         toCity={gameDetailsData.toCity}
-                        fromDay={gameDetailsData.fromDay}
+                        fromDay={gameDetailsData.fromDay || new Date(defaultDate)}
                         fromTime={gameDetailsData.fromTime}
-                        toDay={gameDetailsData.toDay}
+                        toDay={gameDetailsData.toDay || new Date(defaultDate)}
                         toTime={gameDetailsData.toTime}
                         updateDetails={_updateDetails}
                     />

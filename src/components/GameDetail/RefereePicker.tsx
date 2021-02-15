@@ -82,7 +82,7 @@ export default function RefereePicker({ saveRefsType, refsWithType }: IProps) {
                 {REFS}
             </Text>
             <View>
-                {refsWithType.map((ref: { name: string }, index: number) => {
+                {refsWithType.map((ref: { name: string; refType: string }, index: number) => {
                     return (
                         <View
                             key={index}
@@ -98,7 +98,7 @@ export default function RefereePicker({ saveRefsType, refsWithType }: IProps) {
                                 key={index}
                                 zIndex={10}
                                 items={refsPickerData}
-                                defaultValue={refsPickerData[index].value}
+                                defaultValue={ref.refType}
                                 dropDownMaxHeight={95}
                                 containerStyle={styles.containerSize}
                                 itemStyle={styles.itemStyle}

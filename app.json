@@ -24,7 +24,7 @@
           },
         "android": {
             "package": "com.jobb.refsmobileweb",
-            "versionCode": 2,
+            "versionCode": 3,
             "permissions" : []
         }
     }

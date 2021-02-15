@@ -37,6 +37,7 @@ export default function TimePicker({ onChange, placeholder, time }: IProps) {
         },
         [setVisible]
     );
+    const defaultTime: string[] = time ? time.split(':') : ['11', '0'];
 
     return (
         <View style={styles.container}>
@@ -45,8 +46,8 @@ export default function TimePicker({ onChange, placeholder, time }: IProps) {
                 onDismiss={onDismiss}
                 onConfirm={_onConfirm}
                 locale={'sk'}
-                hours={11} // default: current hours
-                minutes={0} // default: current minutes
+                hours={Number(defaultTime[0])} // default: current hours
+                minutes={Number(defaultTime[1])} // default: current minutes
                 label="Vyber čas" // optional, default 'Select time'
                 cancelLabel="Zrušiť" // optional, default: 'Cancel'
                 confirmLabel="Ok" // optional, default: 'Ok'
