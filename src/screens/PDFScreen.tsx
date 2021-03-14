@@ -1,16 +1,18 @@
 import React from 'react';
 import { StyleSheet, View, Button } from 'react-native';
-import * as Print from 'expo-print';
-import * as Sharing from 'expo-sharing';
-import { WebView } from 'react-native-webview';
 import { ScrollView } from 'react-native-gesture-handler';
 import { isIos, isWeb } from '@layout';
 import { szlhLogo } from '@strings';
+import { WebView } from 'react-native-webview';
+import * as Sharing from 'expo-sharing';
+import * as FileSystem from 'expo-file-system';
 import get from 'lodash/get';
-import { getGameData, EGameDetail, getDateString } from '@utils';
+import { getGameData, EGameDetail, getDateString, getFilledPDF, IGame } from '@utils';
 import { useSelector } from 'react-redux';
 import { IGameDetail } from './GameScreen';
 import { BackButtonWeb } from '../components/BackButtonWeb';
+import download from 'downloadjs';
+import { PDFDocument } from 'pdf-lib';
 
 const styles = StyleSheet.create({
     container: {
@@ -28,6 +30,16 @@ const styles = StyleSheet.create({
         maxWidth: 200
     }
 });
+
+let dataArray: {
+    gameData: IGame;
+    gameUserData: IGameDetail;
+    mesto: string;
+    auto: string;
+    name: string;
+}[] = [];
+
+let gameId: string;
 
 const scaledValue = (value: number): number => (isIos ? value : (value * 4) / 3);
 
@@ -53,6 +65,7 @@ const createGameHTML = (gameId: string) => {
     const dateNotes = gameUserData.notes;
     const notes1 = dateNotes ? dateNotes.slice(0, 48) : '';
     const notes2 = notes1 && dateNotes?.slice(48, 120) ? dateNotes?.slice(48, 120) : '';
+    dataArray.push({ gameData, gameUserData, mesto, auto, name });
 
     const gamePage = `
         <div class="wrapper">
@@ -365,10 +378,35 @@ const createGameHTML = (gameId: string) => {
     return gamePage;
 };
 
-export default function PDFScreen({ route }: any) {
-    const gameId = get(route, 'params.gameId', '');
-    const idList: string[] = gameId.split('-');
+const createPdf = async () => {
+    const finalDoc = await PDFDocument.create();
 
+    for (let index = 0; index < dataArray.length; index++) {
+        const pdfDoc = await getFilledPDF(dataArray[index]);
+        const [pdfDocPgae] = await finalDoc.copyPages(pdfDoc, [0]);
+        finalDoc.addPage(pdfDocPgae);
+    }
+
+    if (isWeb) {
+        const pdfBytes = await finalDoc.save();
+        download(pdfBytes, `vyuctovanie-${gameId}.pdf`, 'application/pdf');
+    } else {
+        const pdfBytes = await finalDoc.saveAsBase64();
+        try {
+            let filename = `vyuctovanie-${gameId}.pdf`; // or some other way to generate filename
+            let filepath = `${FileSystem.documentDirectory}/${filename}`;
+            await FileSystem.writeAsStringAsync(filepath, pdfBytes, { encoding: 'base64' });
+            Sharing.shareAsync(filepath, { mimeType: 'application/pdf' });
+        } catch (e) {
+            alert(e.message);
+        }
+    }
+};
+
+export default function PDFScreen({ route }: any) {
+    gameId = get(route, 'params.gameId', '');
+    const idList: string[] = gameId.split('-');
+    dataArray = [];
     const gamesHTML: string[] = idList.map(id => createGameHTML(id));
 
     const html = `
@@ -438,22 +476,6 @@ export default function PDFScreen({ route }: any) {
       </html>    
     `;
 
-    async function execute() {
-        if (isWeb) {
-            const pW = window.open('', '', `height=792px, width=612px`);
-            pW?.document.write(html);
-            pW?.document.close();
-            pW?.print();
-        } else {
-            const { uri } = await Print.printToFileAsync({
-                html: html
-                // width: 422,
-                // height: 596
-            });
-            Sharing.shareAsync(uri);
-        }
-    }
-
     return (
         <>
             {isWeb ? (
@@ -463,7 +485,7 @@ export default function PDFScreen({ route }: any) {
                 >
                     <BackButtonWeb title="Späť" />
                     <View style={styles.button}>
-                        <Button title="Generuj" onPress={() => execute()} />
+                        <Button title="Stiahnúť PDF" onPress={createPdf} />
                     </View>
                     <div
                         style={{ maxWidth: 612 }}
@@ -474,7 +496,7 @@ export default function PDFScreen({ route }: any) {
                 </ScrollView>
             ) : (
                 <View style={styles.container}>
-                    <Button title="Vytlačiť alebo poslať" onPress={() => execute()} />
+                    <Button title="Vytlačiť alebo poslať" onPress={createPdf} />
                     <WebView
                         source={{ html: html }}
                         scalesPageToFit={false}

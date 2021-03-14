@@ -1,11 +1,12 @@
 import { PDFDocument } from 'pdf-lib';
 import { pdfBase64 } from '@strings';
 import fontkit from '@pdf-lib/fontkit';
+import { decode as atob } from 'base-64';
 import { EGameDetail, IGame } from './types';
 import { getDateString } from './gameUtils';
 import { IGameDetail } from '../screens/GameScreen';
 
-import robotoFont from '../../assets/fonts/Roboto-Regular.ttf';
+import { robotoBase64 } from '../../assets/fonts/robot64';
 
 const base64ToUint8Array = () => {
     var raw = atob(pdfBase64);
@@ -25,14 +26,11 @@ interface IPDFdata {
 }
 
 export const getFilledPDF = async ({ gameData, gameUserData, mesto, auto, name }: IPDFdata) => {
-    const url = robotoFont;
-    const fontBytes = await fetch(url).then(res => res.arrayBuffer());
-
     const bytes = base64ToUint8Array();
     const pdfDoc = await PDFDocument.load(bytes);
 
     pdfDoc.registerFontkit(fontkit);
-    const ubuntuFont = await pdfDoc.embedFont(fontBytes);
+    const ubuntuFont = await pdfDoc.embedFont(robotoBase64);
 
     const form = pdfDoc.getForm();
 
@@ -75,18 +73,27 @@ export const getFilledPDF = async ({ gameData, gameUserData, mesto, auto, name }
     const ostatne = form.getTextField('Text44');
     const spolu = form.getTextField('Text45');
 
-    gameUserData.playedBefore
-        ? form.getCheckBox('Začiarkavacie políčko5').check()
-        : form.getCheckBox('Začiarkavacie políčko5').uncheck();
-    gameUserData.played
-        ? form.getCheckBox('Začiarkavacie políčko8').check()
-        : form.getCheckBox('Začiarkavacie políčko9').check();
-    gameUserData.isRepeatedGame
-        ? form.getCheckBox('Začiarkavacie políčko30').check()
-        : form.getCheckBox('Začiarkavacie políčko31').check();
-    gameUserData.isSecondGame
-        ? form.getCheckBox('Začiarkavacie políčko32').check()
-        : form.getCheckBox('Začiarkavacie políčko33').check();
+    const check5 = form.getCheckBox('Začiarkavacie políčko5');
+    check5.enableReadOnly();
+    gameUserData.playedBefore ? check5.check() : check5.uncheck();
+
+    const check8 = form.getCheckBox('Začiarkavacie políčko8');
+    const check9 = form.getCheckBox('Začiarkavacie políčko9');
+    check8.enableReadOnly();
+    check9.enableReadOnly();
+    gameUserData.played ? check8.check() : check9.check();
+
+    const check30 = form.getCheckBox('Začiarkavacie políčko30');
+    const check31 = form.getCheckBox('Začiarkavacie políčko31');
+    check30.enableReadOnly();
+    check31.enableReadOnly();
+    gameUserData.isRepeatedGame ? check30.check() : check31.check();
+
+    const check32 = form.getCheckBox('Začiarkavacie políčko32');
+    const check33 = form.getCheckBox('Začiarkavacie políčko33');
+    check32.enableReadOnly();
+    check33.enableReadOnly();
+    gameUserData.isSecondGame ? check32.check() : check33.check();
 
     const dataRoad = gameUserData.road?.toString();
     const road1 = dataRoad ? dataRoad.slice(0, 36) : '';
