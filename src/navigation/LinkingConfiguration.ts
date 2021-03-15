@@ -6,16 +6,35 @@ export default {
         screens: {
             Root: {
                 screens: {
-                    Zapasy: {
+                    Zápasy: {
+                        path: 'matches',
                         screens: {
-                            MatchesScreen: 'matches',
-                            Game: 'game'
+                            MatchesScreen: {
+                                name: 'MatchesScreen',
+                                path: '/'
+                            },
+                            GameScreen: {
+                                name: 'GameScreen',
+                                path: 'game/:gameId'
+                            }
                         }
                     },
-                    Vyuctovanie: {
+                    Vyúčtovanie: {
+                        path: 'billing',
                         screens: {
-                            HomeScreen: 'home',
-                            Game: 'game'
+                            BillingScreen: {
+                                name: 'BillingScreen',
+                                path: '/'
+                            },
+                            PDFScreen: {
+                                name: 'PDFScreen',
+                                path: 'pdf/:gameId'
+                            },
+                            GameScreen: {
+                                name: 'GameScreen',
+                                path: 'game/:gameId/:isBilling?'
+                            },
+                            CitiesScreen: 'cities'
                         }
                     },
                     Profil: {

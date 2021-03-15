@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Card } from '../Card';
-import { IGame, EGameDetail, stringToNumber } from '@utils';
+import { EGameDetail, stringToNumber } from '@utils';
 import { RATE, RATE_CITY, TRAVEL, TOGETHER, MEAL, NIGHT, POST, OTHER } from '@strings';
 import Separator from './Separator';
 import ItemDetailLineInput from './ItemDetailLineInput';
@@ -16,36 +16,87 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         marginVertical: 10,
         fontSize: 20
+    },
+    rateContainer: {
+        marginHorizontal: 15,
+        maxWidth: 120
     }
 });
 
 interface IProps {
-    gameData: IGame;
+    rateMoney?: number;
+    travelMoney?: number;
+    rateCityMoney?: number;
+    mealMoney?: number;
+    nightMoney?: number;
+    postMoney?: number;
+    otherMoney?: number;
     updateDetails: (data: any) => void;
 }
 
-export default function PeniazeDetail({ gameData, updateDetails }: IProps) {
-    const [rateMoney, setRateMoney] = useState('');
-    const [travelMoney, setTravelMoney] = useState('');
-    const [rateCityMoney, setRateCityMoney] = useState('');
-    const [mealMoney, setMealMoney] = useState('');
-    const [nightMoney, setNightMoney] = useState('');
-    const [postMoney, setPostMoney] = useState('');
-    const [otherMoney, setOtherMoney] = useState('');
+export default function PeniazeDetail({
+    rateMoney: rateMoneyProp,
+    travelMoney: travelMoneyProp,
+    rateCityMoney: rateCityMoneyProp,
+    mealMoney: mealMoneyProp,
+    nightMoney: nightMoneyProp,
+    postMoney: postMoneyProp,
+    otherMoney: otherMoneyProp,
+    updateDetails
+}: IProps) {
+    const [rateMoney, setRateMoney] = useState(rateMoneyProp?.toString() || '');
+    const [rateCityMoney, setRateCityMoney] = useState(rateCityMoneyProp?.toString() || '');
+    const [nightMoney, setNightMoney] = useState(nightMoneyProp?.toString() || '');
+    const [travelMoney, setTravelMoney] = useState(travelMoneyProp?.toString() || '');
+    const [postMoney, setPostMoney] = useState(postMoneyProp?.toString() || '');
+    const [mealMoney, setMealMoney] = useState(mealMoneyProp?.toString() || '');
+    const [otherMoney, setOtherMoney] = useState(otherMoneyProp?.toString() || '');
     const [togetherMoney, setTogetherMoney] = useState(0);
 
     useEffect(() => {
+        updateDetails({ [EGameDetail.RATE]: rateMoney });
+    }, []);
+
+    useEffect(() => {
+        rateMoneyProp && setRateMoney(rateMoneyProp.toString());
+    }, [rateMoneyProp]);
+
+    useEffect(() => {
+        travelMoneyProp && setTravelMoney(travelMoneyProp.toString());
+    }, [travelMoneyProp]);
+
+    useEffect(() => {
+        rateCityMoneyProp && setRateCityMoney(rateCityMoneyProp.toString());
+    }, [rateCityMoneyProp]);
+
+    useEffect(() => {
+        mealMoneyProp && setMealMoney(mealMoneyProp.toString());
+    }, [mealMoneyProp]);
+
+    useEffect(() => {
+        nightMoneyProp && setNightMoney(nightMoneyProp.toString());
+    }, [nightMoneyProp]);
+
+    useEffect(() => {
+        postMoneyProp && setPostMoney(postMoneyProp.toString());
+    }, [postMoneyProp]);
+
+    useEffect(() => {
+        otherMoneyProp && setOtherMoney(otherMoneyProp.toString());
+    }, [otherMoneyProp]);
+
+    useEffect(() => {
         const all =
-            stringToNumber(rateMoney) +
             stringToNumber(travelMoney) +
             stringToNumber(rateCityMoney) +
             stringToNumber(mealMoney) +
             stringToNumber(nightMoney) +
             stringToNumber(postMoney) +
             stringToNumber(otherMoney);
-        setTogetherMoney(all);
-        updateDetails({ togetherMoney: all });
-    }, [rateMoney, travelMoney, rateCityMoney, mealMoney, nightMoney, postMoney]);
+        const allFixed = stringToNumber(all.toFixed(2));
+        setTogetherMoney(allFixed);
+        updateDetails({ [EGameDetail.TOGETHER]: allFixed });
+    }, [travelMoney, rateCityMoney, mealMoney, nightMoney, postMoney, otherMoney]);
 
     const _changeText = (itemKey: string, text: string) => {
         if (EGameDetail.RATE === itemKey) {
@@ -70,20 +121,22 @@ export default function PeniazeDetail({ gameData, updateDetails }: IProps) {
             setOtherMoney(text);
         }
         const number = stringToNumber(text);
+
         updateDetails({ [itemKey]: number });
     };
 
     return (
         <View style={styles.container}>
             <Text style={styles.headerText}>{TOGETHER}</Text>
-            <Card>
+            <View style={styles.rateContainer}>
                 <ItemDetailLineInput
                     itemKey={EGameDetail.RATE}
                     changeNumber={_changeText}
                     label={RATE}
                     value={rateMoney}
                 />
-                <Separator />
+            </View>
+            <Card>
                 <ItemDetailLineInput
                     itemKey={EGameDetail.TRAVEL}
                     changeNumber={_changeText}
@@ -133,7 +186,7 @@ export default function PeniazeDetail({ gameData, updateDetails }: IProps) {
                     itemKey={EGameDetail.TOGETHER}
                     changeNumber={_changeText}
                     label={TOGETHER}
-                    value={String(togetherMoney)}
+                    value={togetherMoney?.toString()}
                 />
             </Card>
         </View>

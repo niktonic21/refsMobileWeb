@@ -15,16 +15,17 @@ export const updateLastUpdatedTime = (lastUpdated: number) => ({
 });
 
 export const checkNewData = (latestUpdateTime: string) => {
-    return async (dispatch: any) => {
+    return async (dispatch: any, state: any) => {
         try {
-            const result = await fetchUpdateTime();
+            const season = state().auth.profile.season;
+            const result = await fetchUpdateTime(season);
             if (result && result.lastUpdated > latestUpdateTime) {
                 dispatch(updateLastUpdatedTime(result.lastUpdated));
-                dispatch(fetchGames());
-                dispatch(fetchRefsAction());
+                dispatch(fetchGames(season));
+                dispatch(fetchRefsAction(season));
             }
         } catch (error) {
-            console.log('Getting Updated Error---------', error);
+            console.error('Getting Updated Error---------', error);
         }
     };
 };
@@ -43,14 +44,14 @@ export const fetchGameRejected = (games: any) => ({
     games
 });
 
-export const fetchGames = () => {
+export const fetchGames = (season: string) => {
     return async (dispatch: any) => {
         try {
             dispatch(requestGames());
-            const result = await fetchSeasonGames();
+            const result = await fetchSeasonGames(season);
             dispatch(receivedGames(result));
         } catch (error) {
-            console.log('Getting Games Error---------', error);
+            console.warn('Getting Games Error---------', error);
             dispatch(fetchGameRejected(error));
         }
     };
@@ -70,14 +71,14 @@ export const fetchRefsRejected = (refs: any) => ({
     refs
 });
 
-export const fetchRefsAction = () => {
+export const fetchRefsAction = (season: string) => {
     return async (dispatch: any) => {
         try {
             dispatch(requestRefs());
-            const result = await fetchRefs();
+            const result = await fetchRefs(season);
             dispatch(receivedRefs(result));
         } catch (error) {
-            console.log('Getting Referees Error---------', error);
+            console.warn('Getting Referees Error---------', error);
             dispatch(fetchRefsRejected(error));
         }
     };

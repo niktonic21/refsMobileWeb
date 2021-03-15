@@ -10,13 +10,14 @@ import store from '../redux/store';
 import Colors from '../../constants/Colors';
 import useColorScheme from '../utils/hooks/useColorScheme';
 import MatchesScreen from '../screens/MatchesScreen';
-// import HomeScreen from '../screens/HomeScreen';
-// import LinksScreen from '../screens/LinksScreen';
 import BillingScreen from '../screens/BillingScreen';
+import PDFScreen from '../screens/PDFScreen';
 import GameScreen from '../screens/GameScreen';
 import UserScreen from '../screens/UserScreen';
+import CitiesScreen from '../screens/CitiesScreen';
+import GameRefListScreen from '../screens/GameRefListScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
-import { BottomTabParamList, HomeParamList, MatchesParamList, UserParamList } from '../../types';
+import { BottomTabParamList, BillingParamList, MatchesParamList, UserParamList } from '../../types';
 import { checkNewData } from '../redux/actions';
 
 const Tab = isWeb
@@ -35,18 +36,19 @@ export default function TabNavigator() {
 
     return (
         <Tab.Navigator
+            swipeEnabled={!isWeb}
             initialRouteName="Matches"
             tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
         >
             <Tab.Screen
-                name="Zapasy"
+                name="Zápasy"
                 component={MatchesNavigator}
                 options={{
                     tabBarIcon: ({ color }) => <TabBarIcon name="ios-list" color={color} />
                 }}
             />
             <Tab.Screen
-                name="Vyuctovanie"
+                name="Vyúčtovanie"
                 component={HomeNavigator}
                 options={{
                     tabBarIcon: ({ color }) => <TabBarIcon name="ios-wallet" color={color} />
@@ -79,33 +81,48 @@ function MatchesNavigator() {
             <MatchesStack.Screen
                 name="MatchesScreen"
                 component={MatchesScreen}
-                options={{ headerTitle: 'Delegacka' }}
+                options={{ headerTitle: 'Delegačné listy' }}
             />
             <MatchesStack.Screen
                 name="GameScreen"
                 component={GameScreen}
-                options={{ headerTitle: 'Datial zapasu' }}
+                options={{ headerTitle: 'Datial zápasu' }}
             />
         </MatchesStack.Navigator>
     );
 }
 
-const HomeStack = createStackNavigator<HomeParamList>();
+const BillingStack = createStackNavigator<BillingParamList>();
 
 function HomeNavigator() {
     return (
-        <HomeStack.Navigator headerMode={headerMode}>
-            <HomeStack.Screen
-                name="HomeScreen"
+        <BillingStack.Navigator headerMode={headerMode}>
+            <BillingStack.Screen
+                name="BillingScreen"
                 component={BillingScreen}
-                options={{ headerTitle: 'Vyuctovanie' }}
+                options={{ headerTitle: 'Vyúčtovanie' }}
             />
-            <MatchesStack.Screen
+            <BillingStack.Screen
+                name="PDFScreen"
+                component={PDFScreen}
+                options={{ headerTitle: 'PDF' }}
+            />
+            <BillingStack.Screen
                 name="GameScreen"
                 component={GameScreen}
-                options={{ headerTitle: 'Datial zapasu' }}
+                options={{ headerTitle: 'Datial zápasu' }}
             />
-        </HomeStack.Navigator>
+            <BillingStack.Screen
+                name="CitiesScreen"
+                component={CitiesScreen}
+                options={{ headerTitle: 'Mestá' }}
+            />
+            <BillingStack.Screen
+                name="GameRefListScreen"
+                component={GameRefListScreen}
+                options={{ headerTitle: 'Rozhodcovia' }}
+            />
+        </BillingStack.Navigator>
     );
 }
 

@@ -17,6 +17,7 @@ export interface ISection {
 export interface IRef {
     id: string;
     name: string;
+    class: string;
 }
 
 export interface IGame {
@@ -31,7 +32,7 @@ export interface IGame {
     round: string;
     stadium: string;
     delegation: number;
-    referees: Array<IRef>;
+    referees: IRef[];
 }
 
 export interface IItemButton {
@@ -49,14 +50,15 @@ export enum EGameDetail {
     PLAYED_BEFORE = 'playedBefore',
     H1 = 'h1',
     H2 = 'h2',
-    C1 = 'r1',
-    C2 = 'r1',
+    C1 = 'c1',
+    C2 = 'c2',
     I = 'i',
     V = 'v',
+    D = 'd',
     MEAL_ENABLED = 'mealEnabled',
     FROM_CITY = 'fromCity',
     TO_CITY = 'toCity',
-    FROM_DAY = 'fromdDay',
+    FROM_DAY = 'fromDay',
     TO_DAY = 'toDay',
     FROM_TIME = 'fromTime',
     TO_TIME = 'toTime',
@@ -65,7 +67,7 @@ export enum EGameDetail {
     CAR = 'car',
     REFS_IN_CAR = 'refsInCar',
     ROAD = 'road',
-    DISTANCE = 'km',
+    DISTANCE = 'distance',
     IS_REPEATED_GAME = 'isRepeatedGame',
     IS_SECOND_GAME = 'isSecondGame',
     SECOND_GAME = 'secondGame',
@@ -77,5 +79,5 @@ export enum EGameDetail {
     NIGHT = 'nightMoney',
     POST = 'postMoney',
     OTHER = 'otherMoney',
-    TOGETHER = 'together'
+    TOGETHER = 'togetherMoney'
 }

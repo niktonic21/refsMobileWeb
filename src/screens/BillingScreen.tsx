@@ -1,10 +1,18 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, SectionList, SectionListData } from 'react-native';
-import { RectButton } from 'react-native-gesture-handler';
+import {
+    StyleSheet,
+    Text,
+    View,
+    SectionList,
+    SectionListData,
+    TouchableOpacity
+} from 'react-native';
 import { useSelector } from 'react-redux';
 import get from 'lodash/get';
 import { createBillingSections } from '@utils';
-import { IItemButton, IGame } from '../utils/types';
+import { IItemButton } from '../utils/types';
+import ScreenContainer from '../components/ScreenContainer';
+import SectionHeader from '../components/SectionHeader';
 
 const styles = StyleSheet.create({
     container: {
@@ -19,6 +27,15 @@ const styles = StyleSheet.create({
         paddingTop: 0,
         paddingBottom: 15
     },
+    pdfContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    pdfText: {
+        fontSize: 16,
+        marginTop: 1
+    },
     option: {
         flex: 1,
         backgroundColor: '#fff',
@@ -29,6 +46,7 @@ const styles = StyleSheet.create({
         borderWidth: StyleSheet.hairlineWidth,
         borderBottomWidth: 0,
         borderColor: '#ededed',
+        justifyContent: 'space-between',
         flexDirection: 'row'
     },
     optionText: {
@@ -51,19 +69,8 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         margin: 2
     },
-    separatorItem: { width: 1, alignSelf: 'stretch', backgroundColor: 'red' },
+    separatorItem: { width: 1, alignSelf: 'stretch', backgroundColor: 'grey' },
     separator: { height: 10, alignSelf: 'stretch' },
-    sectionHeader: {
-        height: 35,
-        flex: 1,
-        paddingHorizontal: 17,
-        justifyContent: 'center',
-        backgroundColor: '#ccc'
-    },
-    sectionText: {
-        fontSize: 18,
-        fontWeight: '700'
-    },
     noMatches: {
         alignSelf: 'center',
         margin: 15,
@@ -71,29 +78,23 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '700'
     },
-    matchInfo: { flex: 3, flexDirection: 'column', justifyContent: 'space-between' },
+    matchInfo: {
+        flex: 4,
+        flexDirection: 'column',
+        justifyContent: 'space-between'
+    },
     refsContainer: { flex: 2, paddingLeft: 4, flexDirection: 'column' }
 });
-
-const _renderSectionHeader = ({ section }: any) => (
-    <View style={styles.sectionHeader}>
-        <Text style={styles.sectionText}>
-            {section.title} ({section.data.length})
-        </Text>
-    </View>
-);
 
 const _renderSeparator = () => <View style={styles.separator} />;
 
 const _keyExtractor = (item: { gameId: string }) => item.gameId;
 
-const _renderEmptyListItem = () => <Text style={styles.noMatches}>Ziadne zapasy</Text>;
+const _renderEmptyListItem = () => <Text style={styles.noMatches}>Žiadne zápasy</Text>;
 
 export default function BillingScreen({ navigation }) {
     const isLoggedId = useSelector<{ auth: { loggedIn: boolean } }>(state => state.auth.loggedIn);
-    const refId = useSelector<{ auth: { profile: { refID: string } } }>(
-        state => state.auth.profile.refID
-    );
+    const refId: string = useSelector(state => get(state, 'auth.profile.refID', ''));
     const games = useSelector(state => get(state, 'games.games', []));
 
     const billingSections: Array<SectionListData<any>> = createBillingSections(games, refId);
@@ -102,24 +103,39 @@ export default function BillingScreen({ navigation }) {
         navigation.navigate('Profil');
     };
 
+    const _onPDFPress = (data: any) => {
+        const idList = data.map(({ gameId }) => gameId);
+        navigation.navigate('PDFScreen', { gameId: idList.join('-') });
+    };
+
+    const _renderSectionHeader = ({ section }: any) => (
+        <SectionHeader
+            section={section}
+            buttonLabel="PDF"
+            onPress={() => _onPDFPress(section.data)}
+        />
+    );
+
     const _renderItem = ({ item }: IItemButton) => {
         const { home, away, gameId, ligue, day, time, date } = item;
 
         const _onPress = () => {
-            navigation.navigate('GameScreen', { gameId: gameId, item: item, isBilling: true });
+            navigation.navigate('GameScreen', { gameId: gameId, isBilling: true });
         };
 
         return (
-            <RectButton key={gameId} style={styles.option} onPress={_onPress}>
-                <View style={styles.matchInfo}>
-                    <Text style={styles.optionText}>{ligue}</Text>
-                    <Text style={styles.optionText}>{home}</Text>
-                    <Text style={styles.optionText}>{away}</Text>
-                    <Text style={styles.optionText}>
-                        {date} o {time}, {day}
-                    </Text>
+            <ScreenContainer>
+                <View style={styles.option} key={gameId}>
+                    <TouchableOpacity style={styles.matchInfo} onPress={_onPress}>
+                        <Text style={styles.optionText}>{ligue}</Text>
+                        <Text style={styles.optionText}>{home}</Text>
+                        <Text style={styles.optionText}>{away}</Text>
+                        <Text style={styles.optionText}>
+                            {date} o {time}, {day}
+                        </Text>
+                    </TouchableOpacity>
                 </View>
-            </RectButton>
+            </ScreenContainer>
         );
     };
 

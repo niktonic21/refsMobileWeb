@@ -11,11 +11,27 @@ export type BottomTabParamList = {
 
 export type MatchesParamList = {
     MatchesScreen: undefined;
-    GameScreen: undefined;
+    GameScreen: {
+        gameId: string;
+    };
 };
 
-export type HomeParamList = {
-    HomeScreen: undefined;
+export type BillingParamList = {
+    BillingScreen: undefined;
+    GameScreen: {
+        gameId: string;
+    };
+    PDFScreen: {
+        gameId: string;
+    };
+    CitiesScreen: {
+        selectedCities: string[];
+        onSelectedCities: () => {};
+    };
+    GameRefListScreen: {
+        selectedRefsInCar: string[];
+        onSelectedRefsInCar: () => {};
+    };
 };
 
 export type UserParamList = {

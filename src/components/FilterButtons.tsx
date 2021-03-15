@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { RectButton } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { getFilterButtonLabel } from '../utils/gameUtils';
 
 const styles = StyleSheet.create({
@@ -45,11 +44,11 @@ const FilterButton = ({ filterKey, onPress }: IProps) => {
     const label = getFilterButtonLabel(filterKey);
 
     return (
-        <RectButton style={styles.buttonContainer} onPress={_onPress}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={_onPress}>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.buttonText}>
                 {label}
             </Text>
-        </RectButton>
+        </TouchableOpacity>
     );
 };
 

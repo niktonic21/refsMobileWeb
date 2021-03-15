@@ -3,31 +3,43 @@ import { StyleSheet, Text, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { REFS } from '@strings';
 import { EGameDetail } from '@utils';
+import { IRefWithType } from './ZapasDetail';
 
-const refsPickerData = [
+export const refsPickerData = [
     {
         label: 'H1',
-        value: EGameDetail.H1
+        value: EGameDetail.H1,
+        class: 'referee-referee'
     },
     {
         label: 'H2',
-        value: EGameDetail.H2
+        value: EGameDetail.H2,
+        class: 'referee-referee_2'
     },
     {
         label: 'Č1',
-        value: EGameDetail.C1
+        value: EGameDetail.C1,
+        class: 'referee-linesmen_1'
     },
     {
         label: 'Č2',
-        value: EGameDetail.C2
+        value: EGameDetail.C2,
+        class: 'referee-linesmen_2'
     },
     {
         label: 'I',
-        value: EGameDetail.H1
+        value: EGameDetail.I,
+        class: 'referee-referee_instructor'
     },
     {
         label: 'V',
-        value: EGameDetail.H1
+        value: EGameDetail.V,
+        class: 'referee-video_goal_judge'
+    },
+    {
+        label: 'D',
+        value: EGameDetail.D,
+        class: 'referee-delegate'
     }
 ];
 
@@ -40,14 +52,13 @@ const styles = StyleSheet.create({
     },
     labelText: { paddingLeft: 10, fontSize: 18 },
     dropDownWrapper: { flexDirection: 'row', marginVertical: 5, alignItems: 'center' },
-    containerSize: { height: 40, width: 60 },
+    containerSize: { height: 40, width: 62 },
     itemStyle: { justifyContent: 'flex-start' }
 });
 
 interface IProps {
-    referees: any;
-    saveRefsType;
-    refsWithType;
+    saveRefsType: (refsWithType: IRefWithType[]) => void;
+    refsWithType: IRefWithType[];
 }
 
 interface IPicker {
@@ -55,32 +66,14 @@ interface IPicker {
     value: string;
 }
 
-interface IRefsTypes {
-    refType: string;
-    name: string;
-}
-
-const createRefsWithType = (referees: any) => {
-    return referees.map((ref: { name: string }, index: number) => {
-        const name = ref.name.split(',', 2).join();
-        return { refType: refsPickerData[index].value, name };
-    });
-};
-
-export default function RefereePicker({ referees, saveRefsType, refsWithType }: IProps) {
-    const refereeWithTypes: Array<IRefsTypes> = refsWithType.length
-        ? refsWithType
-        : createRefsWithType(referees);
-
+export default function RefereePicker({ saveRefsType, refsWithType }: IProps) {
     React.useEffect(() => {
-        if (!refsWithType.length) {
-            saveRefsType(refereeWithTypes);
-        }
+        saveRefsType(refsWithType);
     }, []);
 
     const _onPress = (index: number, refType: string) => {
-        refereeWithTypes[index] = { ...refereeWithTypes[index], refType };
-        saveRefsType(refereeWithTypes);
+        refsWithType[index] = { ...refsWithType[index], refType };
+        saveRefsType(refsWithType);
     };
 
     return (
@@ -89,15 +82,15 @@ export default function RefereePicker({ referees, saveRefsType, refsWithType }: 
                 {REFS}
             </Text>
             <View>
-                {refereeWithTypes.map((ref: { name: string }, index: number) => {
+                {refsWithType.map((ref: { name: string; refType: string }, index: number) => {
                     return (
                         <View
                             key={index}
                             style={[
                                 styles.dropDownWrapper,
                                 {
-                                    zIndex: referees.length - index,
-                                    elevation: referees.length + 1 - index
+                                    zIndex: refsWithType.length - index,
+                                    elevation: refsWithType.length + 1 - index
                                 }
                             ]}
                         >
@@ -105,7 +98,7 @@ export default function RefereePicker({ referees, saveRefsType, refsWithType }: 
                                 key={index}
                                 zIndex={10}
                                 items={refsPickerData}
-                                defaultValue={refsPickerData[index].value}
+                                defaultValue={ref.refType}
                                 dropDownMaxHeight={95}
                                 containerStyle={styles.containerSize}
                                 itemStyle={styles.itemStyle}

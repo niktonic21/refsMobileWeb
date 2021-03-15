@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Platform } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
@@ -16,6 +16,11 @@ const styles = StyleSheet.create({
     },
     inputText: {
         flex: 1,
+        ...Platform.select({
+            web: {
+                outlineWidth: 0
+            }
+        }),
         textAlign: 'right',
         paddingRight: 5,
         fontSize: 18
@@ -27,7 +32,7 @@ const styles = StyleSheet.create({
 
 interface IProps {
     itemKey?: string;
-    value: string;
+    value?: string;
     label: string;
     editable?: boolean;
     changeNumber?: (itemKey: string, number: string) => void;
@@ -54,11 +59,11 @@ export default function ItemDetailLineInput({
                 <TextInput
                     style={styles.inputText}
                     placeholder={'0.0'}
-                    keyboardType="numeric"
+                    keyboardType="numbers-and-punctuation"
                     returnKeyType={'next'}
                     editable={editable}
                     onChangeText={_onChangeText}
-                    value={value}
+                    value={value ? value : ''}
                 />
                 <Text style={styles.labelText}>€</Text>
             </View>

@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { RectButton } from 'react-native-gesture-handler';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
@@ -31,11 +30,11 @@ export default function ItemDetailButton({ itemKey, placeholder, label, onPress 
     };
 
     return (
-        <RectButton style={styles.container} onPress={_onPress}>
+        <TouchableOpacity style={styles.container} onPress={_onPress}>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.placeholderText}>
                 {placeholder}
             </Text>
             <Text style={styles.labelText}>{label}</Text>
-        </RectButton>
+        </TouchableOpacity>
     );
 }

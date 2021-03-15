@@ -18,6 +18,8 @@ const INITIAL_STATE = {
     loading: false,
     loggedIn: null,
     profile: {
+        season: '20202021',
+        name: '',
         mesto: '',
         auto: '',
         email: '',
@@ -67,7 +69,7 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, user: usr, loggedIn: lgdIn };
         }
         case PROFILE_UPDATE: {
-            return { ...state, profile: { ...action.payload } };
+            return { ...state, profile: { ...state.profile, ...action.payload } };
         }
         default:
             return state;

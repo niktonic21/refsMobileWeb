@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Card } from '../Card';
-import { EGameDetail, IGame } from '@utils';
+import { useNavigation } from '@react-navigation/native';
+import uniq from 'lodash/uniq';
+import remove from 'lodash/remove';
+import { EGameDetail, getTravelInfo, IRef, stringToNumber } from '@utils';
 import { TRAVEL, CAR_ID, RATE_CITY, PASSENGERS, FROM_TO, WAS_DRIVER, DISTANCE_KM } from '@strings';
 import ItemDetailInput from './ItemDetailInput';
 import ItemDetailSwitch from './ItemDetailSwitch';
 import Separator from './Separator';
+import ItemDetailIcon from './ItemDetailIcon';
+import { Card } from '../Card';
 
 const styles = StyleSheet.create({
     container: {
@@ -21,31 +25,44 @@ const styles = StyleSheet.create({
 });
 
 interface IProps {
-    gameData: IGame;
+    referees: IRef[];
+    countCity?: boolean;
+    refsInCar?: IRef[];
+    road?: String[];
+    distance?: number;
+    currentRef: { auto: string; refID: string };
     updateDetails: (data: any) => void;
 }
 
-export default function CestovneDetail({ gameData, updateDetails }: IProps) {
-    const [isDriver, setIsDriver] = useState(false);
-    const [countCity, setCountCity] = useState(false);
-    const [car, setCar] = useState('KS-1000BS');
-    const [refsInCar, setRefsInCar] = useState('');
-    const [road, setRoad] = useState('');
-    const [distance, setDistance] = useState('');
+export default function CestovneDetail({
+    referees,
+    currentRef,
+    countCity = false,
+    refsInCar = [],
+    road = [],
+    distance: distanceProp,
+    updateDetails
+}: IProps) {
+    const navigation = useNavigation();
+    const [isDriver, setIsDriver] = useState(road.length > 0);
+    const [distance, setDistance] = useState(distanceProp ? String(distanceProp) : '');
+    const [car, setCar] = useState(currentRef.auto);
 
     useEffect(() => {
         updateDetails({ isDriver, countCity });
     }, []);
 
+    useEffect(() => {
+        distanceProp && setDistance(String(distanceProp));
+    }, [distanceProp]);
+
     const _toggleSwitch = (itemKey: string) => {
         if (EGameDetail.IS_DRIVER === itemKey) {
             setIsDriver(!isDriver);
-            updateDetails({ isDriver: !isDriver });
             return;
         }
         if (EGameDetail.COUNT_CITY === itemKey) {
-            setCountCity(!countCity);
-            updateDetails({ countCity: !countCity });
+            updateDetails({ [EGameDetail.COUNT_CITY]: !countCity });
         }
     };
 
@@ -53,16 +70,48 @@ export default function CestovneDetail({ gameData, updateDetails }: IProps) {
         if (EGameDetail.CAR === itemKey) {
             setCar(text);
         }
-        if (EGameDetail.REFS_IN_CAR === itemKey) {
-            setRefsInCar(text);
-        }
-        if (EGameDetail.ROAD === itemKey) {
-            setRoad(text);
-        }
         if (EGameDetail.DISTANCE === itemKey) {
             setDistance(text);
+            updateDetails({ [itemKey]: stringToNumber(text) });
+            return;
         }
         updateDetails({ [itemKey]: text });
+    };
+
+    const _onSelectedCities = (cities: string[]) => {
+        const distance = getTravelInfo(cities) * 2;
+        const travelMoney = distance * 0.2;
+        setDistance(distance.toString());
+        updateDetails({
+            [EGameDetail.ROAD]: cities,
+            [EGameDetail.DISTANCE]: distance,
+            [EGameDetail.TRAVEL]: travelMoney.toFixed(2)
+        });
+    };
+    const _goToCities = () => {
+        // TODO: stop sending function here use setparaps instead
+        navigation.navigate('CitiesScreen', {
+            selectedCities: road,
+            onSelectedCities: _onSelectedCities
+        });
+    };
+
+    const _onSelectedRefsInCar = (refs: string[]) => {
+        updateDetails({ [EGameDetail.REFS_IN_CAR]: refs });
+    };
+
+    const _goToGameRefList = () => {
+        const otherRefs = remove([...referees], ({ id }) => id !== currentRef.refID);
+        const refList = uniq(
+            otherRefs.map(({ name }) => name.split(',', 2).join('')),
+            false
+        );
+        // TODO: stop sending function here use setparams instead
+        navigation.navigate('GameRefListScreen', {
+            selectedRefsInCar: refsInCar,
+            onSelectedRefsInCar: _onSelectedRefsInCar,
+            refList: refList
+        });
     };
 
     return (
@@ -77,13 +126,13 @@ export default function CestovneDetail({ gameData, updateDetails }: IProps) {
                 />
                 {isDriver ? (
                     <>
-                        <Separator />
+                        {/* <Separator />
                         <ItemDetailSwitch
                             itemKey={EGameDetail.COUNT_CITY}
                             isEnabled={countCity}
                             toggleSwitch={_toggleSwitch}
                             label={RATE_CITY}
-                        />
+                        /> */}
                         <Separator />
                         <ItemDetailInput
                             itemKey={EGameDetail.CAR}
@@ -92,18 +141,18 @@ export default function CestovneDetail({ gameData, updateDetails }: IProps) {
                             value={car}
                         />
                         <Separator />
-                        <ItemDetailInput
-                            itemKey={EGameDetail.REFS_IN_CAR}
+                        <ItemDetailIcon
+                            key={EGameDetail.REFS_IN_CAR}
                             placeholder={PASSENGERS}
-                            onChangeText={_changeText}
-                            value={refsInCar}
+                            onPress={_goToGameRefList}
+                            value={refsInCar.toString()}
                         />
                         <Separator />
-                        <ItemDetailInput
-                            itemKey={EGameDetail.ROAD}
+                        <ItemDetailIcon
+                            key={EGameDetail.ROAD}
                             placeholder={FROM_TO}
-                            onChangeText={_changeText}
-                            value={road}
+                            onPress={_goToCities}
+                            value={road.toString()}
                         />
                         <Separator />
                         <ItemDetailInput

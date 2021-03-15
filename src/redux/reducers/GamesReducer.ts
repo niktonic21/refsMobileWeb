@@ -32,12 +32,10 @@ export default (state = INITIAL_STATE, action: any) => {
             return { ...state, refs: action.refs, loading: false };
         case REFS_ERROR:
             return { ...state, error: action.error, loading: false };
-        case GAMES_MONTHS: {
+        case GAMES_MONTHS:
             return { ...state, months: action.months };
-        }
-        case GAMES_UPDATE: {
+        case GAMES_UPDATE:
             return { ...state, lastUpdated: action.lastUpdated };
-        }
         default:
             return state;
     }

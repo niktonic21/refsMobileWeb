@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { RectButton } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 import Colors from '../../constants/Colors';
 
@@ -25,10 +24,10 @@ interface IProps {
 
 export default function RightButton({ label, onPress }: IProps) {
     return (
-        <RectButton style={styles.container} onPress={onPress}>
+        <TouchableOpacity style={styles.container} onPress={onPress}>
             <View>
                 <Text style={styles.buttonText}>{label}</Text>
             </View>
-        </RectButton>
+        </TouchableOpacity>
     );
 }

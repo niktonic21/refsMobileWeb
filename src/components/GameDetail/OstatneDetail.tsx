@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Card } from '../Card';
 import { EGameDetail, IGame } from '@utils';
@@ -21,39 +21,31 @@ const styles = StyleSheet.create({
 });
 
 interface IProps {
-    gameData: IGame;
     updateDetails: (data: any) => void;
+    isSecondGame?: boolean;
+    isRepeatedGame?: boolean;
+    secondGame?: string;
+    notes?: string;
 }
 
-export default function OstatneDetail({ gameData, updateDetails }: IProps) {
-    const [isSecondGame, setIsSecondGame] = useState(false);
-    const [isRepeatedGame, setIsRepeatedGame] = useState(false);
-    const [secondGameId, setSecondGameId] = useState('');
-    const [notes, setNotes] = useState('');
-
-    useEffect(() => {
-        updateDetails({ isSecondGame, isRepeatedGame });
-    }, []);
-
+export default function OstatneDetail({
+    updateDetails,
+    isSecondGame = false,
+    isRepeatedGame = false,
+    secondGame = '',
+    notes = ''
+}: IProps) {
     const _toggleSwitch = (itemKey: string) => {
         if (EGameDetail.IS_SECOND_GAME === itemKey) {
-            setIsSecondGame(!isSecondGame);
-            updateDetails({ isSecondGame: !isSecondGame });
+            updateDetails({ [EGameDetail.IS_SECOND_GAME]: !isSecondGame });
             return;
         }
         if (EGameDetail.IS_REPEATED_GAME === itemKey) {
-            setIsRepeatedGame(!isRepeatedGame);
-            updateDetails({ isRepeatedGame: !isRepeatedGame });
+            updateDetails({ [EGameDetail.IS_REPEATED_GAME]: !isRepeatedGame });
         }
     };
 
     const _changeText = (itemKey: string, text: string) => {
-        if (EGameDetail.SECOND_GAME === itemKey) {
-            setSecondGameId(text);
-        }
-        if (EGameDetail.NOTES === itemKey) {
-            setNotes(text);
-        }
         updateDetails({ [itemKey]: text });
     };
 
@@ -81,7 +73,7 @@ export default function OstatneDetail({ gameData, updateDetails }: IProps) {
                             itemKey={EGameDetail.SECOND_GAME}
                             placeholder={SECOND_GAME_NUM}
                             onChangeText={_changeText}
-                            value={secondGameId}
+                            value={secondGame}
                         />
                         <Separator />
                         <ItemDetailInput

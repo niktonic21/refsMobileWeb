@@ -1,12 +1,21 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, SectionList, SectionListData } from 'react-native';
-import { RectButton } from 'react-native-gesture-handler';
-import { useSelector } from 'react-redux';
+import {
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity,
+    SectionList,
+    SectionListData
+} from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import get from 'lodash/get';
+import { checkNewData } from '@actions';
 import { createGameSections, filterGameSections } from '../utils/gameUtils';
 import { IItemButton, IGame } from '../utils/types';
 import FilterButtons from '../components/FilterButtons';
 import { FilterModal } from '../components/FilterModal';
+import ScreenContainer from '../components/ScreenContainer';
+import SectionHeader from '../components/SectionHeader';
 
 const styles = StyleSheet.create({
     container: {
@@ -63,24 +72,25 @@ const styles = StyleSheet.create({
     refsContainer: { flex: 2, paddingLeft: 4, flexDirection: 'column' }
 });
 
-const _renderSectionHeader = ({ section }: any) => (
-    <View style={styles.sectionHeader}>
-        <Text style={styles.sectionText}>
-            {section.title} ({section.data.length})
-        </Text>
-    </View>
-);
+const _renderSectionHeader = ({ section }: any) => <SectionHeader section={section} />;
 
 const _renderSeparator = () => <View style={styles.separator} />;
 
-const _keyExtractor = (item: { gameId: string }) => item.gameId;
+const _keyExtractor = (item: { gameId: string; home: string }) => item.gameId;
 
 export default function MatchesScreen({ navigation }) {
+    const dispatch = useDispatch();
     const [modalKey, setModalKey] = React.useState('');
     const games = useSelector(state => get(state, 'games.games', []));
     const filterData = useSelector(state => get(state, 'filter', []));
-    const gameSections: Array<SectionListData<any>> = createGameSections(games);
-    const filteredGameSections: Array<SectionListData<IGame>> = filterGameSections(
+    const season = useSelector(state => get(state, 'auth.profile.season', ''));
+
+    React.useEffect(() => {
+        season && dispatch(checkNewData(''));
+    }, [season]);
+
+    const gameSections = createGameSections(games);
+    const filteredGameSections: SectionListData<IGame>[] = filterGameSections(
         gameSections,
         filterData
     );
@@ -97,38 +107,39 @@ export default function MatchesScreen({ navigation }) {
         const { home, away, gameId, date, day, time, stadium, referees } = item;
 
         const _onPress = () => {
-            navigation.navigate('GameScreen', { gameId: gameId, item: item });
-            console.log('tap', gameId);
+            navigation.navigate('GameScreen', { gameId: gameId });
         };
 
         return (
-            <RectButton key={gameId} style={styles.option} onPress={_onPress}>
-                <View style={styles.matchInfo}>
-                    <Text style={styles.optionText}>{home}</Text>
-                    <Text style={styles.optionText}>{away}</Text>
-                    <Text style={styles.optionText}>
-                        {day} {date}
-                    </Text>
-                    <Text style={styles.optionText}>
-                        {stadium} {time}
-                    </Text>
-                </View>
-                <View style={styles.separatorItem} />
-                <View style={styles.refsContainer}>
-                    {referees
-                        ? referees.map((ref, idx) => (
-                              <Text
-                                  key={idx}
-                                  numberOfLines={1}
-                                  ellipsizeMode="tail"
-                                  style={styles.refText}
-                              >
-                                  {ref.name.split(',', 2)}
-                              </Text>
-                          ))
-                        : null}
-                </View>
-            </RectButton>
+            <ScreenContainer>
+                <TouchableOpacity key={gameId} style={styles.option} onPress={_onPress}>
+                    <View style={styles.matchInfo}>
+                        <Text style={styles.optionText}>{home}</Text>
+                        <Text style={styles.optionText}>{away}</Text>
+                        <Text style={styles.optionText}>
+                            {day} {date}
+                        </Text>
+                        <Text style={styles.optionText}>
+                            {stadium} {time}
+                        </Text>
+                    </View>
+                    <View style={styles.separatorItem} />
+                    <View style={styles.refsContainer}>
+                        {referees
+                            ? referees.map((ref, idx) => (
+                                  <Text
+                                      key={idx}
+                                      numberOfLines={1}
+                                      ellipsizeMode="tail"
+                                      style={styles.refText}
+                                  >
+                                      {ref.name.split(',', 2)}
+                                  </Text>
+                              ))
+                            : null}
+                    </View>
+                </TouchableOpacity>
+            </ScreenContainer>
         );
     };
 
@@ -155,7 +166,7 @@ export default function MatchesScreen({ navigation }) {
                     SectionSeparatorComponent={_renderSeparator}
                 />
             ) : (
-                <Text style={styles.noMatches}>Ziadne zapasy</Text>
+                <Text style={styles.noMatches}>Žiadne zápasy</Text>
             )}
         </View>
     );
