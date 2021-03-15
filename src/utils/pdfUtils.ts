@@ -1,5 +1,6 @@
 import { PDFDocument } from 'pdf-lib';
 import { pdfBase64 } from '@strings';
+import { isIos } from '@layout';
 import fontkit from '@pdf-lib/fontkit';
 import { decode as atob } from 'base-64';
 import { EGameDetail, IGame } from './types';
@@ -73,26 +74,22 @@ export const getFilledPDF = async ({ gameData, gameUserData, mesto, auto, name }
     const ostatne = form.getTextField('Text44');
     const spolu = form.getTextField('Text45');
 
-    const check5 = form.getCheckBox('Začiarkavacie políčko5');
-    check5.enableReadOnly();
+    const check5 = form.getCheckBox('checkBox5');
     gameUserData.playedBefore ? check5.check() : check5.uncheck();
 
-    const check8 = form.getCheckBox('Začiarkavacie políčko8');
-    const check9 = form.getCheckBox('Začiarkavacie políčko9');
-    check8.enableReadOnly();
-    check9.enableReadOnly();
+    const check8 = form.getCheckBox('checkBox8');
+    const check9 = form.getCheckBox('checkBox9');
+
     gameUserData.played ? check8.check() : check9.check();
 
-    const check30 = form.getCheckBox('Začiarkavacie políčko30');
-    const check31 = form.getCheckBox('Začiarkavacie políčko31');
-    check30.enableReadOnly();
-    check31.enableReadOnly();
+    const check30 = form.getCheckBox('checkBox30');
+    const check31 = form.getCheckBox('checkBox31');
+
     gameUserData.isRepeatedGame ? check30.check() : check31.check();
 
-    const check32 = form.getCheckBox('Začiarkavacie políčko32');
-    const check33 = form.getCheckBox('Začiarkavacie políčko33');
-    check32.enableReadOnly();
-    check33.enableReadOnly();
+    const check32 = form.getCheckBox('checkBox32');
+    const check33 = form.getCheckBox('checkBox33');
+
     gameUserData.isSecondGame ? check32.check() : check33.check();
 
     const dataRoad = gameUserData.road?.toString();
@@ -143,6 +140,7 @@ export const getFilledPDF = async ({ gameData, gameUserData, mesto, auto, name }
     spolu.setText(gameUserData.togetherMoney?.toString() || '');
 
     form.updateFieldAppearances(ubuntuFont);
+    !isIos && form.flatten();
 
     return pdfDoc;
 };

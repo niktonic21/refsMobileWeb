@@ -1,18 +1,21 @@
-import React from 'react';
-import { StyleSheet, View, Button } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { Button } from 'react-native-paper';
 import { isIos, isWeb } from '@layout';
+import download from 'downloadjs';
+import { PDFDocument } from 'pdf-lib';
 import { szlhLogo } from '@strings';
 import { WebView } from 'react-native-webview';
 import * as Sharing from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
+//import * as Print from 'expo-print';
 import get from 'lodash/get';
 import { getGameData, EGameDetail, getDateString, getFilledPDF, IGame } from '@utils';
 import { useSelector } from 'react-redux';
+
 import { IGameDetail } from './GameScreen';
 import { BackButtonWeb } from '../components/BackButtonWeb';
-import download from 'downloadjs';
-import { PDFDocument } from 'pdf-lib';
 
 const styles = StyleSheet.create({
     container: {
@@ -383,31 +386,48 @@ const createPdf = async () => {
 
     for (let index = 0; index < dataArray.length; index++) {
         const pdfDoc = await getFilledPDF(dataArray[index]);
-        const [pdfDocPgae] = await finalDoc.copyPages(pdfDoc, [0]);
-        finalDoc.addPage(pdfDocPgae);
+        const [pdfDocPage] = await finalDoc.copyPages(pdfDoc, [0]);
+        finalDoc.addPage(pdfDocPage);
     }
 
     if (isWeb) {
         const pdfBytes = await finalDoc.save();
         download(pdfBytes, `vyuctovanie-${gameId}.pdf`, 'application/pdf');
+        return false;
     } else {
         const pdfBytes = await finalDoc.saveAsBase64();
+
+        // just print
+        // const pdfBytesUri = await finalDoc.saveAsBase64({ dataUri: true });
+        // await Print.printAsync({
+        //     uri: pdfBytesUri
+        // });
         try {
             let filename = `vyuctovanie-${gameId}.pdf`; // or some other way to generate filename
             let filepath = `${FileSystem.documentDirectory}/${filename}`;
             await FileSystem.writeAsStringAsync(filepath, pdfBytes, { encoding: 'base64' });
-            Sharing.shareAsync(filepath, { mimeType: 'application/pdf' });
+            await Sharing.shareAsync(filepath, { mimeType: 'application/pdf' });
+            return false;
         } catch (e) {
             alert(e.message);
+            return false;
         }
     }
 };
 
 export default function PDFScreen({ route }: any) {
+    const [isLoading, setIsLoading] = useState(false);
+
     gameId = get(route, 'params.gameId', '');
     const idList: string[] = gameId.split('-');
     dataArray = [];
     const gamesHTML: string[] = idList.map(id => createGameHTML(id));
+
+    const createPdfTap = async () => {
+        setIsLoading(true);
+        const isStopped = await createPdf();
+        setIsLoading(isStopped);
+    };
 
     const html = `
         <!DOCTYPE html>
@@ -485,7 +505,9 @@ export default function PDFScreen({ route }: any) {
                 >
                     <BackButtonWeb title="Späť" />
                     <View style={styles.button}>
-                        <Button title="Stiahnúť PDF" onPress={createPdf} />
+                        <Button loading={isLoading} onPress={createPdfTap}>
+                            Stiahnúť PDF
+                        </Button>
                     </View>
                     <div
                         style={{ maxWidth: 612 }}
@@ -496,7 +518,9 @@ export default function PDFScreen({ route }: any) {
                 </ScrollView>
             ) : (
                 <View style={styles.container}>
-                    <Button title="Vytlačiť alebo poslať" onPress={createPdf} />
+                    <Button loading={isLoading} onPress={createPdfTap}>
+                        Vytlačiť alebo poslať
+                    </Button>
                     <WebView
                         source={{ html: html }}
                         scalesPageToFit={false}
