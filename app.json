@@ -3,7 +3,7 @@
         "name": "Slovak Hockey Referees",
         "slug": "refsMobileWeb",
         "platforms": ["ios", "android", "web"],
-        "version": "1.0.0",
+        "version": "1.0.1",
         "orientation": "portrait",
         "icon": "./assets/images/icon.png",
         "scheme": "myapp",
@@ -24,7 +24,7 @@
           },
         "android": {
             "package": "com.jobb.refsmobileweb",
-            "versionCode": 3,
+            "versionCode": 4,
             "permissions" : []
         }
     }
