@@ -187,7 +187,9 @@ const createGameHTML = (gameId: string) => {
                 </div>
                 <div style="width: 25%">dňa:
                     <div class="text-dotted">${
-                        gameUserData.fromDay ? getDateString(new Date(gameUserData.fromDay)) : ''
+                        gameUserData.fromCity && gameUserData.fromDay
+                            ? getDateString(new Date(gameUserData.fromDay))
+                            : ''
                     }</div>
                 </div>
                 <div style="width: 15%">o:
@@ -200,7 +202,9 @@ const createGameHTML = (gameId: string) => {
                 </div>
                 <div style="width: 25%">dňa:
                     <div class="text-dotted">${
-                        gameUserData.toDay ? getDateString(new Date(gameUserData.toDay)) : ''
+                        gameUserData.fromCity && gameUserData.toDay
+                            ? getDateString(new Date(gameUserData.toDay))
+                            : ''
                     }</div>
                 </div>
                 <div style="width: 15%">o:

@@ -156,26 +156,26 @@ const containString = (fullString: string, subString: string): boolean => {
 
 const getHGameRate = (num: number, gamePart: string): number => {
     if (num > 0 && num < 500) {
-        if (containString(gamePart, 'finále')) {
-            return 300;
-        }
         if (containString(gamePart, 'semifinále')) {
             return 250;
         }
         if (containString(gamePart, 'štvrťfinále')) {
             return 225;
         }
+        if (containString(gamePart, 'finále')) {
+            return 300;
+        }
         return 200;
     }
     if (num > 500 && num < 1000) {
-        if (containString(gamePart, 'finále')) {
-            return 150;
-        }
         if (containString(gamePart, 'semifinále')) {
             return 130;
         }
         if (containString(gamePart, 'štvrťfinále')) {
             return 115;
+        }
+        if (containString(gamePart, 'finále')) {
+            return 150;
         }
         return 100;
     }

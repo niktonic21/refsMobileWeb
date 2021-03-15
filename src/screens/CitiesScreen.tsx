@@ -66,8 +66,8 @@ export default function CitiesScreen({ route }: IProp) {
             } else {
                 newChoosenCities = choosenCities.concat(item);
             }
-            onSelectedCities(newChoosenCities);
-            useChoosenCities(newChoosenCities);
+            onSelectedCities(newChoosenCities || []);
+            useChoosenCities(newChoosenCities || []);
         };
 
         const checked = includes(choosenCities, item);

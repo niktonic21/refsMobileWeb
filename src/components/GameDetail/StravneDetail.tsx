@@ -103,6 +103,11 @@ export default function StravneDetail({
 
     useEffect(() => {
         setIsMealEnabled(Boolean(fromCity));
+        Boolean(fromCity) &&
+            updateDetails({
+                [EGameDetail.FROM_DAY]: String(fromDay),
+                [EGameDetail.TO_DAY]: String(toDay)
+            });
     }, [fromCity]);
 
     const _toggleSwitch = (itemKey: string) => {
@@ -142,10 +147,10 @@ export default function StravneDetail({
     };
 
     const _changeDateFrom = (date: Date) => {
-        updateDetails({ [EGameDetail.FROM_DAY]: date });
+        updateDetails({ [EGameDetail.FROM_DAY]: String(date) });
     };
     const _changeDateTo = (date: Date) => {
-        updateDetails({ [EGameDetail.TO_DAY]: date });
+        updateDetails({ [EGameDetail.TO_DAY]: String(date) });
     };
 
     const _changeTimeFrom = (time: string) => {

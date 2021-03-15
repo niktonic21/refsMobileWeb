@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
 
 interface IProps {
     onChange: (data: any) => void;
-    date?: Date;
+    date?: Date | string;
     placeholder: string;
 }
 
