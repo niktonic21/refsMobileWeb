@@ -85,7 +85,7 @@ const LoginScreen = ({ navigation }: Props) => {
                 </TouchableOpacity>
             </View>
             <Button mode="contained" onPress={_onLoginPressed}>
-                {loading ? <ActivityIndicator /> : 'Prihlásiť'}
+                {loading ? <ActivityIndicator /> : 'Prihlásenie'}
             </Button>
             {firebaseError ? <Paragraph>{firebaseError}</Paragraph> : null}
         </View>

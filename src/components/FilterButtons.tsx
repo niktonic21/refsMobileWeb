@@ -1,22 +1,30 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Button, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { isWeb } from '@layout';
 import { getFilterButtonLabel } from '../utils/gameUtils';
+import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         maxHeight: 46,
-        paddingHorizontal: 15,
-        paddingVertical: 8,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-around'
+        paddingHorizontal: 8,
+        paddingVertical: 8
     },
     buttonContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignSelf: 'center',
+        width: '100%',
+        maxWidth: 1040
+    },
+    button: {
         backgroundColor: 'white',
         height: 30,
-        maxWidth: '30%',
         flex: 1,
+        marginHorizontal: isWeb ? 8 : 4,
         alignSelf: 'stretch',
         justifyContent: 'center',
         borderWidth: 1,
@@ -27,7 +35,8 @@ const styles = StyleSheet.create({
         fontSize: 15,
         paddingHorizontal: 5,
         textAlign: 'center'
-    }
+    },
+    loginButton: { flex: 1, maxWidth: 120 }
 });
 
 interface IProps {
@@ -44,7 +53,7 @@ const FilterButton = ({ filterKey, onPress }: IProps) => {
     const label = getFilterButtonLabel(filterKey);
 
     return (
-        <TouchableOpacity style={styles.buttonContainer} onPress={_onPress}>
+        <TouchableOpacity style={styles.button} onPress={_onPress}>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.buttonText}>
                 {label}
             </Text>
@@ -53,11 +62,25 @@ const FilterButton = ({ filterKey, onPress }: IProps) => {
 };
 
 export default function FilterButtons({ onPress }) {
+    const navigation = useNavigation();
+    const isLoggedId = useSelector<{ auth: { loggedIn: boolean } }>(state => state.auth.loggedIn);
+
     return (
         <View style={styles.container}>
-            {data.map(({ filterKey }) => (
-                <FilterButton key={filterKey} filterKey={filterKey} onPress={onPress} />
-            ))}
+            <View style={styles.buttonContainer}>
+                {data.map(({ filterKey }) => (
+                    <FilterButton key={filterKey} filterKey={filterKey} onPress={onPress} />
+                ))}
+                {isWeb && !isLoggedId && (
+                    <View style={styles.loginButton}>
+                        <Button
+                            onPress={() => navigation.navigate('UserScreen')}
+                            title="Prihlásenie"
+                            // color="#111"
+                        />
+                    </View>
+                )}
+            </View>
         </View>
     );
 }

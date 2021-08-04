@@ -5,12 +5,16 @@ import { SEASON } from '@strings';
 
 export const seasonsPickerData = [
     {
-        label: '2019/2020',
-        value: '20192020'
+        label: '2021/2022',
+        value: '20212022'
     },
     {
         label: '2020/2021',
         value: '20202021'
+    },
+    {
+        label: '2019/2020',
+        value: '20192020'
     }
 ];
 
@@ -54,7 +58,7 @@ export default function SeasonPicker({ saveSeason, season }: IProps) {
                     zIndex={10}
                     items={seasonsPickerData}
                     defaultValue={seasonsPickerData.find(s => s.value === season)?.value}
-                    dropDownMaxHeight={95}
+                    dropDownMaxHeight={85}
                     containerStyle={styles.containerSize}
                     itemStyle={styles.itemStyle}
                     onChangeItem={(item: IPicker) => saveSeason(item.value)}

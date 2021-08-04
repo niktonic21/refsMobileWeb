@@ -1,6 +1,16 @@
 export type RootStackParamList = {
     Root: undefined;
+    LoggedOut: undefined;
     NotFound: undefined;
+};
+
+export type LoggedOutStackParamList = {
+    MatchesScreen: undefined;
+    GameScreen: {
+        gameId: string;
+    };
+    UserScreen: undefined;
+    ForgotPasswordScreen: undefined;
 };
 
 export type BottomTabParamList = {

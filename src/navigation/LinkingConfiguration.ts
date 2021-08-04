@@ -4,6 +4,21 @@ export default {
     prefixes: [Linking.makeUrl('/')],
     config: {
         screens: {
+            LoggedOut: {
+                path: 'loggedOut',
+                screens: {
+                    MatchesScreen: {
+                        name: 'MatchesScreen',
+                        path: '/'
+                    },
+                    GameScreen: {
+                        name: 'GameScreen',
+                        path: 'game/:gameId'
+                    },
+                    UserScreen: 'user',
+                    ForgotPasswordScreen: 'password'
+                }
+            },
             Root: {
                 screens: {
                     Zápasy: {
