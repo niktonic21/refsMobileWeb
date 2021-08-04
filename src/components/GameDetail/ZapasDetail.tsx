@@ -133,6 +133,7 @@ export default function ZapasDetail({
                         <Separator />
                     </>
                 ) : null}
+                <Separator />
                 {isBilling ? (
                     <RefereeDownPicker saveRefsType={_saveRefsType} refsWithType={refsWithType} />
                 ) : (
