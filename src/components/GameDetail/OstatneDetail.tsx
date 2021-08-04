@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Card } from '../Card';
-import { EGameDetail, IGame } from '@utils';
+import { EGameDetail } from '@utils';
 import { OTHER, ANOTHER_GAME, SECOND_GAME_NUM, GAME_REPETED, NOTE } from '@strings';
 import ItemDetailInput from './ItemDetailInput';
 import ItemDetailSwitch from './ItemDetailSwitch';
@@ -9,7 +9,6 @@ import Separator from './Separator';
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         paddingHorizontal: 15,
         marginBottom: 20
     },

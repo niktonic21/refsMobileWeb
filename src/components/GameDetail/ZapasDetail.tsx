@@ -130,7 +130,6 @@ export default function ZapasDetail({
                             isEnabled={played}
                             toggleSwitch={_toggleSwitch}
                         />
-                        <Separator />
                     </>
                 ) : null}
                 <Separator />
