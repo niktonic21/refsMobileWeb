@@ -130,9 +130,9 @@ export default function ZapasDetail({
                             isEnabled={played}
                             toggleSwitch={_toggleSwitch}
                         />
-                        <Separator />
                     </>
                 ) : null}
+                <Separator />
                 {isBilling ? (
                     <RefereeDownPicker saveRefsType={_saveRefsType} refsWithType={refsWithType} />
                 ) : (

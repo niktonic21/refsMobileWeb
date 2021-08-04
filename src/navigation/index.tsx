@@ -1,12 +1,18 @@
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
-import { ColorSchemeName } from 'react-native';
+import { Button, ColorSchemeName, View } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import NotFoundScreen from '../screens/NotFoundScreen';
-import { RootStackParamList } from '../../types';
+import { RootStackParamList, LoggedOutStackParamList } from '../../types';
 import TabNavigator from './TabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
+import MatchesScreen from '../screens/MatchesScreen';
+import { isWeb } from '@layout';
+import UserScreen from '../screens/UserScreen';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+import GameScreen from '../screens/GameScreen';
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -26,10 +32,57 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+    const isLoggedId = useSelector<{ auth: { loggedIn: boolean } }>(state => state.auth.loggedIn);
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Root" component={TabNavigator} />
+            {!isLoggedId ? (
+                <Stack.Screen name="LoggedOut" component={LoggedOutNavigator} />
+            ) : (
+                <Stack.Screen name="Root" component={TabNavigator} />
+            )}
             <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
         </Stack.Navigator>
+    );
+}
+
+const headerMode = isWeb ? 'none' : 'screen';
+
+const LoggedOut = createStackNavigator<LoggedOutStackParamList>();
+
+function LoggedOutNavigator() {
+    return (
+        <LoggedOut.Navigator headerMode={headerMode}>
+            <LoggedOut.Screen
+                name="MatchesScreen"
+                component={MatchesScreen}
+                options={({ navigation }) => ({
+                    headerTitle: 'Delegačné listy',
+                    headerRight: () => (
+                        <View style={{ marginRight: 16 }}>
+                            <Button
+                                onPress={() => navigation.navigate('UserScreen')}
+                                title="Prihlásenie"
+                                // color="#111"
+                            />
+                        </View>
+                    )
+                })}
+            />
+            <LoggedOut.Screen
+                name="GameScreen"
+                component={GameScreen}
+                options={{ headerTitle: 'Datial zápasu' }}
+            />
+            <LoggedOut.Screen
+                name="UserScreen"
+                component={UserScreen}
+                options={{ headerTitle: '' }}
+            />
+            <LoggedOut.Screen
+                name="ForgotPasswordScreen"
+                component={ForgotPasswordScreen}
+                options={{ headerTitle: '' }}
+            />
+        </LoggedOut.Navigator>
     );
 }

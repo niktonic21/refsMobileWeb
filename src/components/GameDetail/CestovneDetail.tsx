@@ -13,7 +13,6 @@ import { Card } from '../Card';
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         paddingHorizontal: 15,
         marginBottom: 20
     },
