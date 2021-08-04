@@ -18,7 +18,7 @@ const INITIAL_STATE = {
     loading: false,
     loggedIn: null,
     profile: {
-        season: '20202021',
+        season: '20212022',
         name: '',
         mesto: '',
         auto: '',
