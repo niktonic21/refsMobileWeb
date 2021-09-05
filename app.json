@@ -19,7 +19,7 @@
         "assetBundlePatterns": ["**/*"],
         "ios": {
             "bundleIdentifier": "com.jobb.refsmobileweb",
-            "buildNumber": "1.0.0",
+            "buildNumber": "2",
             "supportsTablet": true
           },
         "android": {
