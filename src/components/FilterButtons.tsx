@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { Button, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { isWeb } from '@layout';
 import { getFilterButtonLabel } from '../utils/gameUtils';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import { Ionicons } from '@expo/vector-icons';
 
 const styles = StyleSheet.create({
     container: {
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
         textAlign: 'center'
     },
-    loginButton: { flex: 1, maxWidth: 120 }
+    loginButton: { width: 80, alignItems: 'center', maxWidth: 120 }
 });
 
 interface IProps {
@@ -72,13 +73,12 @@ export default function FilterButtons({ onPress }) {
                     <FilterButton key={filterKey} filterKey={filterKey} onPress={onPress} />
                 ))}
                 {isWeb && !isLoggedId && (
-                    <View style={styles.loginButton}>
-                        <Button
-                            onPress={() => navigation.navigate('UserScreen')}
-                            title="Prihlásenie"
-                            // color="#111"
-                        />
-                    </View>
+                    <TouchableOpacity
+                        style={styles.loginButton}
+                        onPress={() => navigation.navigate('UserScreen')}
+                    >
+                        <Ionicons name="md-person" color={'black'} size={26} />
+                    </TouchableOpacity>
                 )}
             </View>
         </View>

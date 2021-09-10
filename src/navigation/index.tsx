@@ -1,7 +1,8 @@
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Ionicons } from '@expo/vector-icons';
 import * as React from 'react';
-import { Button, ColorSchemeName, View } from 'react-native';
+import { TouchableOpacity, ColorSchemeName } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import NotFoundScreen from '../screens/NotFoundScreen';
@@ -57,14 +58,17 @@ function LoggedOutNavigator() {
                 component={MatchesScreen}
                 options={({ navigation }) => ({
                     headerTitle: 'Delegačné listy',
-                    headerRight: () => (
-                        <View style={{ marginRight: 16 }}>
-                            <Button
-                                onPress={() => navigation.navigate('UserScreen')}
-                                title="Prihlásenie"
-                                // color="#111"
-                            />
-                        </View>
+                    headerRight: ({ tintColor }) => (
+                        <TouchableOpacity
+                            style={{
+                                width: 40,
+                                alignItems: 'center',
+                                marginRight: 8
+                            }}
+                            onPress={() => navigation.navigate('UserScreen')}
+                        >
+                            <Ionicons name="md-person" color={tintColor} size={26} />
+                        </TouchableOpacity>
                     )
                 })}
             />

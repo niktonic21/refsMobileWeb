@@ -52,6 +52,11 @@ export default {
                             CitiesScreen: 'cities'
                         }
                     },
+                    Štatistiky: {
+                        screens: {
+                            StatsScreen: 'stats'
+                        }
+                    },
                     Profil: {
                         screens: {
                             UserScreen: 'user',

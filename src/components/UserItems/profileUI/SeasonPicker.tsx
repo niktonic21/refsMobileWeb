@@ -19,7 +19,10 @@ export const seasonsPickerData = [
 ];
 
 const styles = StyleSheet.create({
-    container: { paddingTop: 18, paddingBottom: 58, alignItems: 'center' },
+    container: {
+        paddingTop: 18,
+        alignItems: 'center'
+    },
     placeholderText: {
         color: '#111',
         fontSize: 16,
@@ -27,11 +30,8 @@ const styles = StyleSheet.create({
     },
     labelText: { paddingLeft: 10, fontSize: 18 },
     dropDownWrapper: {
-        flexDirection: 'row',
-        marginVertical: 5,
-        alignItems: 'center',
-        zIndex: 10,
-        elevation: 10
+        height: 105,
+        flexDirection: 'row'
     },
     containerSize: { height: 40, width: 160 },
     itemStyle: { justifyContent: 'flex-start' }
@@ -58,7 +58,7 @@ export default function SeasonPicker({ saveSeason, season }: IProps) {
                     zIndex={10}
                     items={seasonsPickerData}
                     defaultValue={seasonsPickerData.find(s => s.value === season)?.value}
-                    dropDownMaxHeight={85}
+                    dropDownMaxHeight={65}
                     containerStyle={styles.containerSize}
                     itemStyle={styles.itemStyle}
                     onChangeItem={(item: IPicker) => saveSeason(item.value)}

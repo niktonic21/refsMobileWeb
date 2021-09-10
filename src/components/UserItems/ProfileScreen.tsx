@@ -1,5 +1,5 @@
 import React, { memo, useState, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { Linking, StyleSheet } from 'react-native';
 import * as firebase from 'firebase';
 // import Logo from './profileUI/Logo';
 import Button from './profileUI/Button';
@@ -8,7 +8,17 @@ import SeasonPicker from './profileUI/SeasonPicker';
 import { useSelector, useDispatch } from 'react-redux';
 import { logOut, saveProfileData, updateProfileData } from '@actions';
 import { emailValidator } from '@utils';
-import { SAVE_CHANGES, LOG_OUT, CITY, CAR_ID, NAME } from '@strings';
+import {
+    SAVE_CHANGES,
+    LOG_OUT,
+    CITY,
+    CAR_ID,
+    NAME,
+    SADZOBNIK,
+    KILOMETROVNIK,
+    SADZOBNIK_URL,
+    KILOMETROVNIK_URL
+} from '@strings';
 import { ScrollView } from 'react-native-gesture-handler';
 import alert from '../../utils/alert';
 
@@ -20,15 +30,21 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         alignItems: 'center'
+    },
+    textButtons: {
+        marginVertical: 0
     }
 });
 
 const ProfileScreen = () => {
     const dispatch = useDispatch();
     const { user: userAuth } = useSelector(state => state.auth.user);
-    const { mesto: mestoProp, auto: autoProp, season: seasonProp, name: nameProp } = useSelector(
-        state => state.auth.profile
-    );
+    const {
+        mesto: mestoProp,
+        auto: autoProp,
+        season: seasonProp,
+        name: nameProp
+    } = useSelector(state => state.auth.profile);
     const { email: emailProp, uid: userId } = userAuth;
 
     const [name, setName] = useState(nameProp);
@@ -85,6 +101,22 @@ const ProfileScreen = () => {
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+            <Button
+                mode="text"
+                style={styles.textButtons}
+                labelStyle={styles.textButtons}
+                onPress={() => Linking.openURL(KILOMETROVNIK_URL)}
+            >
+                {KILOMETROVNIK}
+            </Button>
+            <Button
+                mode="text"
+                style={styles.textButtons}
+                labelStyle={styles.textButtons}
+                onPress={() => Linking.openURL(SADZOBNIK_URL)}
+            >
+                {SADZOBNIK}
+            </Button>
             {/* <Logo /> */}
             <SeasonPicker season={season} saveSeason={text => text && setSeason(text)} />
             <TextInput label={NAME} onChangeText={text => setName(text)} value={name || nameProp} />

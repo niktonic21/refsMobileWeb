@@ -93,15 +93,9 @@ const _keyExtractor = (item: { gameId: string }) => item.gameId;
 const _renderEmptyListItem = () => <Text style={styles.noMatches}>Žiadne zápasy</Text>;
 
 export default function BillingScreen({ navigation }) {
-    const isLoggedId = useSelector<{ auth: { loggedIn: boolean } }>(state => state.auth.loggedIn);
     const refId: string = useSelector(state => get(state, 'auth.profile.refID', ''));
     const games = useSelector(state => get(state, 'games.games', []));
-
     const billingSections: Array<SectionListData<any>> = createBillingSections(games, refId);
-
-    const _goToLogin = () => {
-        navigation.navigate('Profil');
-    };
 
     const _onPDFPress = (data: any) => {
         const idList = data.map(({ gameId }) => gameId);
@@ -141,26 +135,18 @@ export default function BillingScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            {!isLoggedId ? (
-                <View style={styles.loginContainer}>
-                    <Text onPress={_goToLogin} style={styles.loginText}>
-                        Na vytváranie vyučtovaní musíš byť prihláseny.
-                    </Text>
-                </View>
-            ) : (
-                <SectionList
-                    style={styles.container}
-                    contentContainerStyle={styles.contentContainer}
-                    sections={billingSections}
-                    keyExtractor={_keyExtractor}
-                    ListEmptyComponent={_renderEmptyListItem}
-                    stickySectionHeadersEnabled={true}
-                    renderItem={_renderItem}
-                    renderSectionHeader={_renderSectionHeader}
-                    ItemSeparatorComponent={_renderSeparator}
-                    SectionSeparatorComponent={_renderSeparator}
-                />
-            )}
+            <SectionList
+                style={styles.container}
+                contentContainerStyle={styles.contentContainer}
+                sections={billingSections}
+                keyExtractor={_keyExtractor}
+                ListEmptyComponent={_renderEmptyListItem}
+                stickySectionHeadersEnabled={true}
+                renderItem={_renderItem}
+                renderSectionHeader={_renderSectionHeader}
+                ItemSeparatorComponent={_renderSeparator}
+                SectionSeparatorComponent={_renderSeparator}
+            />
         </View>
     );
 }

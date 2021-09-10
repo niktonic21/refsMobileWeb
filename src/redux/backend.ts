@@ -2,8 +2,6 @@
 const BACKEND_URL = 'https://jobb.sk/seasons/';
 
 export const fetchSeasonGames = async (season: string = '20212022') => {
-    console.log('aaaa_season', season);
-
     const res = await fetch(`${BACKEND_URL}${season}.json`);
     return res.json();
 };
