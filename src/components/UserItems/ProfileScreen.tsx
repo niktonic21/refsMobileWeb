@@ -8,7 +8,17 @@ import SeasonPicker from './profileUI/SeasonPicker';
 import { useSelector, useDispatch } from 'react-redux';
 import { logOut, saveProfileData, updateProfileData } from '@actions';
 import { emailValidator } from '@utils';
-import { SAVE_CHANGES, LOG_OUT, CITY, CAR_ID, NAME } from '@strings';
+import {
+    SAVE_CHANGES,
+    LOG_OUT,
+    CITY,
+    CAR_ID,
+    NAME,
+    SADZOBNIK,
+    KILOMETROVNIK,
+    SADZOBNIK_URL,
+    KILOMETROVNIK_URL
+} from '@strings';
 import { ScrollView } from 'react-native-gesture-handler';
 import alert from '../../utils/alert';
 
@@ -20,6 +30,9 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         alignItems: 'center'
+    },
+    textButtons: {
+        marginVertical: 0
     }
 });
 
@@ -90,27 +103,19 @@ const ProfileScreen = () => {
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <Button
                 mode="text"
-                style={{ marginVertical: 0 }}
-                labelStyle={{ marginVertical: 0 }}
-                onPress={() =>
-                    Linking.openURL(
-                        'https://www.hockeyslovakia.sk/userfiles/file/Ekonomick%C3%A9%20oddelenie/kilometrovnik%2011_11_2019%20aktualizacia.pdf'
-                    )
-                }
+                style={styles.textButtons}
+                labelStyle={styles.textButtons}
+                onPress={() => Linking.openURL(KILOMETROVNIK_URL)}
             >
-                Kilometrovník
+                {KILOMETROVNIK}
             </Button>
             <Button
                 mode="text"
-                style={{ marginVertical: 0 }}
-                labelStyle={{ marginVertical: 0 }}
-                onPress={() =>
-                    Linking.openURL(
-                        'https://www.hockeyslovakia.sk/userfiles/file/Sadzobn%C3%ADk%20odmien%20rozhodcov%2C%20in%C5%A1truktorov%20rozhodcov%20a%20funkcion%C3%A1rov%20mimo%20%C4%BEadu.pdf'
-                    )
-                }
+                style={styles.textButtons}
+                labelStyle={styles.textButtons}
+                onPress={() => Linking.openURL(SADZOBNIK_URL)}
             >
-                Sadzobník odmien
+                {SADZOBNIK}
             </Button>
             {/* <Logo /> */}
             <SeasonPicker season={season} saveSeason={text => text && setSeason(text)} />
