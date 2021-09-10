@@ -552,6 +552,7 @@ const sortByCurrentDate = (currentDayInMonth: number, day1: string, day2: string
 };
 
 const filterGamesListByRozhodca = (games: any, rozhodcaId: string) => {
+    if (rozhodcaId === '') return games;
     const filteredGames = filter(
         games,
         ({ referees }): boolean => !referees.every(({ id }) => id != rozhodcaId)

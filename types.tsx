@@ -48,3 +48,7 @@ export type UserParamList = {
     UserScreen: undefined;
     ForgotPasswordScreen: undefined;
 };
+
+export type StatsParamList = {
+    StatsScreen: undefined;
+};

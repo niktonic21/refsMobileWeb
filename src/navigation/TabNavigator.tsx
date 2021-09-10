@@ -17,7 +17,14 @@ import UserScreen from '../screens/UserScreen';
 import CitiesScreen from '../screens/CitiesScreen';
 import GameRefListScreen from '../screens/GameRefListScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
-import { BottomTabParamList, BillingParamList, MatchesParamList, UserParamList } from '../../types';
+import StatsScreen from '../screens/StatsScreen';
+import {
+    BottomTabParamList,
+    BillingParamList,
+    MatchesParamList,
+    UserParamList,
+    StatsParamList
+} from '../../types';
 import { checkNewData } from '../redux/actions';
 
 const Tab = isWeb
@@ -52,6 +59,13 @@ export default function TabNavigator() {
                 component={HomeNavigator}
                 options={{
                     tabBarIcon: ({ color }) => <TabBarIcon name="ios-wallet" color={color} />
+                }}
+            />
+            <Tab.Screen
+                name="Štatistiky"
+                component={StatsNavigator}
+                options={{
+                    tabBarIcon: ({ color }) => <TabBarIcon name="ios-stats" color={color} />
                 }}
             />
             <Tab.Screen
@@ -142,5 +156,19 @@ function UserNavigator() {
                 options={{ headerTitle: '' }}
             />
         </UserStack.Navigator>
+    );
+}
+
+const StatsStack = createStackNavigator<StatsParamList>();
+
+function StatsNavigator() {
+    return (
+        <StatsStack.Navigator headerMode={headerMode}>
+            <StatsStack.Screen
+                name="StatsScreen"
+                component={StatsScreen}
+                options={{ headerTitle: 'Štatistiky' }}
+            />
+        </StatsStack.Navigator>
     );
 }

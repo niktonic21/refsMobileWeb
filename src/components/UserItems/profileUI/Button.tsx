@@ -4,10 +4,10 @@ import { Button as PaperButton } from 'react-native-paper';
 
 type Props = React.ComponentProps<typeof PaperButton>;
 
-const Button = ({ mode, style, children, ...props }: Props) => (
+const Button = ({ mode, style, labelStyle, children, ...props }: Props) => (
     <PaperButton
         style={[styles.button, mode === 'outlined' && { backgroundColor: 'white' }, style]}
-        labelStyle={styles.text}
+        labelStyle={[styles.text, labelStyle]}
         mode={mode}
         {...props}
     >

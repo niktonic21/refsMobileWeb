@@ -1,5 +1,5 @@
 import React, { memo, useState, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { Linking, StyleSheet } from 'react-native';
 import * as firebase from 'firebase';
 // import Logo from './profileUI/Logo';
 import Button from './profileUI/Button';
@@ -26,9 +26,12 @@ const styles = StyleSheet.create({
 const ProfileScreen = () => {
     const dispatch = useDispatch();
     const { user: userAuth } = useSelector(state => state.auth.user);
-    const { mesto: mestoProp, auto: autoProp, season: seasonProp, name: nameProp } = useSelector(
-        state => state.auth.profile
-    );
+    const {
+        mesto: mestoProp,
+        auto: autoProp,
+        season: seasonProp,
+        name: nameProp
+    } = useSelector(state => state.auth.profile);
     const { email: emailProp, uid: userId } = userAuth;
 
     const [name, setName] = useState(nameProp);
@@ -85,6 +88,30 @@ const ProfileScreen = () => {
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+            <Button
+                mode="text"
+                style={{ marginVertical: 0 }}
+                labelStyle={{ marginVertical: 0 }}
+                onPress={() =>
+                    Linking.openURL(
+                        'https://www.hockeyslovakia.sk/userfiles/file/Ekonomick%C3%A9%20oddelenie/kilometrovnik%2011_11_2019%20aktualizacia.pdf'
+                    )
+                }
+            >
+                Kilometrovník
+            </Button>
+            <Button
+                mode="text"
+                style={{ marginVertical: 0 }}
+                labelStyle={{ marginVertical: 0 }}
+                onPress={() =>
+                    Linking.openURL(
+                        'https://www.hockeyslovakia.sk/userfiles/file/Sadzobn%C3%ADk%20odmien%20rozhodcov%2C%20in%C5%A1truktorov%20rozhodcov%20a%20funkcion%C3%A1rov%20mimo%20%C4%BEadu.pdf'
+                    )
+                }
+            >
+                Sadzobník odmien
+            </Button>
             {/* <Logo /> */}
             <SeasonPicker season={season} saveSeason={text => text && setSeason(text)} />
             <TextInput label={NAME} onChangeText={text => setName(text)} value={name || nameProp} />
