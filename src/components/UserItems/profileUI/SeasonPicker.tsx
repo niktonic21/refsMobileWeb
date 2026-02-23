@@ -5,6 +5,10 @@ import { SEASON } from '@strings';
 
 export const seasonsPickerData = [
     {
+        label: '2022/2023',
+        value: '20222023'
+    },
+    {
         label: '2021/2022',
         value: '20212022'
     },

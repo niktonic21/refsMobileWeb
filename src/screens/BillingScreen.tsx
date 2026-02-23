@@ -121,7 +121,9 @@ export default function BillingScreen({ navigation }) {
             <ScreenContainer>
                 <View style={styles.option} key={gameId}>
                     <TouchableOpacity style={styles.matchInfo} onPress={_onPress}>
-                        <Text style={styles.optionText}>{ligue}</Text>
+                        <Text style={styles.optionText}>
+                            {ligue} ({gameId})
+                        </Text>
                         <Text style={styles.optionText}>{home}</Text>
                         <Text style={styles.optionText}>{away}</Text>
                         <Text style={styles.optionText}>
