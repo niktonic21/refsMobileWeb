@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
 const LoginScreen = ({ navigation }: Props) => {
     const [email, setEmail] = useState({ value: '', error: '' });
     const [password, setPassword] = useState({ value: '', error: '' });
-    const dispatch = useDispatch();
-    const { error: firebaseError, loading } = useSelector(state => state.auth);
+    const dispatch = useDispatch<any>();
+    const { error: firebaseError, loading } = useSelector((state: any) => state.auth);
 
     const _onLoginPressed = () => {
         const emailError = emailValidator(email.value);

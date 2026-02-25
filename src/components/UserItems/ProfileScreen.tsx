@@ -1,6 +1,7 @@
 import React, { memo, useState, useEffect } from 'react';
 import { Linking, StyleSheet } from 'react-native';
-import * as firebase from 'firebase';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 // import Logo from './profileUI/Logo';
 import Button from './profileUI/Button';
 import TextInput from './profileUI/TextInput';
@@ -37,14 +38,14 @@ const styles = StyleSheet.create({
 });
 
 const ProfileScreen = () => {
-    const dispatch = useDispatch();
-    const { user: userAuth } = useSelector(state => state.auth.user);
+    const dispatch = useDispatch<any>();
+    const { user: userAuth } = useSelector((state: any) => state.auth.user);
     const {
         mesto: mestoProp,
         auto: autoProp,
         season: seasonProp,
         name: nameProp
-    } = useSelector(state => state.auth.profile);
+    } = useSelector((state: any) => state.auth.profile);
     const { email: emailProp, uid: userId } = userAuth;
 
     const [name, setName] = useState(nameProp);
@@ -74,8 +75,9 @@ const ProfileScreen = () => {
             .collection('referees')
             .doc(userId)
             .onSnapshot(doc => {
-                if (doc.exists) {
-                    dispatch(updateProfileData(doc.data()));
+                const profileData = doc.data();
+                if (doc.exists && profileData) {
+                    dispatch(updateProfileData(profileData));
                 } else {
                     console.warn('Profile: no data to be stored');
                 }

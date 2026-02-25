@@ -1,6 +1,7 @@
-import 'expo-firestore-offline-persistence';
-import * as firebase from 'firebase';
-import 'firebase/firestore';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
+import 'firebase/compat/auth';
+import { Platform } from 'react-native';
 import alert from '../utils/alert';
 
 const firebaseConfig = {
@@ -15,8 +16,13 @@ const firebaseConfig = {
 
 export const initFirebase = () => {
     if (!firebase.apps.length) {
+        if (Platform.OS === 'web') {
+            require('expo-firestore-offline-persistence');
+        }
+
         firebase.initializeApp(firebaseConfig);
-        firebase.firestore().enablePersistence();
+
+        firebase.firestore();
     }
 };
 

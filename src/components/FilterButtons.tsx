@@ -63,7 +63,7 @@ const FilterButton = ({ filterKey, onPress }: IProps) => {
 };
 
 export default function FilterButtons({ onPress }) {
-    const navigation = useNavigation();
+    const navigation = useNavigation<any>();
     const isLoggedId = useSelector<{ auth: { loggedIn: boolean } }>(state => state.auth.loggedIn);
 
     return (
@@ -77,7 +77,7 @@ export default function FilterButtons({ onPress }) {
                         style={styles.loginButton}
                         onPress={() => navigation.navigate('UserScreen')}
                     >
-                        <Ionicons name="md-person" color={'black'} size={26} />
+                        <Ionicons name="person" color={'black'} size={26} />
                     </TouchableOpacity>
                 )}
             </View>

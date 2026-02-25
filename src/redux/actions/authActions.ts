@@ -1,4 +1,6 @@
-import * as firebase from 'firebase';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
+import 'firebase/compat/auth';
 
 export const EMAIL_CHANGED = 'auth_email_changed';
 export const PASSWORD_CHANGED = 'auth_password_changed';
@@ -53,23 +55,43 @@ export const downloadProfileData = (dispatch: any, userId: string) => {
     // });
 };
 
-const loginUserFail = (dispatch: any, error: string) => {
+const loginUserFail = (dispatch: any, error: { code: string; message?: string }) => {
     dispatch({ type: LOGIN_USER_FAIL, payload: error });
 };
 
-export const loginUser = ({ email, password }: { email: string; password: string }) => (
-    dispatch: any
-) => {
-    dispatch({ type: LOGIN_USER });
-    firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password)
-        .then(user => loginUserSuccess(dispatch, user))
-        .catch(error => {
-            console.warn('Login error: ', error);
-            loginUserFail(dispatch, error);
-        });
+const shouldRetry = (error: { code?: string }, retryCount: number) => {
+    return error?.code === 'auth/network-request-failed' && retryCount < 1;
 };
+
+export const loginUser =
+    ({ email, password }: { email: string; password: string }) =>
+    (dispatch: any) => {
+        const normalizedEmail = email.trim().toLowerCase();
+        const normalizedPassword = password.trim();
+
+        const attemptLogin = (retryCount = 0) => {
+            firebase
+                .auth()
+                .signInWithEmailAndPassword(normalizedEmail, normalizedPassword)
+                .then(user => loginUserSuccess(dispatch, user))
+                .catch(error => {
+                    console.warn('Login error: ', error);
+
+                    if (shouldRetry(error, retryCount)) {
+                        setTimeout(() => attemptLogin(retryCount + 1), 1200);
+                        return;
+                    }
+
+                    loginUserFail(dispatch, {
+                        code: error?.code || 'auth/internal-error',
+                        message: error?.message || 'Prihlásenie neúspešné.'
+                    });
+                });
+        };
+
+        dispatch({ type: LOGIN_USER });
+        attemptLogin();
+    };
 
 export const logOut = () => {
     firebase.auth().signOut();

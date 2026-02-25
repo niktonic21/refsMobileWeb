@@ -29,7 +29,7 @@ const INITIAL_STATE = {
 
 const WRONG_EMAIL = 'Zadaný nesprávny formát emailu.';
 const WRONG_PASSWORD = 'Zadaný nesprávny email alebo heslo.';
-const NO_INTERNET = 'Zadané nesprávne heslo.';
+const NO_INTERNET = 'Problém so sieťou. Skontrolujte internetové pripojenie a skúste znova.';
 const NO_LOGIN = 'Prihlásenie neúspešné.';
 
 export default (state = INITIAL_STATE, action) => {

@@ -36,7 +36,7 @@ export const RadioButton: React.FC<IRadioButton> = ({ label, checked, onPress })
         <View style={styles.container}>
             <Text style={styles.optionText}>{label}</Text>
             <View style={styles.optionIconContainer}>
-                {checked && <Ionicons name={'ios-checkmark'} size={45} color="grey" />}
+                {checked && <Ionicons name={'checkmark'} size={45} color="grey" />}
             </View>
         </View>
     </TouchableOpacity>

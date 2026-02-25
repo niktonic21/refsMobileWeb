@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
+import './src/utils/tslibPatch';
 import 'intl';
-import { Platform } from 'react-native';
+import { BackHandler, Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -12,7 +13,9 @@ import useCachedResources from './src/utils/hooks/useCachedResources';
 import useColorScheme from './src/utils/hooks/useColorScheme';
 import Navigation from './src/navigation';
 
-console.ignoredYellowBox = ['Setting a timer'];
+if (typeof (BackHandler as any).removeEventListener !== 'function') {
+    (BackHandler as any).removeEventListener = () => {};
+}
 
 if (Platform.OS === 'android') {
     // See https://github.com/expo/expo/issues/6536 for this issue.

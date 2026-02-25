@@ -8,6 +8,8 @@ module.exports = function (api) {
                 'module-resolver',
                 {
                     alias: {
+                        '^tslib$': './src/utils/tslibCompat.js',
+                        '^use-latest-callback$': './src/utils/useLatestCallbackCompat.js',
                         '@Modal': './src/components/Modal',
                         '@gameUtils': './src/utils/gameUtils.ts',
                         '@profileUtils': './src/utils/profileUtils.ts',
@@ -18,7 +20,8 @@ module.exports = function (api) {
                         '@actions': './src/redux/actions'
                     }
                 }
-            ]
+            ],
+            'react-native-reanimated/plugin'
         ]
     };
 };

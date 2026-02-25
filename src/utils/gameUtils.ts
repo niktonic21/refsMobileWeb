@@ -6,7 +6,6 @@ import filter from 'lodash/filter';
 import find from 'lodash/find';
 import includes from 'lodash/includes';
 import store from '../redux/store';
-import { filterMonths } from '../redux/actions';
 import kilometrovnik from '../../assets/kilometrovnik.json';
 
 const numberToLigue = (num: number): string => {
@@ -393,19 +392,12 @@ export const parseDate = (date: string) => {
 export const createGameSections = (games: object[]): Array<SectionListData<IItemButton>> => {
     const categoryMap: any = {};
     const sections: any = [];
-    const months: any = [];
 
     if (!games.length) {
         return [];
     }
 
     games.forEach((game: IGame): void => {
-        const dateNum = game.date ? parseInt(parseDate(game.date).month, 10) : 0;
-        const month = numberToMonth2(dateNum);
-
-        if (!months.includes(month)) {
-            months.push(month);
-        }
         const gameID = game.gameId ? parseInt(game.gameId, 10) : 0;
 
         const category: string = numberToLigue(gameID);
@@ -425,15 +417,25 @@ export const createGameSections = (games: object[]): Array<SectionListData<IItem
         return section;
     });
 
-    if (months.length) {
-        const monthsResult = months.map((month: string) => ({
-            month: month,
-            value: monthToNumber(month)
-        }));
-        store.reduxStore.dispatch(filterMonths(monthsResult));
-    }
-
     return result;
+};
+
+export const createGameMonths = (games: object[]): Array<{ month: string; value: number }> => {
+    const months: string[] = [];
+
+    games.forEach((game: IGame): void => {
+        const dateNum = game.date ? parseInt(parseDate(game.date).month, 10) : 0;
+        const month = numberToMonth2(dateNum);
+
+        if (month && !months.includes(month)) {
+            months.push(month);
+        }
+    });
+
+    return months.map((month: string) => ({
+        month,
+        value: monthToNumber(month)
+    }));
 };
 
 const filterGamesByRozhodca = (gamesSections: any, rozhodcaId: string) => {
@@ -652,8 +654,8 @@ const slovakSort = (s1: string, s2: string): number => {
     return charsOrder[s1[idx]] > charsOrder[s2[idx]]
         ? 1
         : charsOrder[s1[idx]] < charsOrder[s2[idx]]
-        ? -1
-        : 0;
+          ? -1
+          : 0;
 };
 
 export const getDateString = (date?: Date) => {

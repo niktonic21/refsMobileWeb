@@ -20,7 +20,7 @@ import GameScreen from '../screens/GameScreen';
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
     return (
         <NavigationContainer
-            linking={LinkingConfiguration}
+            linking={LinkingConfiguration as any}
             theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
         >
             <RootNavigator />
@@ -46,13 +46,11 @@ function RootNavigator() {
     );
 }
 
-const headerMode = isWeb ? 'none' : 'screen';
-
 const LoggedOut = createStackNavigator<LoggedOutStackParamList>();
 
 function LoggedOutNavigator() {
     return (
-        <LoggedOut.Navigator headerMode={headerMode}>
+        <LoggedOut.Navigator screenOptions={{ headerShown: !isWeb }}>
             <LoggedOut.Screen
                 name="MatchesScreen"
                 component={MatchesScreen}
@@ -67,7 +65,7 @@ function LoggedOutNavigator() {
                             }}
                             onPress={() => navigation.navigate('UserScreen')}
                         >
-                            <Ionicons name="md-person" color={tintColor} size={26} />
+                            <Ionicons name="person" color={tintColor} size={26} />
                         </TouchableOpacity>
                     )
                 })}

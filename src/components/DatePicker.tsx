@@ -44,6 +44,7 @@ export default function DatePicker({ onChange, placeholder, date }: IProps) {
                 mode="single"
                 visible={visible}
                 onDismiss={onDismiss}
+                locale="sk"
                 date={correctDate || new Date()}
                 onConfirm={_onChange}
                 saveLabel="Ulož" // optional

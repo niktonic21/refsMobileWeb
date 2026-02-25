@@ -44,7 +44,7 @@ export default function ItemDetailIcon({ value = '', placeholder, onPress }: IPr
                 <Text style={styles.labelText}>{value}</Text>
             </View>
             <View style={styles.tapContainer}>
-                <Ionicons name="ios-arrow-round-forward" size={34} color="grey" />
+                <Ionicons name="arrow-forward" size={34} color="grey" />
             </View>
         </TouchableOpacity>
     );

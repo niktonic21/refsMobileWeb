@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import Modal from 'modal-enhanced-react-native-web';
+import Modal from 'react-native-modal';
 import { IModal } from './index';
 import { layout } from '@layout';
 

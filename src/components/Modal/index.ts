@@ -6,7 +6,7 @@ export interface IModal {
     onClose: (label: string) => void;
     isVisible: boolean;
     label: string;
-    children: object;
+    children: React.ReactNode;
 }
 
 const Modal = isWeb ? ModalWeb : ModalMobile;

@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import get from 'lodash/get';
-import { checkNewData } from '@actions';
-import { createGameSections, filterGameSections } from '../utils/gameUtils';
+import { checkNewData, filterMonths } from '@actions';
+import { createGameMonths, createGameSections, filterGameSections } from '../utils/gameUtils';
 import { IItemButton, IGame } from '../utils/types';
 import FilterButtons from '../components/FilterButtons';
 import { FilterModal } from '../components/FilterModal';
@@ -79,7 +79,7 @@ const _renderSeparator = () => <View style={styles.separator} />;
 const _keyExtractor = (item: { gameId: string; home: string }) => item.gameId;
 
 export default function MatchesScreen({ navigation }) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<any>();
     const [modalKey, setModalKey] = React.useState('');
     const games = useSelector(state => get(state, 'games.games', []));
     const filterData = useSelector(state => get(state, 'filter', []));
@@ -88,6 +88,10 @@ export default function MatchesScreen({ navigation }) {
     React.useEffect(() => {
         season && dispatch(checkNewData(''));
     }, [season]);
+
+    React.useEffect(() => {
+        dispatch(filterMonths(createGameMonths(games)));
+    }, [dispatch, games]);
 
     const gameSections = createGameSections(games);
     const filteredGameSections: SectionListData<IGame>[] = filterGameSections(

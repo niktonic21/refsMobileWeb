@@ -18,23 +18,14 @@ import CitiesScreen from '../screens/CitiesScreen';
 import GameRefListScreen from '../screens/GameRefListScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import StatsScreen from '../screens/StatsScreen';
-import {
-    BottomTabParamList,
-    BillingParamList,
-    MatchesParamList,
-    UserParamList,
-    StatsParamList
-} from '../../types';
+import { BillingParamList, MatchesParamList, UserParamList, StatsParamList } from '../../types';
 import { checkNewData } from '../redux/actions';
 
-const Tab = isWeb
-    ? createMaterialTopTabNavigator<BottomTabParamList>()
-    : createBottomTabNavigator<BottomTabParamList>();
-const headerMode = isWeb ? 'none' : 'screen';
+const Tab = isWeb ? createMaterialTopTabNavigator() : createBottomTabNavigator();
 
 export default function TabNavigator() {
     const colorScheme = useColorScheme();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<any>();
 
     React.useEffect(() => {
         const lastUpdated = get(store.reduxStore.getState(), 'games.lastUpdated', 0);
@@ -43,36 +34,37 @@ export default function TabNavigator() {
 
     return (
         <Tab.Navigator
-            swipeEnabled={!isWeb}
             initialRouteName="Matches"
-            tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
+            screenOptions={{
+                tabBarActiveTintColor: Colors[colorScheme].tint
+            }}
         >
             <Tab.Screen
                 name="Zápasy"
                 component={MatchesNavigator}
                 options={{
-                    tabBarIcon: ({ color }) => <TabBarIcon name="ios-list" color={color} />
+                    tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />
                 }}
             />
             <Tab.Screen
                 name="Vyúčtovanie"
                 component={HomeNavigator}
                 options={{
-                    tabBarIcon: ({ color }) => <TabBarIcon name="ios-wallet" color={color} />
+                    tabBarIcon: ({ color }) => <TabBarIcon name="wallet" color={color} />
                 }}
             />
             <Tab.Screen
                 name="Štatistiky"
                 component={StatsNavigator}
                 options={{
-                    tabBarIcon: ({ color }) => <TabBarIcon name="ios-stats" color={color} />
+                    tabBarIcon: ({ color }) => <TabBarIcon name="stats-chart" color={color} />
                 }}
             />
             <Tab.Screen
                 name="Profil"
                 component={UserNavigator}
                 options={{
-                    tabBarIcon: ({ color }) => <TabBarIcon name="ios-contacts" color={color} />
+                    tabBarIcon: ({ color }) => <TabBarIcon name="person" color={color} />
                 }}
             />
         </Tab.Navigator>
@@ -82,7 +74,14 @@ export default function TabNavigator() {
 // You can explore the built-in icon families and icons on the web at:
 // https://icons.expo.fyi/
 function TabBarIcon(props: { name: string; color: string }) {
-    return <Ionicons size={30} style={{ marginBottom: -3 }} {...props} />;
+    return (
+        <Ionicons
+            size={30}
+            style={{ marginBottom: -3 }}
+            name={props.name as any}
+            color={props.color}
+        />
+    );
 }
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
@@ -91,7 +90,7 @@ const MatchesStack = createStackNavigator<MatchesParamList>();
 
 function MatchesNavigator() {
     return (
-        <MatchesStack.Navigator headerMode={headerMode}>
+        <MatchesStack.Navigator screenOptions={{ headerShown: !isWeb }}>
             <MatchesStack.Screen
                 name="MatchesScreen"
                 component={MatchesScreen}
@@ -110,7 +109,7 @@ const BillingStack = createStackNavigator<BillingParamList>();
 
 function HomeNavigator() {
     return (
-        <BillingStack.Navigator headerMode={headerMode}>
+        <BillingStack.Navigator screenOptions={{ headerShown: !isWeb }}>
             <BillingStack.Screen
                 name="BillingScreen"
                 component={BillingScreen}
@@ -144,7 +143,7 @@ const UserStack = createStackNavigator<UserParamList>();
 
 function UserNavigator() {
     return (
-        <UserStack.Navigator headerMode={headerMode}>
+        <UserStack.Navigator screenOptions={{ headerShown: !isWeb }}>
             <UserStack.Screen
                 name="UserScreen"
                 component={UserScreen}
@@ -163,7 +162,7 @@ const StatsStack = createStackNavigator<StatsParamList>();
 
 function StatsNavigator() {
     return (
-        <StatsStack.Navigator headerMode={headerMode}>
+        <StatsStack.Navigator screenOptions={{ headerShown: !isWeb }}>
             <StatsStack.Screen
                 name="StatsScreen"
                 component={StatsScreen}

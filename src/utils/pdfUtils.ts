@@ -1,4 +1,4 @@
-import { PDFDocument } from 'pdf-lib';
+import { PDFDocument } from 'pdf-lib/cjs';
 import { pdfBase64 } from '@strings';
 import { isIos } from '@layout';
 import fontkit from '@pdf-lib/fontkit';

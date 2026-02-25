@@ -1,4 +1,5 @@
-import * as firebase from 'firebase';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 import { IGameDetail } from 'src/screens/GameScreen';
 
 export const SAVE_GAME = 'user_game_data';
